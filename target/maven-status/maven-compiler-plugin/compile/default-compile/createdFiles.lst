@@ -1,0 +1,4 @@
+com\typecasters\apitowerofwords\Repository\StudentRepository.class
+com\typecasters\apitowerofwords\Service\StudentService.class
+com\typecasters\apitowerofwords\DataPopulator\StudentDataPopulator.class
+com\typecasters\apitowerofwords\Controller\StudentController.class
