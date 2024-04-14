@@ -1,0 +1,10 @@
+:root {
+  --primary-btn-color: #ffaf40;
+  --danger-btn-color: #fc5776;
+}
+
+/* Font */
+@font-face {
+  font-family: "Lilita One";
+  src: url("/public/fonts/LilitaOne-Regular.ttf") format("truetype");
+}

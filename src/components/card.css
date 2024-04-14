@@ -1,0 +1,175 @@
+.card-container {
+  height: 100%;
+  width: 100vw;
+  margin-top: 100px;
+
+  margin-bottom: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.card {
+  border: 1px solid #000;
+  border-radius: 25px;
+  box-shadow: 5px 5px 5px rgba(102, 102, 102, 0.5);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.card-h {
+  height: 400px;
+  width: 230px;
+}
+
+.card-h:hover {
+  transform: scale(1.1);
+}
+
+.card-h__banner-container {
+  width: 100%;
+  height: 150px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  outline: 1px solid red;
+}
+
+.card-h__banner {
+  width: 100%;
+  position: absolute;
+}
+
+.card-h__banner-container--square {
+  border-radius: 10px;
+  width: 90%;
+  height: 180px;
+  background-color: #000;
+  outline: 1px solid red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 0.5em;
+}
+
+.card-h__banner--square {
+  height: 100%;
+  width: 100%;
+}
+
+.card-h__counter-banner {
+  background-color: #662b9a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.card-h__counter-banner-header,
+.card-v__counter-banner-header {
+  margin: 0;
+  font-family: "Lilita One";
+  color: #fff;
+  margin-top: 10px;
+}
+
+.card-v__info-container {
+  text-align: center;
+  font-family: "Lilita One";
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  right: 0;
+}
+.card-h__counter-banner-count,
+.card-v__counter-banner-count {
+  font-size: 40px;
+  font-family: "Lilita One";
+  color: #ffcd6c;
+  text-shadow: 0 0 10px #ffcd6c;
+  padding: 20px 0;
+}
+
+.card-h__info-container {
+  text-align: center;
+  font-family: "Lilita One";
+}
+
+.card-h__counter-banner--square {
+  margin-top: 20px; /* Assuming this modifier adds extra spacing at the top */
+}
+
+.card-h__title {
+  margin: 0;
+  padding: 10px 0;
+}
+
+.card-v {
+  height: 150px;
+  width: 40%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-archive {
+  width: 70%;
+}
+
+.card-v__banner-container {
+  outline: 1px solid red;
+  height: 90%;
+  width: 150px;
+  display: flex;
+  flex-direction: row;
+  background-color: #000;
+  border-radius: 20px;
+  font-family: "Lilita One";
+
+  gap: 1rem;
+}
+
+.card-v__banner {
+  width: 100%;
+  height: 130px;
+}
+
+.card-v__counter-banner {
+  background-color: #662b9a;
+  border-radius: 20px;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.card-v__title {
+  margin: 0;
+}
+
+.card--dotted {
+  border: 5px dashed #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  font-family: "Lilita One";
+}
+
+.card-v__group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1em;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+}

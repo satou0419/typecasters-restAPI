@@ -1,0 +1,56 @@
+.idle {
+  height: 307px;
+  width: calc(3379px / 11);
+
+  background: url("../public/assets/sprites/15_enemy_spring_idle_spritesheet.png");
+  background-size: 3379px 307;
+  animation: idle 0.5s steps(11) infinite;
+}
+
+@keyframes idle {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -3379px 0;
+  }
+}
+
+.idle {
+  height: 307px;
+  width: calc(3379px / 11);
+
+  background: url("../public/assets/sprites/15_enemy_spring_idle_spritesheet.png");
+  background-size: 3379px 307;
+  animation: idle 0.9167s steps(11) infinite;
+}
+
+@keyframes idle {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -3379px 0;
+  }
+}
+
+.attack {
+  height: 307px;
+  width: calc(8602px / 28);
+
+  background: url("../public/assets/sprites/15_enemy_spring_attack_spritesheet.png");
+  background-size: 8602px 307px;
+  animation: attack 2.333s steps(28) infinite;
+}
+
+@keyframes attack {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -8602px 0;
+  }
+}

@@ -1,0 +1,51 @@
+.btn-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px; /* Adjust the gap size based on your aesthetic preference */
+  padding: 50px;
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 20px;
+  color: #fff;
+  font-family: "Lilita One";
+}
+
+.btn--small {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+  border-top: 3px solid #fff;
+}
+
+.btn--danger {
+  background-color: var(--danger-btn-color);
+}
+
+.btn--danger--large {
+  background-color: #f0f0f5;
+  outline: 2px solid var(--danger-btn-color);
+  color: var(--danger-btn-color);
+}
+
+.btn--large {
+  padding: 10px 120px;
+  border-radius: 10px;
+}
+
+.btn--medium {
+  padding: 10px 30px;
+  border-radius: 15px;
+}
+
+.btn--primary {
+  background-color: var(--primary-btn-color);
+}

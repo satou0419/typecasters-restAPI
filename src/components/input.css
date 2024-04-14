@@ -1,0 +1,48 @@
+.input-container {
+  padding: 50px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  background-color: cadetblue;
+}
+
+.input {
+  outline: none;
+  padding: 5px 100px 5px 5px;
+}
+
+.input-box {
+  border: 1px solid #c1c1c1;
+  border-radius: 3px;
+  color: #c1c1c1;
+}
+
+.input-box::placeholder {
+  color: inherit;
+}
+
+.input-line {
+  border: none;
+  font-family: "Lilita One";
+  background-color: transparent;
+}
+
+.input-line--dark {
+  border-bottom: 2px solid #666;
+  color: #666;
+}
+
+.input-line--dark::placeholder {
+  color: inherit;
+}
+
+.input-line--light {
+  border-bottom: 2px solid #fff;
+  color: #fff;
+}
+
+.input-line--light::placeholder {
+  color: inherit;
+}

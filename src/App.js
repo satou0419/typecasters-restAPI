@@ -1,9 +1,12 @@
 import "./App.css";
-import Login from "./Login";
-import Trial from "./Trial";
+import Animation from "./components/Animation";
+import Button from "./components/Button";
+import Card from "./components/Card";
+import Input from "./components/Input";
+import Navigation from "./components/Navigation";
 
 function App() {
-  return <Trial />;
+  return <Navigation />;
 }
 
 export default App;

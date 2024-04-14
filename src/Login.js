@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./components/styles.css";
 
 export default function Login() {
   document.body.style.backgroundColor = "#333";
@@ -19,6 +19,7 @@ export default function Login() {
                 className="input input__card"
                 id="username"
                 placeholder="Username"
+                autoFocus
               />
 
               <input
@@ -27,6 +28,18 @@ export default function Login() {
                 id="password"
                 placeholder="Password"
               />
+
+              <button className="btn">Sign In</button>
+
+              <span>
+                Don't have an account yet?<span>Sign up</span>
+              </span>
+
+              <span>
+                <span>Terms & Conditions | </span>
+                <span>Privacy Policy | </span>
+                <span>Support</span>
+              </span>
             </section>
           </section>
         </aside>
