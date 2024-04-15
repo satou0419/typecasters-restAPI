@@ -1,13 +1,6 @@
-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2em;
-}
-
 .nav-container {
   width: 100%;
+  height: fit-content;
   outline: 1px solid red;
   display: flex;
   justify-content: center;

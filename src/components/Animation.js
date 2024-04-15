@@ -1,3 +1,5 @@
+import "./button.css";
+
 export default function Animation() {
   return (
     <section className="animation-container">

@@ -8,12 +8,19 @@ export function GameCard({
   bannerSrc,
   counterHeader,
   counterCount,
+  imageSize, // New prop for image size
 }) {
   return (
     <>
-      <section className="card card-h">
+      <section className="card card-game">
         <div className="card-h__banner-container">
-          <img src={bannerSrc} className="card-h__banner" alt={title} />
+          <img
+            src={bannerSrc}
+            className="card-h__banner"
+            alt={title}
+            style={{ width: imageSize }}
+          />{" "}
+          {/* Apply width style based on the imageSize prop */}
         </div>
         <div className="card-h__counter-banner">
           <h3 className="card-h__counter-banner-header">{counterHeader}</h3>
@@ -193,6 +200,20 @@ export default function Card() {
         bannerSrc="./assets/banner/banner_adventure.webp"
       />
       <CardCreate title="+Create" />
+
+      <section className="card card-h card-settings">
+        <h1 className="card-settings__header">Settings</h1>
+
+        <input
+          className="card-settings__input input input-box "
+          placeholder="Update Room Name"
+        />
+
+        <div className="card-settings__button">
+          <button className="btn btn--small btn--danger">Delete</button>
+          <button className="btn btn--small btn--primary">Save</button>
+        </div>
+      </section>
     </main>
   );
 }

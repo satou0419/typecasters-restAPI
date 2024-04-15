@@ -1,4 +1,4 @@
-import "./components/styles.css";
+import "./styles.css";
 
 export default function Login() {
   document.body.style.backgroundColor = "#333";

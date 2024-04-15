@@ -1,5 +1,7 @@
 import React from "react";
-import { ArchiveCard } from "./Card"; // Import only the CardCreate component
+
+import { Link } from "react-router-dom";
+import { ArchiveCard, GameCard } from "./Card"; // Import only the CardCreate component
 
 import "./navigation.css";
 
@@ -12,11 +14,9 @@ export default function Navigation() {
             <img src="./assets/logo/logo_simple.webp" />
           </div>
 
-          <a>About</a>
+          <Link to="/login">About</Link>
         </nav>
       </main>
-
-      <ArchiveCard className="custom-archive-card" />
     </section>
   );
 }

@@ -23,8 +23,13 @@
   width: 230px;
 }
 
-.card-h:hover {
-  transform: scale(1.1);
+.card-game {
+  height: 350px;
+  width: 200px;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }
 
 .card-h__banner-container {
@@ -34,6 +39,7 @@
   display: flex;
   align-items: flex-end;
   outline: 1px solid red;
+  justify-content: center;
 }
 
 .card-h__banner {
@@ -172,4 +178,60 @@
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 10px;
+}
+
+.card-item {
+  width: 230px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.card-item__banner {
+  width: 80%;
+  height: 120px;
+  outline: 1px solid red;
+  margin-top: 15px;
+}
+
+.card-item__heading {
+  margin: 0;
+}
+
+.card-settings {
+  width: 400px;
+  height: 160px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.8rem;
+  flex-direction: column;
+}
+
+.card-settin_input-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  outline: 1px solid green;
+}
+.card-settings__header {
+  margin: 0;
+  margin-top: 5px;
+}
+
+.card-settings__button {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+
+  outline: 1px solid red;
+}
+
+.card-settings__input {
+  width: 80%;
 }
