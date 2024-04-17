@@ -37,7 +37,6 @@ export default function Registration() {
         throw new Error("Registration failed");
       }
       alert("Registration successful!");
-      // You can redirect the user to the login page or do something else here
     } catch (error) {
       console.error("Registration error:", error.message);
       alert("Registration failed. Please try again.");

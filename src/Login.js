@@ -28,7 +28,6 @@ export default function Login() {
       }
 
       console.log("Login successful!");
-      // You can redirect to dashboard or any other page after successful login
     } catch (error) {
       setError("Invalid username or password");
       console.error(error);
