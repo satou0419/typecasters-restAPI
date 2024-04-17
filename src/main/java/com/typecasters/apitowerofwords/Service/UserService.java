@@ -16,8 +16,15 @@ public class UserService {
 
 
     //Registration
-    public UserEntity registerUser(UserEntity user){
-        return urepo.save(user);
+    public String registerUser(UserEntity user){
+
+
+        if(urepo.findOneByUsername(user.getUsername()) == null){
+            urepo.save(user);
+            return "Registration Succesful";
+        }else{
+            return "Username already exist";
+        }
     }
 
     //Login
