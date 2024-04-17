@@ -1,0 +1,5 @@
+com\typecasters\apitowerofwords\Service\UserItemService.class
+com\typecasters\apitowerofwords\Repository\UserItemRepository.class
+com\typecasters\apitowerofwords\Config\WebMvcConfig.class
+com\typecasters\apitowerofwords\Controller\UserItemController.class
+com\typecasters\apitowerofwords\Entity\UserDetailsEntity.class
