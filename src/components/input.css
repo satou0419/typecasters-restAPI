@@ -15,16 +15,20 @@
 .input {
   outline: none;
   padding: 5px 0px;
-}
 
-.input-box {
   border: 1px solid #c1c1c1;
   border-radius: 3px;
   color: #c1c1c1;
+}
+
+.input-box {
   width: 380px;
 }
 
-.input-box::placeholder {
+.input-box-form {
+  width: 280px;
+}
+.input::placeholder {
   color: inherit;
 }
 

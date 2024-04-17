@@ -1,0 +1,79 @@
+.login-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  height: 90%;
+  width: 330px;
+}
+
+.form-banner {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-form {
+  border-radius: 20px;
+  height: 550px;
+  width: 800px;
+  border: 2px solid #c4c4c4;
+  background-color: #fff;
+
+  display: flex;
+  align-items: center;
+}
+
+.form-heading {
+  color: #534e64;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  font-size: 26pt;
+  font-weight: 100;
+}
+
+.card-form-details {
+  height: 100%;
+  display: flex;
+}
+
+.card-form-banner {
+  height: 100%;
+  width: 450px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.card-form img {
+  height: 90%;
+  z-index: 2;
+}
+
+.btn-signup {
+  margin-top: 5em;
+}
+
+.link-group {
+  width: 100%;
+  font-size: small;
+  color: #c0c0c0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: auto;
+}
+
+.li-signup {
+  color: #9488b6;
+}

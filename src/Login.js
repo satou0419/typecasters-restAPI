@@ -1,48 +1,47 @@
-import "./styles.css";
-
+import "./login.css";
+import "./components/card.css";
 export default function Login() {
   document.body.style.backgroundColor = "#333";
   return (
-    <main className="login-section">
-      <section className="login-form">
-        <aside className="banner-sidebar">
-          <img src="./images/login--banner.png" alt="Login Banner" />
-        </aside>
+    <main className="login-container">
+      <section className="card card-form">
+        <div className="card-form-banner">
+          <img src="./assets/banner/banner_login.webp" />
+        </div>
+        <form className="card form-login">
+          <h1 className="form-heading">Welcome!</h1>
 
-        <aside className="login-sidebar">
-          <section className="card">
-            <h2 className="card__header">Welcome!</h2>
+          <input
+            type="text"
+            className="input input-box-form"
+            placeholder="Username"
+            autoFocus
+          />
+          <input
+            type="password"
+            className="input input-box-form"
+            placeholder="Password"
+          />
 
-            <section className="input-section">
-              <input
-                type="text"
-                className="input input__card"
-                id="username"
-                placeholder="Username"
-                autoFocus
-              />
+          <button
+            type="submit"
+            className="btn btn--small btn--primary btn-signup"
+          >
+            Sign in
+          </button>
 
-              <input
-                type="password"
-                className="input input__card"
-                id="password"
-                placeholder="Password"
-              />
-
-              <button className="btn">Sign In</button>
-
-              <span>
-                Don't have an account yet?<span>Sign up</span>
-              </span>
-
-              <span>
-                <span>Terms & Conditions | </span>
-                <span>Privacy Policy | </span>
-                <span>Support</span>
-              </span>
-            </section>
-          </section>
-        </aside>
+          <div className="link-group">
+            <span>
+              Don't have an account yet?
+              <span className="li-signup"> Sign up</span>
+            </span>
+            <span>
+              <span>Terms and Condition |</span>
+              <span>Privacy Policy |</span>
+              <span>Support</span>
+            </span>
+          </div>
+        </form>
       </section>
     </main>
   );

@@ -17,7 +17,7 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes> */}
-      <Card />
+      <Login />
     </>
   );
 }
