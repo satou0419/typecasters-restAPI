@@ -8,16 +8,16 @@ import Card from "./components/Card";
 import Input from "./components/Input";
 import Navigation from "./components/Navigation";
 import Dashboard from "./Dashboard";
+import Registration from "./Registration";
 
 function App() {
   return (
     <>
-      <Navigation />
-      <div className="container">
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </div>
+      {/* <Navigation />
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes> */}
+      <Card />
     </>
   );
 }

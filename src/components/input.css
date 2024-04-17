@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box; /* Ensures padding doesn't affect the overall width */
+}
+
 .input-container {
   padding: 50px 50px;
   display: flex;
@@ -17,6 +21,7 @@
   border: 1px solid #c1c1c1;
   border-radius: 3px;
   color: #c1c1c1;
+  width: 380px;
 }
 
 .input-box::placeholder {

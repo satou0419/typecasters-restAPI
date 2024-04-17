@@ -1,0 +1,458 @@
+import React from "react";
+import "./card.css";
+
+// GameCard component
+export function GameCard({
+  title,
+  description,
+  bannerSrc,
+  counterHeader,
+  counterCount,
+  imageSize, // New prop for image size
+}) {
+  return (
+    <>
+      <section className="card card-game">
+        <div className="card-h__banner-container">
+          <img
+            src={bannerSrc}
+            className="card-h__banner"
+            alt={title}
+            style={{ width: imageSize }}
+          />{" "}
+          {/* Apply width style based on the imageSize prop */}
+        </div>
+        <div className="card-h__counter-banner">
+          <h3 className="card-h__counter-banner-header">{counterHeader}</h3>
+          <span className="card-h__counter-banner-count">{counterCount}</span>
+        </div>
+
+        <div className="card-h__info-container">
+          <h2 className="card-h__title">{title}</h2>
+          <span className="card-h__description">{description}</span>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// RoomCard component
+export function RoomCard({
+  title,
+  description,
+  bannerSrc,
+  counterHeader,
+  counterCount,
+}) {
+  return (
+    <section className="card card-h">
+      <div className="card-h__banner-container card-h__banner-container--square">
+        <img
+          src={bannerSrc}
+          className="card-h__banner card-h__banner--square"
+          alt={title}
+        />
+      </div>
+
+      <div className="card-h__info-container">
+        <h2 className="card-h__title">{title}</h2>
+        <span className="card-h__description">{description}</span>
+      </div>
+      <div className="card-h__counter-banner card-h__counter-banner--square">
+        <h3 className="card-h__counter-banner-header">{counterHeader}</h3>
+        <span className="card-h__counter-banner-count">{counterCount}</span>
+      </div>
+    </section>
+  );
+}
+
+// TeacherStatusCard component
+export function TeacherStatusCard({ username, time, bannerSrc }) {
+  return (
+    <section className="card card-v">
+      <div className="card-v__group">
+        <div className="card-v__banner-container">
+          <img
+            src={bannerSrc}
+            className="card-v__banner"
+            alt="Teacher Status Banner"
+          />
+        </div>
+        <div className="card-v__info-container">
+          <h2 className="card-v__title">{username}</h2>
+          <span className="card-v__description">{time}</span>
+        </div>
+      </div>
+
+      <div className="card-v__counter-banner"></div>
+    </section>
+  );
+}
+
+// StudentStatusCard component
+export function StudentStatusCard({ username, time, bannerSrc, score }) {
+  return (
+    <section className="card card-v">
+      <div className="card-v__group">
+        <div className="card-v__banner-container">
+          <img
+            src={bannerSrc}
+            className="card-v__banner"
+            alt="Student Status Banner"
+          />
+        </div>
+        <div className="card-v__info-container">
+          <h2 className="card-v__title">{username}</h2>
+          <span className="card-v__description">{time}</span>
+        </div>
+      </div>
+
+      <div className="card-v__counter-banner">
+        <h3 className="card-v__counter-banner-header">Score</h3>
+        <span className="card-v__counter-banner-count">{score}</span>
+      </div>
+    </section>
+  );
+}
+
+// ArchiveCard component
+export function ArchiveCard({
+  archive,
+  description,
+  total_badge,
+  total_words,
+  bannerSrc,
+}) {
+  return (
+    <section className="card card-v card-archive">
+      <div className="card-v__group">
+        <div className="card-v__banner-container">
+          <img
+            src={bannerSrc}
+            className="card-v__banner"
+            alt="Student Status Banner"
+          />
+        </div>
+        <div className="card-v__info-container">
+          <h2 className="card-v__title">{archive}</h2>
+          <span className="card-v__description">{description}</span>
+        </div>
+      </div>
+
+      <div className="card-v__counter-banner">
+        <h3 className="card-v__counter-banner-header">Badges</h3>
+        <span className="card-v__counter-banner-count">{total_badge}</span>
+      </div>
+
+      <div className="card-v__counter-banner">
+        <h3 className="card-v__counter-banner-header">Words</h3>
+        <span className="card-v__counter-banner-count">{total_words}</span>
+      </div>
+    </section>
+  );
+}
+
+// CardCreate component
+export function CardCreate({ title }) {
+  return (
+    <div className="card card-h card--dotted">
+      <h1 className="card--dotted-title">{title}</h1>
+    </div>
+  );
+}
+
+// Main Card component
+export default function Card() {
+  return (
+    <main className="card-container">
+      {/* You can use these components in other parts of your application */}
+      <GameCard
+        title="Adventure"
+        description="Lorem ipsum"
+        bannerSrc="./assets/banner/banner_adventure.webp"
+        counterHeader="Floors Completed"
+        counterCount={1}
+      />
+      <RoomCard
+        title="Game Name"
+        description="Teacher"
+        bannerSrc="./assets/banner/banner_adventure.webp"
+        counterHeader="Words Completed"
+        counterCount={1}
+      />
+      <TeacherStatusCard
+        username="Teacher1"
+        time="10:00 AM"
+        bannerSrc="./assets/banner/banner_adventure.webp"
+      />
+      <StudentStatusCard
+        username="Student1"
+        time="10:30 AM"
+        bannerSrc="./assets/banner/banner_adventure.webp"
+        score={90}
+      />
+
+      <ArchiveCard
+        archive="Archive"
+        description="Conquer the Towers! Collect Words and Badges in Adventure Mode"
+        total_badge={4}
+        total_words={4}
+        bannerSrc="./assets/banner/banner_adventure.webp"
+      />
+      <CardCreate title="+Create" />
+
+      <section className="card card-h card-settings">
+        <h1 className="card-settings__header">Settings</h1>
+
+        <input
+          className="card-settings__input input input-box "
+          placeholder="Update Room Name"
+        />
+
+        <div className="card-settings__button">
+          <button className="btn btn--small btn--danger">Delete</button>
+          <button className="btn btn--small btn--primary">Save</button>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+
+.card-container {
+  height: 100%;
+  width: 100vw;
+  margin-top: 100px;
+
+  margin-bottom: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.card {
+  border: 1px solid #000;
+  border-radius: 25px;
+  box-shadow: 5px 5px 5px rgba(102, 102, 102, 0.5);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.card-h {
+  height: 400px;
+  width: 230px;
+}
+
+.card-game {
+  height: 350px;
+  width: 200px;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-h__banner-container {
+  width: 100%;
+  height: 150px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  outline: 1px solid red;
+  justify-content: center;
+}
+
+.card-h__banner {
+  width: 100%;
+  position: absolute;
+}
+
+.card-h__banner-container--square {
+  border-radius: 10px;
+  width: 90%;
+  height: 180px;
+  background-color: #000;
+  outline: 1px solid red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 0.5em;
+}
+
+.card-h__banner--square {
+  height: 100%;
+  width: 100%;
+}
+
+.card-h__counter-banner {
+  background-color: #662b9a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.card-h__counter-banner-header,
+.card-v__counter-banner-header {
+  margin: 0;
+  font-family: "Lilita One";
+  color: #fff;
+  margin-top: 10px;
+}
+
+.card-v__info-container {
+  text-align: center;
+  font-family: "Lilita One";
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  right: 0;
+}
+.card-h__counter-banner-count,
+.card-v__counter-banner-count {
+  font-size: 40px;
+  font-family: "Lilita One";
+  color: #ffcd6c;
+  text-shadow: 0 0 10px #ffcd6c;
+  padding: 20px 0;
+}
+
+.card-h__info-container {
+  text-align: center;
+  font-family: "Lilita One";
+}
+
+.card-h__counter-banner--square {
+  margin-top: 20px; /* Assuming this modifier adds extra spacing at the top */
+}
+
+.card-h__title {
+  margin: 0;
+  padding: 10px 0;
+}
+
+.card-v {
+  height: 150px;
+  width: 40%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-archive {
+  width: 70%;
+}
+
+.card-v__banner-container {
+  outline: 1px solid red;
+  height: 90%;
+  width: 150px;
+  display: flex;
+  flex-direction: row;
+  background-color: #000;
+  border-radius: 20px;
+  font-family: "Lilita One";
+
+  gap: 1rem;
+}
+
+.card-v__banner {
+  width: 100%;
+  height: 130px;
+}
+
+.card-v__counter-banner {
+  background-color: #662b9a;
+  border-radius: 20px;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.card-v__title {
+  margin: 0;
+}
+
+.card--dotted {
+  border: 5px dashed #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  font-family: "Lilita One";
+}
+
+.card-v__group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1em;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+}
+
+.card-item {
+  width: 230px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.card-item__banner {
+  width: 80%;
+  height: 120px;
+  outline: 1px solid red;
+  margin-top: 15px;
+}
+
+.card-item__heading {
+  margin: 0;
+}
+
+.card-settings {
+  width: 400px;
+  height: 160px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.8rem;
+  flex-direction: column;
+}
+
+.card-settin_input-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  outline: 1px solid green;
+}
+.card-settings__header {
+  margin: 0;
+  margin-top: 5px;
+}
+
+.card-settings__button {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+
+  outline: 1px solid red;
+}
+
+.card-settings__input {
+  width: 80%;
+}

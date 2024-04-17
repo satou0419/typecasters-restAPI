@@ -1,217 +1,138 @@
-import React from "react";
 import "./card.css";
+import "./button.css";
 
-// GameCard component
-export function GameCard({
-  title,
-  description,
-  bannerSrc,
-  counterHeader,
-  counterCount,
-  imageSize, // New prop for image size
-}) {
-  return (
-    <>
-      <section className="card card-game">
-        <div className="card-h__banner-container">
-          <img
-            src={bannerSrc}
-            className="card-h__banner"
-            alt={title}
-            style={{ width: imageSize }}
-          />{" "}
-          {/* Apply width style based on the imageSize prop */}
-        </div>
-        <div className="card-h__counter-banner">
-          <h3 className="card-h__counter-banner-header">{counterHeader}</h3>
-          <span className="card-h__counter-banner-count">{counterCount}</span>
-        </div>
-
-        <div className="card-h__info-container">
-          <h2 className="card-h__title">{title}</h2>
-          <span className="card-h__description">{description}</span>
-        </div>
-      </section>
-    </>
-  );
-}
-
-// RoomCard component
-export function RoomCard({
-  title,
-  description,
-  bannerSrc,
-  counterHeader,
-  counterCount,
-}) {
-  return (
-    <section className="card card-h">
-      <div className="card-h__banner-container card-h__banner-container--square">
-        <img
-          src={bannerSrc}
-          className="card-h__banner card-h__banner--square"
-          alt={title}
-        />
-      </div>
-
-      <div className="card-h__info-container">
-        <h2 className="card-h__title">{title}</h2>
-        <span className="card-h__description">{description}</span>
-      </div>
-      <div className="card-h__counter-banner card-h__counter-banner--square">
-        <h3 className="card-h__counter-banner-header">{counterHeader}</h3>
-        <span className="card-h__counter-banner-count">{counterCount}</span>
-      </div>
-    </section>
-  );
-}
-
-// TeacherStatusCard component
-export function TeacherStatusCard({ username, time, bannerSrc }) {
-  return (
-    <section className="card card-v">
-      <div className="card-v__group">
-        <div className="card-v__banner-container">
-          <img
-            src={bannerSrc}
-            className="card-v__banner"
-            alt="Teacher Status Banner"
-          />
-        </div>
-        <div className="card-v__info-container">
-          <h2 className="card-v__title">{username}</h2>
-          <span className="card-v__description">{time}</span>
-        </div>
-      </div>
-
-      <div className="card-v__counter-banner"></div>
-    </section>
-  );
-}
-
-// StudentStatusCard component
-export function StudentStatusCard({ username, time, bannerSrc, score }) {
-  return (
-    <section className="card card-v">
-      <div className="card-v__group">
-        <div className="card-v__banner-container">
-          <img
-            src={bannerSrc}
-            className="card-v__banner"
-            alt="Student Status Banner"
-          />
-        </div>
-        <div className="card-v__info-container">
-          <h2 className="card-v__title">{username}</h2>
-          <span className="card-v__description">{time}</span>
-        </div>
-      </div>
-
-      <div className="card-v__counter-banner">
-        <h3 className="card-v__counter-banner-header">Score</h3>
-        <span className="card-v__counter-banner-count">{score}</span>
-      </div>
-    </section>
-  );
-}
-
-// ArchiveCard component
-export function ArchiveCard({
-  archive,
-  description,
-  total_badge,
-  total_words,
-  bannerSrc,
-}) {
-  return (
-    <section className="card card-v card-archive">
-      <div className="card-v__group">
-        <div className="card-v__banner-container">
-          <img
-            src={bannerSrc}
-            className="card-v__banner"
-            alt="Student Status Banner"
-          />
-        </div>
-        <div className="card-v__info-container">
-          <h2 className="card-v__title">{archive}</h2>
-          <span className="card-v__description">{description}</span>
-        </div>
-      </div>
-
-      <div className="card-v__counter-banner">
-        <h3 className="card-v__counter-banner-header">Badges</h3>
-        <span className="card-v__counter-banner-count">{total_badge}</span>
-      </div>
-
-      <div className="card-v__counter-banner">
-        <h3 className="card-v__counter-banner-header">Words</h3>
-        <span className="card-v__counter-banner-count">{total_words}</span>
-      </div>
-    </section>
-  );
-}
-
-// CardCreate component
-export function CardCreate({ title }) {
-  return (
-    <div className="card card-h card--dotted">
-      <h1 className="card--dotted-title">{title}</h1>
-    </div>
-  );
-}
-
-// Main Card component
 export default function Card() {
   return (
     <main className="card-container">
-      {/* You can use these components in other parts of your application */}
-      <GameCard
-        title="Adventure"
-        description="Lorem ipsum"
-        bannerSrc="./assets/banner/banner_adventure.webp"
-        counterHeader="Floors Completed"
-        counterCount={1}
-      />
-      <RoomCard
-        title="Game Name"
-        description="Teacher"
-        bannerSrc="./assets/banner/banner_adventure.webp"
-        counterHeader="Words Completed"
-        counterCount={1}
-      />
-      <TeacherStatusCard
-        username="Teacher1"
-        time="10:00 AM"
-        bannerSrc="./assets/banner/banner_adventure.webp"
-      />
-      <StudentStatusCard
-        username="Student1"
-        time="10:30 AM"
-        bannerSrc="./assets/banner/banner_adventure.webp"
-        score={90}
-      />
+      {/* CardSetting1F */}
+      <section className="card card-setting card-setting--1f">
+        <h2 className="card-setting__heading">Settings</h2>
 
-      <ArchiveCard
-        archive="Archive"
-        description="Conquer the Towers! Collect Words and Badges in Adventure Mode"
-        total_badge={4}
-        total_words={4}
-        bannerSrc="./assets/banner/banner_adventure.webp"
-      />
-      <CardCreate title="+Create" />
+        <div className="card-setting__input-container">
+          <input
+            type="text"
+            className="input input-box"
+            placeholder="Update Room Name"
+          />
 
-      <section className="card card-h card-settings">
-        <h1 className="card-settings__header">Settings</h1>
+          <div className="card-setting__btn-group">
+            <button className="btn btn--small btn--danger">Delete</button>
+            <button className="btn btn--small btn--primary">Save</button>
+          </div>
+        </div>
+      </section>
 
-        <input
-          className="card-settings__input input input-box "
-          placeholder="Update Room Name"
-        />
+      {/* CardSettingF2 */}
+      <section className="card card-setting card-setting--2f">
+        <h2 className="card-setting__heading">Settings</h2>
 
-        <div className="card-settings__button">
-          <button className="btn btn--small btn--danger">Delete</button>
-          <button className="btn btn--small btn--primary">Save</button>
+        <div className="card-setting__input-container">
+          <input
+            type="text"
+            className="input input-box"
+            placeholder="Update Simulation Name"
+          />
+
+          <input
+            type="text"
+            className="input input-box"
+            placeholder="Update Time"
+          />
+
+          <div className="card-setting__btn-group">
+            <button className="btn btn--small btn--danger">Delete</button>
+            <button className="btn btn--small btn--primary">Save</button>
+          </div>
+        </div>
+      </section>
+
+      {/* CardGame */}
+      <section className="card card-game">
+        <div className="card-game__banner">
+          <img src="./assets/banner/banner_simulation.png" />
+          <img src="./assets/banner/banner_adventure.webp" />
+        </div>
+
+        <div className="card__progress">
+          <h2 className="card__progress-title">Floors Completed</h2>
+          <span className="card__progress-value">1</span>
+        </div>
+
+        <div className="card__description">
+          <h1 className="card__title">Adventure</h1>
+          <span className="card__content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing
+          </span>
+        </div>
+      </section>
+
+      {/* CardSimulation */}
+      <section className="card card-simulation">
+        <div className="card-simulation__banner">
+          {/* <img src="./assets/banner/banner_simulation.png" /> */}
+          <img src="./assets/banner/banner_adventure.webp" />
+        </div>
+
+        <div className="card__description">
+          <h1 className="card__title">Class Name</h1>
+          <span className="card__content">Teacher</span>
+        </div>
+
+        <div className="card__progress push-top">
+          <h2 className="card__progress-title">Students</h2>
+          <span className="card__progress-value">4</span>
+        </div>
+      </section>
+
+      {/* CardCreate */}
+      <section className="card card-simulation card-create">
+        <h1 className="card__title">+Create</h1>
+      </section>
+
+      {/* CardStatus */}
+      <section className="card card-status">
+        <div className="card-status__info">
+          <div className="card-status__banner">
+            <img src="./assets/banner/banner_adventure.webp" />
+          </div>
+
+          <div className="card-status__description">
+            <h1 className="card__title">Username</h1>
+            <span className="card__content">Time</span>
+          </div>
+        </div>
+        <div className="card__progress status-progress">
+          <h2 className="card__progress-title">Score</h2>
+          <span className="card__progress-value">4</span>
+        </div>
+      </section>
+
+      {/* CardArchive */}
+      <section className="card card-archive">
+        <div className="card-status__info push-down">
+          <div className="card-archive__banner-container">
+            <div className="card-archive__banner">
+              <img src="./assets/banner/banner_adventure.webp" />
+            </div>
+          </div>
+          <div className="card-status__description">
+            <h1 className="card__title">Archive</h1>
+            <span className="card__content">
+              Conquer the Towers! Collect Words and Badges in Adventure Mode
+            </span>
+          </div>
+        </div>
+
+        <div className="card__progress--container">
+          <div className="card__progress">
+            <h2 className="card__progress-title push-top ">Badges</h2>
+            <span className="card__progress-value">4</span>
+          </div>
+
+          <div className="card__progress">
+            <h2 className="card__progress-title push-top ">Words</h2>
+            <span className="card__progress-value">4</span>
+          </div>
         </div>
       </section>
     </main>

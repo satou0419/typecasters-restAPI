@@ -1,237 +1,248 @@
 .card-container {
   height: 100%;
-  width: 100vw;
-  margin-top: 100px;
-
-  margin-bottom: 300px;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
   gap: 2em;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 5em;
 }
 
 .card {
-  border: 1px solid #000;
-  border-radius: 25px;
-  box-shadow: 5px 5px 5px rgba(102, 102, 102, 0.5);
-  cursor: pointer;
-  transition: transform 0.3s ease;
+  border: 1px solid #666666;
+  box-shadow: 0px 4px 20px rgba(191, 191, 191, 191);
+  border-radius: 20px;
+  font-family: "Lilita One";
 }
-.card-h {
-  height: 400px;
-  width: 230px;
+
+.card-setting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-setting--1f {
+  width: 430px;
+  height: 150px;
+}
+
+.card-setting--2f {
+  width: 430px;
+  height: 200px;
+}
+
+.card-setting__heading {
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.card-setting__input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.card-setting__btn-group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .card-game {
   height: 350px;
-  width: 200px;
+  width: 210px;
 }
 
-.card:hover {
-  transform: scale(1.05);
-}
-
-.card-h__banner-container {
+.card-game__banner {
   width: 100%;
-  height: 150px;
-  position: relative;
+  height: 45%;
+  outline: 1px solid green;
   display: flex;
   align-items: flex-end;
-  outline: 1px solid red;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
-.card-h__banner {
+.card-game__banner img {
   width: 100%;
-  position: absolute;
 }
 
-.card-h__banner-container--square {
-  border-radius: 10px;
-  width: 90%;
-  height: 180px;
-  background-color: #000;
+.card__progress {
+  width: 100%;
+  height: 80px;
   outline: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 5px;
+  background-color: #662b9a;
+  gap: 0.2rem;
+}
+
+.card__progress-value {
+  font-size: 30px;
+  color: #ffcd6c;
+  text-shadow: 0 0 10px #ffcd6c;
+}
+
+.card__progress-title {
+  color: #fff;
+}
+.card__progress-title,
+.card__progress-value,
+.card__title {
+  margin: 0;
+}
+
+.card__description {
+  width: 100%;
+  min-height: 72px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
-  margin-top: 0.5em;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 10px;
+  gap: 0.5rem;
+  outline: 1px solid red;
 }
 
-.card-h__banner--square {
+.card-simulation {
+  height: 380px;
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.card-simulation__banner {
+  outline: 1px solid green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  height: 40%;
+  margin-top: 20px;
+  border-radius: 10px;
+  background-color: #000;
+}
+
+.card-simulation__banner img {
   height: 100%;
   width: 100%;
 }
 
-.card-h__counter-banner {
-  background-color: #662b9a;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-}
-
-.card-h__counter-banner-header,
-.card-v__counter-banner-header {
-  margin: 0;
-  font-family: "Lilita One";
-  color: #fff;
+.push-top {
   margin-top: 10px;
 }
 
-.card-v__info-container {
-  text-align: center;
-  font-family: "Lilita One";
+.card-create {
+  border: 5px dashed #666;
+  color: #666;
   display: flex;
-  flex-direction: column;
-  position: relative;
-  right: 0;
-}
-.card-h__counter-banner-count,
-.card-v__counter-banner-count {
-  font-size: 40px;
-  font-family: "Lilita One";
-  color: #ffcd6c;
-  text-shadow: 0 0 10px #ffcd6c;
-  padding: 20px 0;
+  justify-content: center;
+  align-items: center;
 }
 
-.card-h__info-container {
-  text-align: center;
-  font-family: "Lilita One";
-}
-
-.card-h__counter-banner--square {
-  margin-top: 20px; /* Assuming this modifier adds extra spacing at the top */
-}
-
-.card-h__title {
-  margin: 0;
-  padding: 10px 0;
-}
-
-.card-v {
-  height: 150px;
-  width: 40%;
-
+.card-status {
+  width: 520px;
+  height: 120px;
   display: flex;
-  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
+}
+
+.card-status__banner {
+  height: 90%;
+  width: 110px;
+  margin-left: 10px;
+  border-radius: 10px;
+  background-color: #000;
+  display: flex;
+}
+
+.card-status__info {
+  display: flex;
+}
+
+.card-status__banner img {
+  width: 100%;
+}
+.status-progress {
+  border-radius: 10px;
+  padding-top: 0;
+  width: 120px;
+  height: 100%;
+}
+
+.status-progress .card__progress-title {
+  padding-top: 10px;
+}
+
+.card-status__info {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  margin-top: 10px;
 }
 
 .card-archive {
-  width: 70%;
-}
+  width: 750px;
+  height: 120px;
 
-.card-v__banner-container {
-  outline: 1px solid red;
-  height: 90%;
-  width: 150px;
   display: flex;
-  flex-direction: row;
-  background-color: #000;
-  border-radius: 20px;
-  font-family: "Lilita One";
-
-  gap: 1rem;
+  align-items: center;
 }
 
-.card-v__banner {
-  width: 100%;
-  height: 130px;
-}
-
-.card-v__counter-banner {
-  background-color: #662b9a;
-  border-radius: 20px;
-  width: 120px;
+.card__progress--container {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  margin-right: 30px;
   align-items: center;
   height: 100%;
-  position: relative;
-}
-
-.card-v__title {
-  margin: 0;
-}
-
-.card--dotted {
-  border: 5px dashed #666;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #666;
-  font-family: "Lilita One";
-}
-
-.card-v__group {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 1em;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-}
-
-.card-item {
-  width: 230px;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.card-item__banner {
-  width: 80%;
-  height: 120px;
-  outline: 1px solid red;
-  margin-top: 15px;
-}
-
-.card-item__heading {
-  margin: 0;
-}
-
-.card-settings {
-  width: 400px;
-  height: 160px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.8rem;
-  flex-direction: column;
-}
-
-.card-settin_input-group {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  gap: 2rem;
   outline: 1px solid green;
 }
-.card-settings__header {
-  margin: 0;
+
+.card-archive .card__progress {
+  height: 100%;
+  width: 150px;
+  display: flex;
+  padding: 0;
+}
+
+.card-archive__banner {
+  height: calc(90% - 5px);
+  border: none;
+  width: calc(100% - 10px);
+
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #884ac3, #a460dc, #552094);
+  border-top: 5px solid #7c49a6; /* Top border color */
+  outline: 3px solid #666667;
+
+  display: flex;
+}
+
+.card-archive__banner-container {
+  height: 90%;
+  min-width: 110px;
+  max-width: 110px;
+  border-radius: 5px;
+  background-color: #95a299;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
   margin-top: 5px;
 }
 
-.card-settings__button {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 10px;
-
-  outline: 1px solid red;
+.push-down {
+  margin-top: 0;
 }
-
-.card-settings__input {
-  width: 80%;
+.card-archive__banner img {
+  width: 100%;
 }
