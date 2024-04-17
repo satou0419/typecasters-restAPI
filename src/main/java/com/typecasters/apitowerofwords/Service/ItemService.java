@@ -2,6 +2,8 @@ package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.ItemEntity;
 import com.typecasters.apitowerofwords.Repository.ItemRepository;
+import com.typecasters.apitowerofwords.Repository.UserItemRepository;
+import com.typecasters.apitowerofwords.Repository.UserRepository;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

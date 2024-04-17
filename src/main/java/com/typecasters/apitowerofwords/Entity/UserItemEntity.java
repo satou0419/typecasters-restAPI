@@ -8,26 +8,26 @@ import javax.persistence.*;
 @Table(name = "tbl_user_item")
 public class UserItemEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_item_id;
 
     private int quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id")
-    private ItemEntity item;
+//    @ManyToOne
+//    @JoinColumn(name = "item_id")
+    private int item_id;
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserDetailsEntity user_details;
 
-    public UserItemEntity(int user_item_id, int quantity, ItemEntity item, UserDetailsEntity user_details) {
+    public UserItemEntity(int user_item_id, int quantity, int item_id, UserDetailsEntity user_details) {
         super();
         this.user_item_id = user_item_id;
         this.quantity = quantity;
-        this.item = item;
+        this.item_id = item_id;
         this.user_details = user_details;
     }
 
@@ -51,12 +51,12 @@ public class UserItemEntity {
         this.quantity = quantity;
     }
 
-    public ItemEntity getItem() {
-        return item;
+    public int getItemId() {
+        return item_id;
     }
 
-    public void setItem(ItemEntity item) {
-        this.item = item;
+    public void setItem(int itemId) {
+        this.item_id = item_id;
     }
 
     public UserDetailsEntity getUser_details() {
