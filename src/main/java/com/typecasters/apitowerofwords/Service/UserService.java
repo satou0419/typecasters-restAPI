@@ -2,9 +2,11 @@ package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.UserEntity;
 import com.typecasters.apitowerofwords.LoginRequest;
+import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import com.typecasters.apitowerofwords.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -14,14 +16,22 @@ public class UserService {
     @Autowired
     UserRepository urepo;
 
+    @Autowired
+    UserDetailsService ud_serv;
+
 
     //Registration
+    @Transactional
     public String registerUser(UserEntity user){
-
+        int user_id;
 
         if(urepo.findOneByUsername(user.getUsername()) == null){
-            urepo.save(user);
+
+            user_id = urepo.save(user).getUserID();
+            ud_serv.initUserDetails(user_id);
+
             return "Registration Succesful";
+
         }else{
             return "Username already exist";
         }
