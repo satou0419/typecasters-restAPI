@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Table(name = "tbl_user_item")
 public class UserItemEntity {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_item_id;
 
     private int quantity;
