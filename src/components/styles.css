@@ -1,0 +1,130 @@
+/* style.css */
+
+/* Keyframe for glitch border animation */
+@keyframes glitchBorder {
+  0%,
+  20% {
+    stroke-dashoffset: 0;
+    stroke: #4a2ffc; /* First color */
+    transform: translate(0, 0); /* No glitch effect */
+  }
+  10%,
+  30% {
+    stroke-dashoffset: 0;
+    stroke: #ff006e; /* Second color */
+    transform: translate(2px, -2px); /* Glitch effect */
+  }
+  5%,
+  15%,
+  25%,
+  35% {
+    stroke-dashoffset: 1000; /* Hide the stroke */
+    transform: translate(-2px, 2px); /* Glitch effect */
+  }
+}
+
+/* Keyframe for glitch animation */
+@keyframes glitchAnimation {
+  0% {
+    filter: drop-shadow(0 0 50px #4a2ffc);
+  }
+  25% {
+    filter: drop-shadow(0 0 50px #ff006e) hue-rotate(20deg);
+  }
+  50% {
+    filter: drop-shadow(0 0 50px #4a2ffc) hue-rotate(0deg);
+  }
+  75% {
+    filter: drop-shadow(0 0 50px #ff006e) hue-rotate(20deg);
+  }
+  to {
+    filter: drop-shadow(0 0 50px #4a2ffc);
+  }
+}
+
+/* Keyframe for run to border animation */
+@keyframes runToBorder {
+  0% {
+    stroke-dasharray: 0 100%;
+    stroke-dashoffset: 0;
+    stroke: #ff006e;
+  }
+  100% {
+    stroke-dasharray: 100% 100%;
+    stroke-dashoffset: -100%;
+    stroke: #4a2ffc;
+  }
+}
+
+/* Container styles */
+.outlined-container {
+  position: relative;
+  width: 528px;
+  height: 278px;
+  transform: translate(-50%, 50%);
+  top: 50%;
+  left: 50%;
+}
+
+/* Add this to your style.css */
+
+/* Add a new class for the shutdown animation */
+.outlined-container.shutdown {
+  animation: shutdownAnimation 1s ease-out forwards;
+}
+
+/* Keyframe for shutdown animation */
+@keyframes shutdownAnimation {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* SVG styles */
+.outlined-container svg {
+  /* Add any necessary SVG styles here */
+}
+
+/* Component holder styles */
+.component-holder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: #5b5b5b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dialog title styles */
+.component-holder .dialog-title {
+  margin: 0;
+}
+
+/* Dialog text styles */
+.component-holder .dialog-text {
+  width: 90%;
+  /* Add any other necessary text styles */
+}
+
+/* Dialog buttons styles */
+.component-holder .dialog-buttons {
+  margin-top: 10px; /* Adjust as needed */
+}
+
+.component-holder .dialog-button {
+  /* Add your button styles here */
+}
+#yourPathId {
+  animation: "runToBorder 2s infinite linear";
+  filter: drop-shadow(5px 2px 10px #4a2ffc);
+}

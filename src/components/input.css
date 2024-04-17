@@ -28,6 +28,10 @@
 .input-box-form {
   width: 280px;
 }
+
+.input-box-form__s {
+  width: 130px;
+}
 .input::placeholder {
   color: inherit;
 }

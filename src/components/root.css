@@ -8,3 +8,7 @@
   font-family: "Lilita One";
   src: url("/public/fonts/LilitaOne-Regular.ttf") format("truetype");
 }
+
+body {
+  background-color: #fff;
+}

@@ -9,6 +9,7 @@ import Input from "./components/Input";
 import Navigation from "./components/Navigation";
 import Dashboard from "./Dashboard";
 import Registration from "./Registration";
+import DialogBox from "./components/DialogBox";
 
 function App() {
   return (
