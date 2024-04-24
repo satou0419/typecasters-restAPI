@@ -24,25 +24,25 @@ public class AdventureEnemyController {
     AdventureEnemyService aeserv;
 
     //C
-    @PostMapping("/insertEnemy")
+    @PostMapping("/insert_enemy")
     public AdventureEnemyEntity insertEnemy(@RequestBody AdventureEnemyEntity enemy) {
         return aeserv.insertAdventureEnemy(enemy);
     }
 
     //R
-    @GetMapping("/getAllEnemy")
+    @GetMapping("/get_all_enemy")
     public List<AdventureEnemyEntity> getAllEnemy(){
         return aeserv.getAllAdventureEnemy();
     }
 
     //U
-    @PutMapping("/updateEnemy")
+    @PutMapping("/update_enemy")
     public AdventureEnemyEntity updateEnemy(@RequestParam int enemyId, @RequestBody AdventureEnemyEntity newEnemyDetails) {
         return aeserv.updateAdventureEnemy(enemyId, newEnemyDetails);
     }
 
     //D
-    @DeleteMapping("deleteEnemy/{enemyId}")
+    @DeleteMapping("delete_enemy/{enemyId}")
     public String deleteEnemy(@PathVariable int enemyId) {
         return aeserv.deleteEnemy(enemyId);
     }

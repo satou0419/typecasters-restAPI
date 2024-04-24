@@ -22,7 +22,7 @@ public class UserController {
         return userv.registerUser(user);
     }
 
-    @GetMapping("/userTest")
+    @GetMapping("/user_test")
     public String testUser(){
         return "testinnnngg";
     }
@@ -32,12 +32,12 @@ public class UserController {
         return userv.login(logReq);
     }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/update_user")
     public UserEntity updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo){
         return userv.editAccount(newUserInfo, uid);
     }
 
-    @PostMapping("/testFind")
+    @PostMapping("/test_find")
     public UserEntity loginUser(@RequestBody String username){
         return userv.testFind(username);
     }
