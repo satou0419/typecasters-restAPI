@@ -1,6 +1,8 @@
 package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.ItemEntity;
+import com.typecasters.apitowerofwords.Entity.UserEntity;
+import com.typecasters.apitowerofwords.Entity.UserItemEntity;
 import com.typecasters.apitowerofwords.Repository.ItemRepository;
 import com.typecasters.apitowerofwords.Repository.UserItemRepository;
 import com.typecasters.apitowerofwords.Repository.UserRepository;
