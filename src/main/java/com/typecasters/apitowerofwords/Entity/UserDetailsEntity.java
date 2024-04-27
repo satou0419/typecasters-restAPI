@@ -1,7 +1,6 @@
 package com.typecasters.apitowerofwords.Entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name ="tbl_user_details")
@@ -11,10 +10,14 @@ public class UserDetailsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_detail_id")
     private int user_detail_id;
-    private int user_id;
+    private int userId;
     private int credit_amount ;
     private int words_collected ;
     private int achievement_count ;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tower_progress_id")
+    private TowerProgressEntity userProgress;
 //    @OneToMany(cascade = CascadeType.ALL)
 //    private List<UserItemEntity> userItemList;
 
@@ -22,19 +25,44 @@ public class UserDetailsEntity {
     public UserDetailsEntity() {
     }
 
-    public UserDetailsEntity(int user_id, int credit_amount, int words_collected, int achievement_count) {
-        this.user_id = user_id;
+    public UserDetailsEntity(int userId, int credit_amount, int words_collected, int achievement_count) {
+        this.userId = userId;
         this.credit_amount = credit_amount;
         this.words_collected = words_collected;
         this.achievement_count = achievement_count;
     }
 
-    public UserDetailsEntity(int user_detail_id, int user_id, int credit_amount, int words_collected, int achievement_count) {
-        this.user_detail_id = user_detail_id;
-        this.user_id = user_id;
+    public UserDetailsEntity(int userId, int credit_amount, int words_collected, int achievement_count, TowerProgressEntity userProgress) {
+        this.userId = userId;
         this.credit_amount = credit_amount;
         this.words_collected = words_collected;
         this.achievement_count = achievement_count;
+        this.userProgress = userProgress;
+    }
+
+    public UserDetailsEntity(int user_detail_id, int userId, int credit_amount, int words_collected, int achievement_count) {
+        this.user_detail_id = user_detail_id;
+        this.userId = userId;
+        this.credit_amount = credit_amount;
+        this.words_collected = words_collected;
+        this.achievement_count = achievement_count;
+    }
+
+    public UserDetailsEntity(int user_detail_id, int userId, int credit_amount, int words_collected, int achievement_count, TowerProgressEntity userProgress) {
+        this.user_detail_id = user_detail_id;
+        this.userId = userId;
+        this.credit_amount = credit_amount;
+        this.words_collected = words_collected;
+        this.achievement_count = achievement_count;
+        this.userProgress = userProgress;
+    }
+
+    public TowerProgressEntity getUserProgress() {
+        return userProgress;
+    }
+
+    public void setUserProgress(TowerProgressEntity userProgress) {
+        this.userProgress = userProgress;
     }
 
     public int getUser_detail_id() {
@@ -45,12 +73,12 @@ public class UserDetailsEntity {
         this.user_detail_id = user_detail_id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getCredit_amount() {

@@ -1,10 +1,9 @@
 package com.typecasters.apitowerofwords.Repository;
 
-import com.typecasters.apitowerofwords.Entity.UserItemEntity;
+import com.typecasters.apitowerofwords.Entity.TowerFloorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserItemRepository extends JpaRepository<UserItemEntity, Integer> {
-
+public interface TowerFloorRepository extends JpaRepository<TowerFloorEntity, Integer> {
 }

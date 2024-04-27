@@ -1,51 +1,52 @@
 package com.typecasters.apitowerofwords.Controller;
 
-import java.util.List;
 
 import com.typecasters.apitowerofwords.Entity.AdventureEnemyEntity;
 import com.typecasters.apitowerofwords.Service.AdventureEnemyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/A-enemy")
+@RequestMapping("/adventure_enemy")
 public class AdventureEnemyController {
+
     @Autowired
-    AdventureEnemyService aeserv;
+    private AdventureEnemyService ae_serv;
 
-    //C
-    @PostMapping("/insertEnemy")
-    public AdventureEnemyEntity insertEnemy(@RequestBody AdventureEnemyEntity enemy) {
-        return aeserv.insertAdventureEnemy(enemy);
+    @PostMapping("/add_enemy")
+    public AdventureEnemyEntity insertEnemy(@RequestBody AdventureEnemyEntity enemy){
+        return ae_serv.insertEnemy(enemy);
     }
 
-    //R
-    @GetMapping("/getAllEnemy")
+    //Read All
+    @GetMapping("/get_all_enemy")
     public List<AdventureEnemyEntity> getAllEnemy(){
-        return aeserv.getAllAdventureEnemy();
+        return ae_serv.getAllEnemy();
     }
 
-    //U
-    @PutMapping("/updateEnemy")
-    public AdventureEnemyEntity updateEnemy(@RequestParam int enemyId, @RequestBody AdventureEnemyEntity newEnemyDetails) {
-        return aeserv.updateAdventureEnemy(enemyId, newEnemyDetails);
+    //Read One
+    @GetMapping("/get_enemy_by_id")
+    public Optional<AdventureEnemyEntity> getEnemyById(@RequestParam int enemy_id){
+        return ae_serv.getEnemyById(enemy_id);
     }
 
-    //D
-    @DeleteMapping("deleteEnemy/{enemyId}")
-    public String deleteEnemy(@PathVariable int enemyId) {
-        return aeserv.deleteEnemy(enemyId);
+    //Read By foreign key
+    @GetMapping("/get_enemy_by_tower_id")
+    public Optional<List<AdventureEnemyEntity>> getEnemyByTowerId(@RequestParam int tower_id){
+        return ae_serv.getAllByTowerId(tower_id);
     }
 
+    //Update
+    @PutMapping("/update_enemy")
+    public AdventureEnemyEntity updateEnemy(@RequestParam int enemy_id, @RequestBody AdventureEnemyEntity newEnemyDetails){
+        return ae_serv.updateEnemy(enemy_id, newEnemyDetails);
+    }
 
+    @PutMapping("/delete_enemy")
+    public String deleteEnemy(@RequestParam int enemy_id){
+        return ae_serv.deleteEnemy(enemy_id);
+    }
 }

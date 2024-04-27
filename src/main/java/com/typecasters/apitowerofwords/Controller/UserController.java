@@ -28,7 +28,7 @@ public class UserController {
         return userv.login(logReq);
     }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/update_user")
     public UserEntity updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo){
         return userv.editAccount(newUserInfo, uid);
     }
