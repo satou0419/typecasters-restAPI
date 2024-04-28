@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import "./registration.css";
+import "./components/input.css";
 
 export default function Registration() {
   // State variables to store form data
@@ -12,6 +14,8 @@ export default function Registration() {
     confirmPassword: "",
     email: "",
   });
+
+  const navigate = useNavigate();
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -37,13 +41,12 @@ export default function Registration() {
         throw new Error("Registration failed");
       }
       alert("Registration successful!");
+      navigate("/login");
     } catch (error) {
       console.error("Registration error:", error.message);
       alert("Registration failed. Please try again.");
     }
   };
-
-  document.body.style.backgroundColor = "#333";
 
   return (
     <main className="registration-container">
@@ -68,6 +71,7 @@ export default function Registration() {
                 value={formData.firstname}
                 onChange={handleInputChange}
                 autoFocus
+                required
               />
               <input
                 type="text"
@@ -76,6 +80,7 @@ export default function Registration() {
                 name="lastname"
                 value={formData.lastname}
                 onChange={handleInputChange}
+                required
               />
             </div>
 
@@ -86,6 +91,7 @@ export default function Registration() {
               name="username"
               value={formData.username}
               onChange={handleInputChange}
+              required
             />
             <input
               type="password"
@@ -94,6 +100,7 @@ export default function Registration() {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
+              required
             />
             <input
               type="password"
@@ -102,6 +109,7 @@ export default function Registration() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
+              required
             />
             <input
               type="email"
@@ -110,14 +118,16 @@ export default function Registration() {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              required
             />
 
             <select
               id="usertype"
-              className="input input-box-form"
+              className="input input-box-form input-select"
               name="userType"
               value={formData.userType}
               onChange={handleInputChange}
+              required
             >
               <option value="" disabled hidden>
                 Select User Type
@@ -133,7 +143,9 @@ export default function Registration() {
           <div className="link-group">
             <span>
               Already have an account?
-              <span className="li-signup"> Sign in</span>
+              <Link to="/login">
+                <span className="li-signup"> Sign in</span>
+              </Link>
             </span>
             <span>
               <span>Terms and Condition |</span>

@@ -1,0 +1,70 @@
+.tab-container {
+  height: 100%;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.tab-section {
+  border: 1px solid #666666;
+  border-radius: 15px;
+  height: 500px;
+  width: 90%;
+  border-top: none;
+  display: flex; /* Ensure flex behavior */
+  flex-direction: column; /* Arrange children vertically */
+}
+
+.tab-btn-container {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+}
+
+.tab-btn {
+  height: 100%;
+  flex: 1;
+  font-family: "Lilita One";
+  transition: background-color 0.3s; /* Smooth transition for background color */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center text horizontally and vertically */
+  cursor: pointer; /* Indicates that the element is clickable */
+  background-color: #bda4d4; /* Darker green for active tab */
+
+  border: 1px solid #666;
+  border-top-color: 1px #666;
+  border-bottom-color: transparent;
+  border-left: 0px;
+  border-right: 0px;
+
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+}
+
+.tab-btn:nth-child(even) {
+  border-bottom-left-radius: 15px;
+}
+
+.tab-btn:nth-child(odd) {
+  border-bottom-right-radius: 15px;
+  border-bottom: 1px solid #666;
+  border-right: 1px solid #666;
+}
+.tab-btn:hover {
+  background-color: #f0e6f7; /* Light lavender-grey */
+}
+
+.tab-btn.active {
+  background-color: #fff;
+  color: #000;
+
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.tab-content {
+  height: 100%; /* Occupy full height of tab-section */
+  flex-grow: 1; /* Allow tab-content to grow to occupy remaining space */
+}

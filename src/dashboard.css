@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 50px;
   gap: 2rem;
 }
 
@@ -15,4 +15,8 @@
 
 .game-card-wrapper .game-card:nth-child(2) .card-h__banner {
   height: 180%;
+}
+
+.game-card-wrapper a {
+  color: #000;
 }

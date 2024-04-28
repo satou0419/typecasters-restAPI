@@ -105,7 +105,7 @@ const DialogBox = ({ title, content, buttons }) => {
           {buttons.map((button, index) => (
             <button
               key={index}
-              className="dialog-button"
+              className="dialog-button btn btn--medium btn--primary"
               onClick={() => handleButtonClick(button.onClick)}
             >
               {button.label}

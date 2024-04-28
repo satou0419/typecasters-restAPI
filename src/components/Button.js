@@ -27,6 +27,11 @@ export default function Button() {
         <label>btn btn--large btn--primary</label>
         <button className="btn btn--large btn--primary">Join Now</button>
       </div>
+
+      <div className="btn-group">
+        <label>btn btn--large btn--primary</label>
+        <button className="btn btn-item">150</button>
+      </div>
     </section>
   );
 }

@@ -1,12 +1,21 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import DialogBox from "./components/DialogBox";
+import "./components/input.css";
 import "./login.css";
 
-export default function Login() {
-  document.body.style.backgroundColor = "#333";
-
+export default function Login({ setIsLoggedIn }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [showDialog, setShowDialog] = useState(false); // State to manage dialog visibility
+  const [dialogContent, setDialogContent] = useState({
+    title: "",
+    content: "",
+    buttons: [],
+  });
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,15 +36,37 @@ export default function Login() {
         throw new Error("Login failed");
       }
 
+      // Set authentication status to true and store it in session storage
+      sessionStorage.setItem("isLoggedIn", "true");
+      setIsLoggedIn(true); // Update the loggedIn state
+      navigate("/dashboard"); // Redirect to the dashboard
+
       console.log("Login successful!");
     } catch (error) {
+      openDialog("Error", "Invalid username or password", [
+        { label: "Retry", onClick: closeDialog },
+      ]);
       setError("Invalid username or password");
       console.error(error);
     }
   };
 
+  // Function to open the dialog box
+  const openDialog = (title, content, buttons) => {
+    setDialogContent({ title, content, buttons });
+    setShowDialog(true);
+  };
+
+  // Function to close the dialog box
+  const closeDialog = () => {
+    setShowDialog(false);
+  };
+
   return (
     <main className="login-container">
+      {/* Overlay */}
+      {showDialog && <div className="overlay" />}
+
       <section className="card card-form">
         <div className="card-form-banner">
           <img src="./assets/banner/banner_login.webp" alt="Login Banner" />
@@ -48,18 +79,18 @@ export default function Login() {
             className="input input-box-form"
             placeholder="Username"
             autoFocus
+            required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
           <input
             type="password"
             className="input input-box-form"
+            required
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
-          {error && <div className="error-message">{error}</div>}
 
           <button
             type="submit"
@@ -71,7 +102,9 @@ export default function Login() {
           <div className="link-group">
             <span>
               Don't have an account yet?{" "}
-              <span className="li-signup">Sign up</span>
+              <Link to="/registration">
+                <span className="li-signup">Sign up</span>
+              </Link>
             </span>
             <span>
               <span>Terms and Condition |</span>
@@ -81,6 +114,15 @@ export default function Login() {
           </div>
         </form>
       </section>
+
+      {/* DialogBox component */}
+      {showDialog && (
+        <DialogBox
+          title={dialogContent.title}
+          content={dialogContent.content}
+          buttons={dialogContent.buttons}
+        />
+      )}
     </main>
   );
 }

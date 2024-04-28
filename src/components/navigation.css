@@ -1,34 +1,61 @@
 .nav-container {
   width: 100%;
   height: fit-content;
-  outline: 1px solid red;
   display: flex;
   justify-content: center;
+  margin-bottom: 5%;
 }
 
 .nav-bar {
   width: 100%;
-  height: 90px;
+  height: 5ch;
   background-image: url("/public/assets/background/bg_nav.svg");
-  background-size: contain;
+  background-size: cover; /* cover to ensure full coverage */
+  background-position: center; /* centers the background image */
   background-repeat: no-repeat;
   position: relative;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-bar a {
+  color: #fff;
+  font-family: "Lilita One";
+}
+
+.nav-bar a:last-child {
+  margin-right: 30px;
+}
+
+.nav-bar {
+  height: 50px; /* default height */
+}
+
+@media (max-width: 768px) {
+  .nav-bar {
+    height: 30px; /* smaller height for smaller screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-bar {
+    height: 60px; /* possibly larger for bigger screens */
+  }
 }
 
 .nav-bar__logo {
   width: 100%;
   margin-top: 20px;
-  outline: 1px solid blue;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
+  z-index: -4;
 }
 
 .nav-bar__logo img {
-  width: 10%;
-}
-
-.custom-archive-card {
-  /* Add your custom styles here */
+  width: 150px; /* Set a default width */
 }

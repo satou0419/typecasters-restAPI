@@ -35,3 +35,49 @@
     background-position: -8602px 0;
   }
 }
+
+.character-enemy {
+  transition: transform 0.5s ease; /* Smooth movement transition */
+}
+
+/* CSS Animation for blinking effect, blinking five times in 0.5 seconds */
+@keyframes blink {
+  0%,
+  20%,
+  60%,
+  100% {
+    filter: none;
+  }
+  10%,
+  50%,
+  90% {
+    filter: brightness(10);
+  }
+}
+
+.character-main.hit {
+  animation: blink 0.5s ease-in-out;
+}
+
+/* CSS Animation for shaking effect */
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.character-main.hit {
+  animation: blink 0.5s ease-in-out, shake 0.5s ease-in-out;
+}

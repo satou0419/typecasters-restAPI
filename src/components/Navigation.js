@@ -15,6 +15,7 @@ export default function Navigation() {
           </div>
 
           <Link to="/login">About</Link>
+          <Link to="/login">Logout</Link>
         </nav>
       </main>
     </section>

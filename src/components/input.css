@@ -18,7 +18,7 @@
 
   border: 1px solid #c1c1c1;
   border-radius: 3px;
-  color: #c1c1c1;
+  color: #000;
 }
 
 .input-box {
@@ -32,8 +32,9 @@
 .input-box-form__s {
   width: 130px;
 }
-.input::placeholder {
-  color: inherit;
+.input::placeholder,
+.input-select {
+  color: #c1c1c1;
 }
 
 .input-line {
