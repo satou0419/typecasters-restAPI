@@ -5,6 +5,9 @@ import com.typecasters.apitowerofwords.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 @RestController
 @RequestMapping("/user")
@@ -19,7 +22,7 @@ public class UserController {
         return userv.registerUser(user);
     }
 
-    @GetMapping("/userTest")
+    @GetMapping("/user_test")
     public String testUser(){
         return "testinnnngg";
     }
@@ -29,16 +32,19 @@ public class UserController {
         return userv.login(logReq);
     }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/update_user")
     public UserEntity updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo){
         return userv.editAccount(newUserInfo, uid);
     }
 
-    @PostMapping("/testFind")
+    @PostMapping("/test_find")
     public UserEntity loginUser(@RequestBody String username){
         return userv.testFind(username);
     }
 
-
+    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
+    public String logoutUser(HttpServletRequest request, HttpServletResponse response){
+        return "redirect:/login";
+    }
 }
 
