@@ -27,20 +27,20 @@ public class ArchiveWordsController {
         return AWS.viewAllArchiveWords();
     }
 
-    @GetMapping("/view_by_id/{archive_words_id}")
-    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int archive_words_id) {
-        return AWS.viewArchiveWordsByID(archive_words_id);
+    @GetMapping("/view_by_id/{AWID}")
+    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int AWID) {
+        return AWS.viewArchiveWordsByID(AWID);
     }
 
     //Update
-    @PutMapping("/edit/{archive_words_id}")
-    public ArchiveWordsEntity editArchiveWords(@PathVariable int archive_words_id,@RequestBody ArchiveWordsEntity new_archive_words) {
-        return AWS.editArchiveWords(archive_words_id, new_archive_words);
+    @PutMapping("/edit")
+    public ArchiveWordsEntity editArchiveWords(@RequestBody ArchiveWordsEntity word) {
+        return AWS.editArchiveWords(word);
     }
 
     //Delete
-    @PutMapping("/remove/{archive_words_id}")
-    public ArchiveWordsEntity removeArchiveWords(@PathVariable int archive_words_id) {
-        return AWS.removeArchiveWords(archive_words_id);
+    @PutMapping("/remove/{AWID}")
+    public ArchiveWordsEntity removeArchiveWords(@PathVariable int AWID) {
+        return AWS.removeArchiveWords(AWID);
     }
 }

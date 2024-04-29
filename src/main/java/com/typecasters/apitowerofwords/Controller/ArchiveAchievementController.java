@@ -27,20 +27,20 @@ public class ArchiveAchievementController {
         return AAS.viewAllArchiveAchievement();
     }
 
-    @GetMapping("/view_by_id/{archive_achievement_id}")
-    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int archive_achievement_id) {
-        return AAS.viewArchiveAchievementByID(archive_achievement_id);
+    @GetMapping("/view_by_id/{AAID}")
+    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int AAID) {
+        return AAS.viewArchiveAchievementByID(AAID);
     }
 
     //Update
-    @PutMapping("/edit/{archive_achievement_id}")
-    public ArchiveAchievementEntity editArchiveAchievement(@PathVariable int archive_achievement_id, @RequestBody ArchiveAchievementEntity new_archive_achievement) {
-        return AAS.editArchiveAchievement(archive_achievement_id, new_archive_achievement);
+    @PutMapping("/edit")
+    public ArchiveAchievementEntity editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+        return AAS.editArchiveAchievement(achievement);
     }
 
     //Delete
-    @PutMapping("/remove/{archive_achievement_id}")
-    public ArchiveAchievementEntity removeArchiveAchievement(@PathVariable int archive_achievement_id) {
-        return AAS.removeArchiveAchievement(archive_achievement_id);
+    @PutMapping("/remove/{AAID}")
+    public ArchiveAchievementEntity removeArchiveAchievement(@PathVariable int AAID) {
+        return AAS.removeArchiveAchievement(AAID);
     }
 }

@@ -7,61 +7,61 @@ import javax.persistence.*;
 public class ArchiveAchievementEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int archive_achievement_id;
+    private int AAID;
 
-    private String archive_achievement_name;
-    private String archive_achievement_description;
-    private String archive_achievement_image_path;
-    private boolean archive_achievement_is_deleted = false;
+    private String name;
+    private String description;
+    private String imagePath;
+    private boolean isDeleted = false;
 
     public ArchiveAchievementEntity() {
     }
 
-    public ArchiveAchievementEntity(int archive_achievement_id, String archive_achievement_name, String archive_achievement_description, String archive_achievement_image_path, boolean archive_achievement_is_deleted) {
-        this.archive_achievement_id = archive_achievement_id;
-        this.archive_achievement_name = archive_achievement_name;
-        this.archive_achievement_description = archive_achievement_description;
-        this.archive_achievement_image_path = archive_achievement_image_path;
-        this.archive_achievement_is_deleted = archive_achievement_is_deleted;
+    public ArchiveAchievementEntity(int AAID, String name, String description, String imagePath, boolean isDeleted) {
+        this.AAID = AAID;
+        this.name = name;
+        this.description = description;
+        this.imagePath = imagePath;
+        this.isDeleted = isDeleted;
     }
 
-    public int getArchive_achievement_id() {
-        return archive_achievement_id;
+    public int getAAID() {
+        return AAID;
     }
 
-    public void setArchive_achievement_id(int archive_achievement_id) {
-        this.archive_achievement_id = archive_achievement_id;
+    public void setAAID(int AAID) {
+        this.AAID = AAID;
     }
 
-    public String getArchive_achievement_name() {
-        return archive_achievement_name;
+    public String getName() {
+        return name;
     }
 
-    public void setArchive_achievement_name(String archive_achievement_name) {
-        this.archive_achievement_name = archive_achievement_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getArchive_achievement_description() {
-        return archive_achievement_description;
+    public String getDescription() {
+        return description;
     }
 
-    public void setArchive_achievement_description(String archive_achievement_description) {
-        this.archive_achievement_description = archive_achievement_description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getArchive_achievement_image_path() {
-        return archive_achievement_image_path;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setArchive_achievement_image_path(String archive_achievement_image_path) {
-        this.archive_achievement_image_path = archive_achievement_image_path;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
-    public boolean isArchive_achievement_is_deleted() {
-        return archive_achievement_is_deleted;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setArchive_achievement_is_deleted(boolean archive_achievement_is_deleted) {
-        this.archive_achievement_is_deleted = archive_achievement_is_deleted;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

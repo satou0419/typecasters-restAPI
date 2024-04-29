@@ -22,36 +22,36 @@ public class ArchiveAchievementService {
         return AAR.findAll();
     }
 
-    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(int archive_achievement_id) {
-        return AAR.findById(archive_achievement_id);
+    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(int AAID) {
+        return AAR.findById(AAID);
     }
 
-    public ArchiveAchievementEntity editArchiveAchievement(int archive_achievement_id, ArchiveAchievementEntity new_archive_achievement) {
+    public ArchiveAchievementEntity editArchiveAchievement(ArchiveAchievementEntity achievement) {
         ArchiveAchievementEntity edit = new ArchiveAchievementEntity();
 
         try {
-            edit = AAR.findById(archive_achievement_id).get();
+            edit = AAR.findById(achievement.getAAID()).get();
 
-            edit.setArchive_achievement_name(new_archive_achievement.getArchive_achievement_name());
-            edit.setArchive_achievement_description(new_archive_achievement.getArchive_achievement_description());
-            edit.setArchive_achievement_image_path(new_archive_achievement.getArchive_achievement_image_path());
+            edit.setName(achievement.getName());
+            edit.setDescription(achievement.getDescription());
+            edit.setImagePath(achievement.getImagePath());
 
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + archive_achievement_id + " does not exist");
+            throw new NoSuchElementException ("Achievement " + achievement.getAAID() + " does not exist");
         }finally {
             return AAR.save(edit);
         }
     }
 
-    public ArchiveAchievementEntity removeArchiveAchievement(int archive_achievement_id) {
+    public ArchiveAchievementEntity removeArchiveAchievement(int AAID) {
         ArchiveAchievementEntity delete = new ArchiveAchievementEntity();
 
         try {
-            delete = AAR.findById(archive_achievement_id).get();
+            delete = AAR.findById(AAID).get();
 
-            delete.setArchive_achievement_is_deleted(true);
+            delete.setDeleted(true);
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Achievement " + archive_achievement_id + " does not exist!");
+            throw new NoSuchElementException("Achievement " + AAID + " does not exist!");
         }finally {
             return AAR.save(delete);
         }

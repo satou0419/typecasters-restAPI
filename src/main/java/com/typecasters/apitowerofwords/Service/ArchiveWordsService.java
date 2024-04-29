@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ArchiveWordsService {
     @Autowired
     ArchiveWordsRepository AWR;
-    
+
     public ArchiveWordsEntity insertArchiveWords(ArchiveWordsEntity word) {
         return AWR.save(word);
     }
@@ -27,32 +27,32 @@ public class ArchiveWordsService {
         return AWR.findById(archive_words_id);
     }
 
-    public ArchiveWordsEntity editArchiveWords(int archive_words_id, ArchiveWordsEntity new_archive_words) {
+    public ArchiveWordsEntity editArchiveWords(ArchiveWordsEntity word) {
         ArchiveWordsEntity edit = new ArchiveWordsEntity();
 
         try {
-            edit = AWR.findById(archive_words_id).get();
+            edit = AWR.findById(word.getAWID()).get();
 
-            edit.setArchive_words_user_id(new_archive_words.getArchive_words_user_id());
-            edit.setArchive_words_word(new_archive_words.getArchive_words_word());
-            edit.setArchive_words_check(new_archive_words.isArchive_words_check());
+            edit.setUID(word.getUID());
+            edit.setWord(word.getWord());
+            edit.setCheck(word.isCheck());
 
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Word " + archive_words_id + " does not exist");
+            throw new NoSuchElementException ("Word " + word.getAWID() + " does not exist");
         }finally {
             return AWR.save(edit);
         }
     }
 
-    public ArchiveWordsEntity removeArchiveWords(int archive_words_id) {
+    public ArchiveWordsEntity removeArchiveWords(int AWID) {
         ArchiveWordsEntity delete = new ArchiveWordsEntity();
 
         try {
-            delete = AWR.findById(archive_words_id).get();
+            delete = AWR.findById(AWID).get();
 
-            delete.setArchive_words_is_deleted(true);
+            delete.setDeleted(true);
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Word " + archive_words_id + " does not exist!");
+            throw new NoSuchElementException("Word " + AWID + " does not exist!");
         }finally {
             return AWR.save(delete);
         }

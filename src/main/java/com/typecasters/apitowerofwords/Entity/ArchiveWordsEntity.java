@@ -7,61 +7,62 @@ import javax.persistence.*;
 public class ArchiveWordsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int archive_words_id;
+    private int AWID;
 
-    private int archive_words_user_id;
-    private String archive_words_word;
-    private boolean archive_words_check = false;
-    private boolean archive_words_is_deleted = false;
+    private int UID;
+    private String word;
+    @Column(name = "check_column")
+    private boolean check;
+    private boolean isDeleted = false;
 
     public ArchiveWordsEntity() {
     }
 
-    public ArchiveWordsEntity(int archive_words_id, int archive_words_user_id, String archive_words_word, boolean archive_words_check, boolean archive_words_is_deleted) {
-        this.archive_words_id = archive_words_id;
-        this.archive_words_user_id = archive_words_user_id;
-        this.archive_words_word = archive_words_word;
-        this.archive_words_check = archive_words_check;
-        this.archive_words_is_deleted = archive_words_is_deleted;
+    public ArchiveWordsEntity(int AWID, int UID, String word, boolean check, boolean isDeleted) {
+        this.AWID = AWID;
+        this.UID = UID;
+        this.word = word;
+        this.check = check;
+        this.isDeleted = isDeleted;
     }
 
-    public boolean isArchive_words_is_deleted() {
-        return archive_words_is_deleted;
+    public int getAWID() {
+        return AWID;
     }
 
-    public void setArchive_words_is_deleted(boolean archive_words_is_deleted) {
-        this.archive_words_is_deleted = archive_words_is_deleted;
+    public void setAWID(int AWID) {
+        this.AWID = AWID;
     }
 
-    public boolean isArchive_words_check() {
-        return archive_words_check;
+    public int getUID() {
+        return UID;
     }
 
-    public void setArchive_words_check(boolean archive_words_check) {
-        this.archive_words_check = archive_words_check;
+    public void setUID(int UID) {
+        this.UID = UID;
     }
 
-    public String getArchive_words_word() {
-        return archive_words_word;
+    public String getWord() {
+        return word;
     }
 
-    public void setArchive_words_word(String archive_words_word) {
-        this.archive_words_word = archive_words_word;
+    public void setWord(String word) {
+        this.word = word;
     }
 
-    public int getArchive_words_user_id() {
-        return archive_words_user_id;
+    public boolean isCheck() {
+        return check;
     }
 
-    public void setArchive_words_user_id(int archive_words_user_id) {
-        this.archive_words_user_id = archive_words_user_id;
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 
-    public int getArchive_words_id() {
-        return archive_words_id;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setArchive_words_id(int archive_words_id) {
-        this.archive_words_id = archive_words_id;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }
