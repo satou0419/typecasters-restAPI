@@ -7,59 +7,63 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class AdventureEnemyService {
+
     @Autowired
-    AdventureEnemyRepository aerepo;
+    private AdventureEnemyRepository ae_rep;
 
-
-    //C - read all records in tbladventure_ennemy
-    public AdventureEnemyEntity insertAdventureEnemy(AdventureEnemyEntity enemy) {
-
-        return aerepo.save(enemy);
+    //Create
+    public AdventureEnemyEntity insertEnemy(AdventureEnemyEntity enemy){
+        return ae_rep.save(enemy);
     }
 
-    //R - read all records in tbladventure_ennemy
-    public List<AdventureEnemyEntity> getAllAdventureEnemy(){
-        return aerepo.findAll();
+    //Read
+    public List<AdventureEnemyEntity> getAllEnemy(){
+        return ae_rep.findAll();
     }
 
-    //U - update enemy
-    @SuppressWarnings("finally")
-    public AdventureEnemyEntity updateAdventureEnemy(int enemyId, AdventureEnemyEntity newEnemyDetails) {
+    public Optional<AdventureEnemyEntity> getEnemyById(int enemy_id){
+        return ae_rep.findById(enemy_id);
+    }
+
+    //Get All By TowerId
+
+    public Optional<List<AdventureEnemyEntity>> getAllByTowerId(int tower_id){
+        return ae_rep.findAllByTowerFloorId(tower_id);
+    }
+
+    //Update
+    @SuppressWarnings({"finally", "ReturnInsideFinallyBlock"})
+    public AdventureEnemyEntity updateEnemy(int enemy_id, AdventureEnemyEntity newEnemyDetail){
         AdventureEnemyEntity enemy = new AdventureEnemyEntity();
 
+        try{
+            enemy = ae_rep.findById(enemy_id).get();
 
-        try {
-            //search
-            enemy = aerepo.findById(enemyId).get();
-
-
-            //Update
-            enemy.setEnemyName(newEnemyDetails.getEnemyName());
-            enemy.setWord(newEnemyDetails.getWord());
-            enemy.setImagePath(newEnemyDetails.getImagePath());
-
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("enemy " + enemyId + " does not exist");
-        }finally {
-            return aerepo.save(enemy);
+            enemy.setImagePath(newEnemyDetail.getImagePath());
+            enemy.setTowerFloorId(newEnemyDetail.getTowerFloorId());
+            enemy.setWords(newEnemyDetail.getWords());
+        }catch (NoSuchElementException ex){
+            throw new NoSuchElementException("Enemy does not exist");
+        }finally{
+            return ae_rep.save(enemy);
         }
     }
 
-    //D - delete
-    public String deleteEnemy(int enemyId) {
-        String msg = "";
+    //Delete
+    public String deleteEnemy(int enemy_id){
+        String msg = "enemy id does not exist";
 
-        if(aerepo.findById(enemyId) != null) {
-            aerepo.deleteById(enemyId);
-            msg = "Enemy " + enemyId + " is successfully deleted!";
-        }else {
-            msg = "Enemy " + enemyId +" does not exist";
+        if(ae_rep.findById(enemy_id).isPresent()){
+            ae_rep.deleteById(enemy_id);
         }
-
 
         return msg;
+
     }
+
+
 }

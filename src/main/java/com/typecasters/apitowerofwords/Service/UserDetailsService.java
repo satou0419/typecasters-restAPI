@@ -1,5 +1,6 @@
 package com.typecasters.apitowerofwords.Service;
 
+import com.typecasters.apitowerofwords.Entity.TowerProgressEntity;
 import com.typecasters.apitowerofwords.Entity.UserDetailsEntity;
 import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,28 +14,39 @@ public class UserDetailsService {
 
     //Initialized User Details
     public void initUserDetails(int user_id){
-        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0);
+        TowerProgressEntity towerProg = new TowerProgressEntity(user_id, 1, 0);
+        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg);
 
         ud_repo.save(userDetails);
+    }
+
+    //Get user details
+    public UserDetailsEntity getUserDetails(int user_id){
+        return ud_repo.findOneByUserId(user_id);
     }
 
 
     //Edit Credit
     public String updateUserCredit(int user_detail_id, int s_credit){
         UserDetailsEntity userDetails = new UserDetailsEntity();
-        String message ;
-        userDetails = ud_repo.findById(user_detail_id).get();
+        String message = "";
 
-        if(userDetails != null){
-            int new_credit = userDetails.getCredit_amount() + s_credit;
-            if(new_credit < 0){
+        try{
+            userDetails = ud_repo.findById(user_detail_id).get();
+
+            if(userDetails != null){
+                int new_credit = userDetails.getCredit_amount() + s_credit;
+                if(new_credit < 0){
                 message =  "Credit below zero.";
+                }else{
+                    userDetails.setCredit_amount(new_credit);
+                    ud_repo.save(userDetails);
+                    message =  "Credit updated.";
+                }
             }else{
-                userDetails.setCredit_amount(new_credit);
-                ud_repo.save(userDetails);
-                message =  "Credit updated.";
+                message = "user_detail_id does not exist";
             }
-        }else{
+        }catch (RuntimeException e){
             message = "user_detail_id does not exist";
         }
 
