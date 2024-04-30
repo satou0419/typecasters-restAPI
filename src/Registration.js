@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./registration.css";
 import "./components/input.css";
+import { REGISTER_ENDPOINT } from "./api";
 
 export default function Registration() {
   // State variables to store form data
@@ -27,10 +28,9 @@ export default function Registration() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // API URL for user registration
-    const registrationUrl = "http://localhost:8080/user/register";
 
     try {
-      const response = await fetch(registrationUrl, {
+      const response = await fetch(REGISTER_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

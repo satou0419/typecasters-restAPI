@@ -1,23 +1,42 @@
-import React from "react";
-
-import { Link } from "react-router-dom";
-import { ArchiveCard, GameCard } from "./Card"; // Import only the CardCreate component
-
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./navigation.css";
 
-export default function Navigation() {
+export default function Navigation({ onLogout }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const toggleProfile = () => {
+    setProfileOpen(!profileOpen);
+  };
+
   return (
     <section>
-      <main className="nav-container">
-        <nav className="nav-bar">
-          <div className="nav-bar__logo">
-            <img src="./assets/logo/logo_simple.webp" />
-          </div>
-
-          <Link to="/login">About</Link>
-          <Link to="/login">Logout</Link>
-        </nav>
-      </main>
+      <nav className={`nav-bar ${menuOpen ? "menu-open" : ""}`}>
+        <div className="nav-bar__logo">
+          <img src="./assets/logo/logo_simple.webp" alt="Logo" />
+        </div>
+        <div className="menu-icon" onClick={toggleMenu}>
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </div>
+        <div className={`menu ${menuOpen ? "open" : "close"}`}>
+          <Link to="/about">About</Link>
+          <Link to="/inventory_shop">Inventory</Link>
+        </div>
+        <div className="profile-icon" onClick={toggleProfile}>
+          <span className="circle"></span>
+        </div>
+        <div className={`profile ${profileOpen ? "open" : "close"}`}>
+          <Link onClick={onLogout}>Logout</Link>
+        </div>
+      </nav>
     </section>
   );
 }

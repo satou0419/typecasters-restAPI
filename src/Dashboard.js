@@ -7,7 +7,7 @@ export default function Dashboard() {
   return (
     <main className="dashboard-wrapper">
       <section className="game-card-wrapper">
-        <Link to="/adventure_spelling">
+        <Link to="/adventure_mode">
           <CardGame
             title="Adventure"
             content="Lorem ipsum dolor sit amet, consectetur adipiscing"

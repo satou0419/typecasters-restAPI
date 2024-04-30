@@ -173,7 +173,7 @@ export const CardArchive = ({
   </section>
 );
 
-export const CardItemm = ({ bannerSrc, itemName, itemBtnPrice, onClick }) => (
+export const CardItem = ({ bannerSrc, itemName, itemBtnPrice, onClick }) => (
   <section className="card card-item" onClick={onClick}>
     <div className="card-item__banner">
       <img src={bannerSrc} alt={itemName} />
@@ -270,7 +270,7 @@ const Card = () => {
         onClick={handleCardArchiveClick}
       />
       {/* CardItem */}
-      <CardItemm
+      <CardItem
         bannerSrc="./assets/items/item_medical_kit.webp"
         itemName="Medkit"
         itemBtnPrice={150}

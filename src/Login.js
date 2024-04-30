@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DialogBox from "./components/DialogBox";
 import "./components/input.css";
 import "./login.css";
+import { LOGIN_ENDPOINT } from "./api";
 
 export default function Login({ setIsLoggedIn }) {
   const [username, setUsername] = useState("");
@@ -21,7 +22,7 @@ export default function Login({ setIsLoggedIn }) {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/user/login", {
+      const response = await fetch(LOGIN_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

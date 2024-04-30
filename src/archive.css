@@ -76,7 +76,7 @@
 
 /* Style the scrollbar thumb */
 ::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Set the color of the scrollbar thumb */
+  background-color: green; /* Set the color of the scrollbar thumb */
   border-radius: 6px; /* Set the border radius of the scrollbar thumb */
 }
 

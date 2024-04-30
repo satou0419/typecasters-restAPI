@@ -66,7 +66,7 @@ export default function Archive() {
             </section>
           </div>
         );
-      case "shop":
+      case "achievement":
         return <div className="tab-content word-archive">Hello</div>;
       default:
         return <div className="tab-content">Select a tab</div>;
@@ -84,10 +84,10 @@ export default function Archive() {
             Word
           </div>
           <div
-            className={`tab-btn ${activeTab === "shop" ? "active" : ""}`}
-            onClick={() => handleTabClick("shop")}
+            className={`tab-btn ${activeTab === "achievement" ? "active" : ""}`}
+            onClick={() => handleTabClick("achievement")}
           >
-            Shop
+            Achievement
           </div>
         </div>
 

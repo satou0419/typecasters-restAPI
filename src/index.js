@@ -12,6 +12,8 @@ import Tab from "./components/Tab";
 import InventoryShop from "./InventoryShop";
 import GameplayAdventureSpelling from "./GameplayAdventureSpelling";
 import Animation from "./components/Animation";
+import AdventureMode from "./AdventureMode";
+import CreateRoom from "./CreateRoom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
