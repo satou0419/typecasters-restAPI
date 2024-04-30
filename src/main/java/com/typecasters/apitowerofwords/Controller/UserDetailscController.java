@@ -1,5 +1,6 @@
 package com.typecasters.apitowerofwords.Controller;
 
+import com.typecasters.apitowerofwords.Entity.UserDetailsEntity;
 import com.typecasters.apitowerofwords.Service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,10 @@ public class UserDetailscController {
     @PutMapping("/increment_achievement")
     public String incrementUserAchievementCount(@RequestParam int ud_id){
         return ud_serv.incrementUserAchievementCount(ud_id);
+    }
+
+    @GetMapping("/get_user_detail")
+    public UserDetailsEntity getUserDetails(@RequestParam int user_id){
+        return ud_serv.getUserDetails(user_id);
     }
 }

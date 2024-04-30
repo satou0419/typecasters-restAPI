@@ -18,13 +18,7 @@ public class UserItemEntity {
 //    @JoinColumn(name = "item_id")
     private int item_id;
 
-    public UserItemEntity(int user_item_id, int quantity, int item_id) {
-        super();
-        this.user_item_id = user_item_id;
-        this.quantity = quantity;
-        this.item_id = item_id;
-    }
-    //    @JsonBackReference
+//    @JsonBackReference
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
 //    private UserDetailsEntity user_details;

@@ -1,31 +1,34 @@
 package com.typecasters.apitowerofwords.Entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name="tbladventure_enemy")
+@Table(name = "tbl_adventure_enemy")
 public class AdventureEnemyEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "enemy_id")
     private int enemyId;
 
-    @Column(name = "enemy_name")
-    private String enemyName;
-
-    @Column(name = "word")
-    private String word;
-
-    @Column(name = "image_path")
+    private int towerFloorId;
     private String imagePath;
+
+//    @OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ElementCollection
+    @CollectionTable(name = "adventure_words", joinColumns = @JoinColumn(name = "enemyId"))
+    private List<String> words = new ArrayList<>();
 
     public AdventureEnemyEntity() {
     }
 
-    public AdventureEnemyEntity(int enemyId, String enemyName, String word, String imagePath) {
+    public AdventureEnemyEntity(int enemyId, int towerFloorId, String imagePath, List<String> words) {
         this.enemyId = enemyId;
-        this.enemyName = enemyName;
-        this.word = word;
+        this.towerFloorId = towerFloorId;
         this.imagePath = imagePath;
+        this.words = words;
     }
 
     public int getEnemyId() {
@@ -36,20 +39,12 @@ public class AdventureEnemyEntity {
         this.enemyId = enemyId;
     }
 
-    public String getEnemyName() {
-        return enemyName;
+    public int getTowerFloorId() {
+        return towerFloorId;
     }
 
-    public void setEnemyName(String enemyName) {
-        this.enemyName = enemyName;
-    }
-
-    public String getWord() {
-        return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
+    public void setTowerFloorId(int towerFloorId) {
+        this.towerFloorId = towerFloorId;
     }
 
     public String getImagePath() {
@@ -58,5 +53,13 @@ public class AdventureEnemyEntity {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public List<String> getWords() {
+        return words;
+    }
+
+    public void setWords(List<String> words) {
+        this.words = words;
     }
 }

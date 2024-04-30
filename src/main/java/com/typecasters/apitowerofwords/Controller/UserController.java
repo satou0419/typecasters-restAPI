@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/user")
-
 public class UserController {
 
     @Autowired

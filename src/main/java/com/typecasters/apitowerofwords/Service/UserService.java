@@ -25,6 +25,10 @@ public class UserService {
     public String registerUser(UserEntity user){
         int user_id;
 
+        if(user.getUsername().isEmpty() && user.getPassword().isEmpty() && user.getUserType().isEmpty() && user.getEmail().isEmpty() && user.getFirstname().isEmpty() && user.getLastname().isEmpty()){
+            return "Fields are empty";
+        }
+
         if(urepo.findOneByUsername(user.getUsername()) == null){
 
             user_id = urepo.save(user).getUserID();
