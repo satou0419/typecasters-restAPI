@@ -34,9 +34,9 @@ public class AdventureEnemyController {
     }
 
     //Read By foreign key
-    @GetMapping("/get_enemy_by_tower_id")
-    public Optional<List<AdventureEnemyEntity>> getEnemyByTowerId(@RequestParam int tower_id){
-        return ae_serv.getAllByTowerId(tower_id);
+    @GetMapping("/get_enemy_by_floor_id")
+    public Optional<List<AdventureEnemyEntity>> getEnemyByFloorId(@RequestParam int floor_id){
+        return ae_serv.getAllByFloorId(floor_id);
     }
 
     //Update

@@ -31,7 +31,7 @@ public class AdventureEnemyService {
 
     //Get All By TowerId
 
-    public Optional<List<AdventureEnemyEntity>> getAllByTowerId(int tower_id){
+    public Optional<List<AdventureEnemyEntity>> getAllByFloorId(int tower_id){
         return ae_rep.findAllByTowerFloorId(tower_id);
     }
 

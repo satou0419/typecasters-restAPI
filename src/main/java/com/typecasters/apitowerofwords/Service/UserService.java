@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -30,6 +32,35 @@ public class UserService {
         }
 
         if(urepo.findOneByUsername(user.getUsername()) == null){
+
+//            user_id = urepo.save(user).getUserID();
+//            ud_serv.initUserDetails(user_id);
+
+            if (user.getPassword().length() < 8) {
+                return "Password must be at least 8 characters";
+            }
+
+            // Check for at least one lowercase letter
+            if (!user.getPassword().matches(".*[a-z].*")) {
+                return "Password must have at least one lowercase letter";
+            }
+
+            // Check for at least one uppercase letter
+            if (!user.getPassword().matches(".*[A-Z].*")) {
+                return "Password must have at least one uppercase letter";
+            }
+
+            // Check for at least one digit
+            if (!user.getPassword().matches(".*\\d.*")) {
+                return "Password must have at least one digit";
+            }
+
+            // Check for at least one special character
+            Pattern specialCharPattern = Pattern.compile("[^a-zA-Z0-9]");
+            Matcher matcher = specialCharPattern.matcher(user.getPassword());
+            if (!matcher.find()) {
+                return "Password must have at least one special character";
+            }
 
             user_id = urepo.save(user).getUserID();
             ud_serv.initUserDetails(user_id);
