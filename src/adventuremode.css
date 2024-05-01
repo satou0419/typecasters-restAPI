@@ -3,7 +3,7 @@
   width: 352px;
   outline: 2px solid green;
   background: url("/public/assets/misc/25_tower.png");
-
+  margin-left: 80%; /* To make the building go right*/
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,4 +24,105 @@
   font-family: "Lilita One";
   color: #5e5e5e;
   background-color: rgba(198, 198, 198, 0.5); /* Adjust the opacity here */
+}
+.border-progress{
+  outline: 2px solid #593796;
+}
+.btnBack{ /* For the Back button */
+  position: absolute;
+  margin-left: 1%;
+  margin-top: 1%; 
+  padding-left: 2%;
+  padding-right: 2%;
+  background-color: #fc5776;
+  color: white;
+  font-size: large;
+  border-top: 2px solid rgb(255, 255, 255);
+}
+.progress{
+  font-size: 40px;
+  font-family: "Lilita One";
+  margin-top: 5%;
+  margin-left: 24%;
+}
+.progress-bar{
+  border: 2px solid black;
+  width: 20%;
+  height: 50px;
+  margin-left: 40%;
+  /* border-top-left-radius: 55px; */
+
+}
+.floor-description{/* for grey backgroundest*/
+  /* border: 2px solid ; */
+  width: 40%;
+  height: 30rem;
+  margin-left: 30%;
+  margin-top: 2rem;
+  position: absolute;
+  background-color: #909090;
+  border-radius: 20px;
+}
+.inner-box{/*for darker grey*/
+  width: 95%;
+  height: 28rem;
+  margin-left: 2.5%;
+  margin-top: 1rem;
+  position: absolute;
+  background-color: #666667;
+  border-radius: 20px;
+}
+.desc-container{/*for purple background*/
+  width: 90%;
+  height: 25rem;
+  margin-left: 5%;
+  margin-top: 2.5rem;
+  position: absolute;
+  background: linear-gradient(-170deg, #B36DEA, #461386);
+  border-radius: 20px;
+  box-shadow: inset 0px 10px 4px 2px #563474;
+}
+.txt-floor{/*for the literal text of Floor 1*/
+  font-family: "lilita One";
+  font-size: 3rem;
+  color: white;
+  -webkit-text-stroke: 2px black;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.txt-rewards{/* for the literal REWARDS word*/
+ font-family: "lilita one";
+ color: white;
+ font-size: 2rem;
+ margin-left: 5rem;
+ margin-top: 1px;
+}
+.reward-item{/*background purple for item1*/
+  width: 6.5rem;
+  height: 6rem;
+  border: 2px solid #541cbd; 
+  background-color: #ffffff;
+  border-radius: 9px;
+  box-shadow: inset 0px 2px 5px 0px #1b1b1b;
+}
+.reward-item-container{/*background metal for item1*/
+  width: 5.8rem;
+  height: 5.2rem;
+  background-color:  #666565;
+  margin-left: 3.5%;
+  margin-top: 5%;
+  border-radius: 9px;
+  box-shadow: inset 0px 2px 5px 0px #1b1b1b;
+}
+.items-container{/*for the items orientation and spacing*/
+  display: flex;
+  gap: 5rem;
+  margin-left: 7rem;
+}
+.btn-enter{
+  margin-left: 18.5rem;
+  width: 6.5rem;
+  height: 3rem;
+  font-size: larger;
+  margin-top: 2rem;
 }
