@@ -26,7 +26,6 @@ public class ItemService {
         return item_repo.save(item);
     }
 
-
     // Read
     public List<ItemEntity> getAllItems() {
         return item_repo.findAll();
