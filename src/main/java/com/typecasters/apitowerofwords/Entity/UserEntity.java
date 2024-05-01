@@ -1,5 +1,9 @@
 package com.typecasters.apitowerofwords.Entity;
 
+import com.typecasters.apitowerofwords.FieldConverter;
+import com.ulisesbocchio.jasyptspringboot.annotation.EncryptablePropertySource;
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,7 +19,10 @@ public class UserEntity {
 
     @Column(unique = true)
     private String username;
+
+    @Convert(converter = FieldConverter.class)
     private String password;
+
     private String userType;
     private String email;
 
