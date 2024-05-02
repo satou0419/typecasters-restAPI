@@ -44,7 +44,6 @@ public class UserItemController {
         return userItemService.getUserItemIdByUserIdAndItemId(userId, itemId);
     }
 
-
     //Read
     @GetMapping("/get_all_user_item")
     public List<UserItemEntity> getAllUserItem() {
