@@ -28,9 +28,9 @@ build/
 ### VS Code ###
 .vscode/
 
-target/
-*.jar
-*.log
-*.class
-.DS_Store
+#target/
+#*.jar
+#*.log
+#*.class
+#.DS_Store
 
