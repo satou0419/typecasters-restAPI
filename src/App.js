@@ -17,6 +17,7 @@ import GameplayAdventureSpelling from "./GameplayAdventureSpelling";
 import { LOGOUT_ENDPOINT } from "./api";
 import CreateRoom from "./CreateRoom";
 import AdventureMode from "./AdventureMode";
+import SimulationMode from "./SimulationMode-Teacher";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -89,6 +90,7 @@ function App() {
             <Route path="/inventory_shop" element={<InventoryShop />} />
             <Route path="/create_room" element={<CreateRoom />} />
             <Route path="/adventure_mode" element={<AdventureMode />} />
+            <Route path="/simulation_mode" element={<SimulationMode />} />
           </>
         )}
       </Routes>

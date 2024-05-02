@@ -16,7 +16,7 @@ export default function Dashboard() {
             imageSrc="./assets/banner/banner_adventure.webp"
           />
         </Link>
-
+        <Link to="/simulation_mode">
         <CardGame
           title="Room"
           content="Lorem ipsum dolor sit amet, consectetur adipiscing"
@@ -24,6 +24,7 @@ export default function Dashboard() {
           progressValue={4}
           imageSrc="./assets/banner/banner_simulation.png"
         />
+        </Link>
       </section>
 
       <Link to="/archive">

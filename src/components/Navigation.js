@@ -18,9 +18,11 @@ export default function Navigation({ onLogout }) {
   return (
     <section>
       <nav className={`nav-bar ${menuOpen ? "menu-open" : ""}`}>
+      
         <div className="nav-bar__logo">
           <img src="./assets/logo/logo_simple.webp" alt="Logo" />
         </div>
+      
         <div className="menu-icon" onClick={toggleMenu}>
           <span className="bar"></span>
           <span className="bar"></span>

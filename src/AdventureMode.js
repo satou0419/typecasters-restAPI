@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "./adventuremode.css";
-// import "./components/button.css";
 export default function AdventureMode() {
   return (
     
