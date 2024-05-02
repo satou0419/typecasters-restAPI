@@ -20,7 +20,7 @@ public class ArchiveWordsService {
         boolean wordExists = false;
 
         try {
-            List<ArchiveWordsEntity> insert = archiveWordsRepository.findByUserID(userID);
+            List<ArchiveWordsEntity> insert = archiveWordsRepository.findAllByUserID(userID);
 
             for (ArchiveWordsEntity i : insert) {
                 if (i.getWord().equals(word.getWord())) {
@@ -43,7 +43,7 @@ public class ArchiveWordsService {
     }
 
     public List<ArchiveWordsEntity> viewAllArchiveWords(int userID) {
-        return archiveWordsRepository.findByUserID(userID);
+        return archiveWordsRepository.findAllByUserID(userID);
     }
 
     public Optional<ArchiveWordsEntity> viewArchiveWordsByID(int archiveWordsID) {

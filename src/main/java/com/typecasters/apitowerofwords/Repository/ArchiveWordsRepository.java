@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface ArchiveWordsRepository extends JpaRepository<ArchiveWordsEntity, Integer> {
-    List<ArchiveWordsEntity> findByUserID(int userID);
+    List<ArchiveWordsEntity> findAllByUserID(int userID);
 }
