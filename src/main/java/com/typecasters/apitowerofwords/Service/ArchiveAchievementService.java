@@ -1,7 +1,9 @@
 package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.ArchiveAchievementEntity;
+import com.typecasters.apitowerofwords.Entity.UserDetailsEntity;
 import com.typecasters.apitowerofwords.Repository.ArchiveAchievementRepository;
+import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,48 +14,74 @@ import java.util.Optional;
 @Service
 public class ArchiveAchievementService {
     @Autowired
-    ArchiveAchievementRepository AAR;
+    ArchiveAchievementRepository archiveAchievementRepository;
+    @Autowired
+    UserDetailsService userDetailsService;
+    @Autowired
+    UserDetailsRepository userDetailsRepository;
 
-    public ArchiveAchievementEntity insertArchiveAchievement(ArchiveAchievementEntity achievement) {
-        return AAR.save(achievement);
-    }
-
-    public List<ArchiveAchievementEntity> viewAllArchiveAchievement() {
-        return AAR.findAll();
-    }
-
-    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(int archive_achievement_id) {
-        return AAR.findById(archive_achievement_id);
-    }
-
-    public ArchiveAchievementEntity editArchiveAchievement(int archive_achievement_id, ArchiveAchievementEntity new_archive_achievement) {
-        ArchiveAchievementEntity edit = new ArchiveAchievementEntity();
+    public ArchiveAchievementEntity insertArchiveAchievement(int userID, ArchiveAchievementEntity achievement) {
+        boolean achievementExists = false;
 
         try {
-            edit = AAR.findById(archive_achievement_id).get();
+            List<ArchiveAchievementEntity> insert = archiveAchievementRepository.findByUserID(userID);
 
-            edit.setArchive_achievement_name(new_archive_achievement.getArchive_achievement_name());
-            edit.setArchive_achievement_description(new_archive_achievement.getArchive_achievement_description());
-            edit.setArchive_achievement_image_path(new_archive_achievement.getArchive_achievement_image_path());
+            for (ArchiveAchievementEntity i : insert) {
+                if (i.getName().equals(achievement.getName())) {
+                    achievementExists = true;
+                    break;
+                }
+            }
 
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + archive_achievement_id + " does not exist");
-        }finally {
-            return AAR.save(edit);
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException("Achievement " + achievement.getArchiveAchievementID() + " does not exist");
+        }
+
+        if (!achievementExists) {
+            userDetailsService.incrementUserDetailWords(userID);
+            return archiveAchievementRepository.save(achievement);
+        } else {
+            System.out.print("Achievement Already Exist!");
+            return achievement;
         }
     }
 
-    public ArchiveAchievementEntity removeArchiveAchievement(int archive_achievement_id) {
+    public List<ArchiveAchievementEntity> viewAllArchiveAchievement(int userID) {
+        return archiveAchievementRepository.findByUserID(userID);
+    }
+
+    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(int archiveAchievementID) {
+        return archiveAchievementRepository.findById(archiveAchievementID);
+    }
+
+    public ArchiveAchievementEntity editArchiveAchievement(ArchiveAchievementEntity achievement) {
+        ArchiveAchievementEntity edit = new ArchiveAchievementEntity();
+
+        try {
+            edit = archiveAchievementRepository.findById(achievement.getArchiveAchievementID()).get();
+
+            edit.setName(achievement.getName());
+            edit.setDescription(achievement.getDescription());
+            edit.setImagePath(achievement.getImagePath());
+
+        }catch(NoSuchElementException ex) {
+            throw new NoSuchElementException ("Achievement " + achievement.getArchiveAchievementID() + " does not exist");
+        }finally {
+            return archiveAchievementRepository.save(edit);
+        }
+    }
+
+    public ArchiveAchievementEntity removeArchiveAchievement(int archiveAchievementID) {
         ArchiveAchievementEntity delete = new ArchiveAchievementEntity();
 
         try {
-            delete = AAR.findById(archive_achievement_id).get();
+            delete = archiveAchievementRepository.findById(archiveAchievementID).get();
 
-            delete.setArchive_achievement_is_deleted(true);
+            delete.setDeleted(true);
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Achievement " + archive_achievement_id + " does not exist!");
+            throw new NoSuchElementException("Achievement " + archiveAchievementID + " does not exist!");
         }finally {
-            return AAR.save(delete);
+            return archiveAchievementRepository.save(delete);
         }
     }
 }
