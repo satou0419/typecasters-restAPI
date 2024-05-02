@@ -1,7 +1,5 @@
 package com.typecasters.apitowerofwords.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 
 @Entity
@@ -10,18 +8,22 @@ public class UserItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user_item_id;
+    @Column(name = "user_item_id")
+    private int userItemId;
 
     private int quantity;
 
-//    @ManyToOne
-//    @JoinColumn(name = "item_id")
-    private int item_id;
+    private int userId;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private ItemEntity itemId;
 
 //    @JsonBackReference
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private UserDetailsEntity user_details;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_details_id")
+//    private UserDetailsEntity userDetails;
+
 
 //    public UserItemEntity(int user_item_id, int quantity, int item_id, UserDetailsEntity user_details) {
 //        super();
@@ -31,16 +33,38 @@ public class UserItemEntity {
 //        this.user_details = user_details;
 //    }
 
+
+    public UserItemEntity(int userItemId, int quantity, int userId, ItemEntity itemId) {
+        this.userItemId = userItemId;
+        this.quantity = quantity;
+        this.userId = userId;
+        this.itemId = itemId;
+    }
+
+    public UserItemEntity(int quantity, int userId, ItemEntity itemId) {
+        this.quantity = quantity;
+        this.userId = userId;
+        this.itemId = itemId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public UserItemEntity() {
         super();
     }
 
-    public int getUser_item_id() {
-        return user_item_id;
+    public int getUserItemId() {
+        return userItemId;
     }
 
-    public void setUser_item_id(int user_item_id) {
-        this.user_item_id = user_item_id;
+    public void setUserItemId(int userItemId) {
+        this.userItemId = userItemId;
     }
 
     public int getQuantity() {
@@ -51,12 +75,12 @@ public class UserItemEntity {
         this.quantity = quantity;
     }
 
-    public int getItemId() {
-        return item_id;
+    public ItemEntity getItemId() {
+        return itemId;
     }
 
-    public void setItem(int itemId) {
-        this.item_id = item_id;
+    public void setItemId(ItemEntity itemId) {
+        this.itemId = itemId;
     }
 
 //    public UserDetailsEntity getUser_details() {
