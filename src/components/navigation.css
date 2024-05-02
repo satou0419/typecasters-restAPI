@@ -63,3 +63,7 @@
 .nav-bar__logo img {
   width: 150px; /* Set a default width */
 }
+
+.ic-img {
+  height: 30px;
+}

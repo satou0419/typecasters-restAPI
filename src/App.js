@@ -19,7 +19,8 @@ import CreateRoom from "./CreateRoom";
 import AdventureMode from "./AdventureMode";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userDetails, setUserDetails] = useState(null); // State to store user details
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -39,6 +40,7 @@ function App() {
 
       if (response.ok) {
         setIsLoggedIn(false);
+        setUserDetails(null); // Clear user details on logout
         sessionStorage.removeItem("isLoggedIn");
         navigate("/login");
       } else {
@@ -64,7 +66,12 @@ function App() {
         ) : (
           <Route
             path="/login"
-            element={<Login setIsLoggedIn={setIsLoggedIn} />}
+            element={
+              <Login
+                setIsLoggedIn={setIsLoggedIn}
+                setUserDetails={setUserDetails}
+              />
+            }
           />
         )}
         {isLoggedIn ? (
@@ -72,7 +79,12 @@ function App() {
         ) : (
           <Route
             path="/registration"
-            element={<Registration setIsLoggedIn={setIsLoggedIn} />}
+            element={
+              <Registration
+                setIsLoggedIn={setIsLoggedIn}
+                setUserDetails={setUserDetails}
+              />
+            }
           />
         )}
         {showAdventureSpelling && (
@@ -83,7 +95,10 @@ function App() {
         )}
         {isLoggedIn && (
           <>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/dashboard"
+              element={<Dashboard userDetails={userDetails} />}
+            />
             <Route path="/student_room" element={<StudentRoom />} />
             <Route path="/archive" element={<Archive />} />
             <Route path="/inventory_shop" element={<InventoryShop />} />

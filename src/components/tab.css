@@ -4,6 +4,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+
+  margin-top: 5%;
 }
 
 .tab-section {
@@ -49,7 +51,6 @@
 
 .tab-btn:nth-child(odd) {
   border-bottom-right-radius: 15px;
-  border-bottom: 1px solid #666;
   border-right: 1px solid #666;
 }
 .tab-btn:hover {

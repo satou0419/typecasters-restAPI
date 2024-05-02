@@ -5,6 +5,8 @@
   align-items: center;
   margin-top: 50px;
   gap: 2rem;
+
+  margin-top: 5%;
 }
 
 .game-card-wrapper {

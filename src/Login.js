@@ -1,3 +1,4 @@
+// Login.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DialogBox from "./components/DialogBox";
@@ -5,7 +6,7 @@ import "./components/input.css";
 import "./login.css";
 import { LOGIN_ENDPOINT } from "./api";
 
-export default function Login({ setIsLoggedIn }) {
+export default function Login({ setIsLoggedIn, setUserDetails }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -37,9 +38,15 @@ export default function Login({ setIsLoggedIn }) {
         throw new Error("Login failed");
       }
 
+      const userData = await response.json(); // Extract user data from response
+
       // Set authentication status to true and store it in session storage
       sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("userDetails", JSON.stringify(userData)); // Store user details
+
       setIsLoggedIn(true); // Update the loggedIn state
+      setUserDetails(userData);
+
       navigate("/dashboard"); // Redirect to the dashboard
 
       console.log("Login successful!");
