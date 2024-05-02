@@ -25,7 +25,6 @@ public class UserDetailsService {
         return ud_repo.findOneByUserId(user_id);
     }
 
-
     //Edit Credit
     public String updateUserCredit(int user_detail_id, int s_credit){
         UserDetailsEntity userDetails = new UserDetailsEntity();
@@ -67,6 +66,6 @@ public class UserDetailsService {
         userDetails.setAchievement_count(userDetails.getAchievement_count() + 1);
         ud_repo.save(userDetails);
 
-        return "word count incremented";
+        return "achievement count incremented";
     }
 }

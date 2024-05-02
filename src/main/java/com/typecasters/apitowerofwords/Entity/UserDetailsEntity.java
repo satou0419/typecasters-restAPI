@@ -1,6 +1,9 @@
 package com.typecasters.apitowerofwords.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name ="tbl_user_details")
@@ -56,6 +59,8 @@ public class UserDetailsEntity {
         this.achievement_count = achievement_count;
         this.userProgress = userProgress;
     }
+
+
 
     public TowerProgressEntity getUserProgress() {
         return userProgress;
