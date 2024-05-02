@@ -13,34 +13,34 @@ import java.util.Optional;
 @RequestMapping("/archive_words")
 public class ArchiveWordsController {
     @Autowired
-    ArchiveWordsService AWS;
+    ArchiveWordsService archiveWordsService;
 
     //Create
     @PostMapping("/insert")
     public ArchiveWordsEntity insertArchiveWords(@RequestBody ArchiveWordsEntity word) {
-        return AWS.insertArchiveWords(word);
+        return archiveWordsService.insertArchiveWords(word.getUserID(), word);
     }
 
     //Read
-    @GetMapping("/view")
-    public List<ArchiveWordsEntity> viewAllArchiveWords() {
-        return AWS.viewAllArchiveWords();
+    @GetMapping("/view/{userID}")
+    public List<ArchiveWordsEntity> viewAllArchiveWords(int userID) {
+        return archiveWordsService.viewAllArchiveWords(userID);
     }
 
-    @GetMapping("/view_by_id/{AWID}")
-    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int AWID) {
-        return AWS.viewArchiveWordsByID(AWID);
+    @GetMapping("/view_by_id/{archiveWordsID}")
+    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int archiveWordsID) {
+        return archiveWordsService.viewArchiveWordsByID(archiveWordsID);
     }
 
     //Update
     @PutMapping("/edit")
     public ArchiveWordsEntity editArchiveWords(@RequestBody ArchiveWordsEntity word) {
-        return AWS.editArchiveWords(word);
+        return archiveWordsService.editArchiveWords(word);
     }
 
     //Delete
-    @PutMapping("/remove/{AWID}")
-    public ArchiveWordsEntity removeArchiveWords(@PathVariable int AWID) {
-        return AWS.removeArchiveWords(AWID);
+    @PutMapping("/remove/{archiveWordsID}")
+    public ArchiveWordsEntity removeArchiveWords(@PathVariable int archiveWordsID) {
+        return archiveWordsService.removeArchiveWords(archiveWordsID);
     }
 }

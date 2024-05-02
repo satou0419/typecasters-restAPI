@@ -1,7 +1,9 @@
 package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.ArchiveAchievementEntity;
+import com.typecasters.apitowerofwords.Entity.UserDetailsEntity;
 import com.typecasters.apitowerofwords.Repository.ArchiveAchievementRepository;
+import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,48 +14,74 @@ import java.util.Optional;
 @Service
 public class ArchiveAchievementService {
     @Autowired
-    ArchiveAchievementRepository AAR;
+    ArchiveAchievementRepository archiveAchievementRepository;
+    @Autowired
+    UserDetailsService userDetailsService;
+    @Autowired
+    UserDetailsRepository userDetailsRepository;
 
-    public ArchiveAchievementEntity insertArchiveAchievement(ArchiveAchievementEntity achievement) {
-        return AAR.save(achievement);
+    public ArchiveAchievementEntity insertArchiveAchievement(int userID, ArchiveAchievementEntity achievement) {
+        boolean achievementExists = false;
+
+        try {
+            List<ArchiveAchievementEntity> insert = archiveAchievementRepository.findByUserID(userID);
+
+            for (ArchiveAchievementEntity i : insert) {
+                if (i.getName().equals(achievement.getName())) {
+                    achievementExists = true;
+                    break;
+                }
+            }
+
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException("Achievement " + achievement.getArchiveAchievementID() + " does not exist");
+        }
+
+        if (!achievementExists) {
+            userDetailsService.incrementUserDetailWords(userID);
+            return archiveAchievementRepository.save(achievement);
+        } else {
+            System.out.print("Achievement Already Exist!");
+            return achievement;
+        }
     }
 
-    public List<ArchiveAchievementEntity> viewAllArchiveAchievement() {
-        return AAR.findAll();
+    public List<ArchiveAchievementEntity> viewAllArchiveAchievement(int userID) {
+        return archiveAchievementRepository.findByUserID(userID);
     }
 
-    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(int AAID) {
-        return AAR.findById(AAID);
+    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(int archiveAchievementID) {
+        return archiveAchievementRepository.findById(archiveAchievementID);
     }
 
     public ArchiveAchievementEntity editArchiveAchievement(ArchiveAchievementEntity achievement) {
         ArchiveAchievementEntity edit = new ArchiveAchievementEntity();
 
         try {
-            edit = AAR.findById(achievement.getAAID()).get();
+            edit = archiveAchievementRepository.findById(achievement.getArchiveAchievementID()).get();
 
             edit.setName(achievement.getName());
             edit.setDescription(achievement.getDescription());
             edit.setImagePath(achievement.getImagePath());
 
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + achievement.getAAID() + " does not exist");
+            throw new NoSuchElementException ("Achievement " + achievement.getArchiveAchievementID() + " does not exist");
         }finally {
-            return AAR.save(edit);
+            return archiveAchievementRepository.save(edit);
         }
     }
 
-    public ArchiveAchievementEntity removeArchiveAchievement(int AAID) {
+    public ArchiveAchievementEntity removeArchiveAchievement(int archiveAchievementID) {
         ArchiveAchievementEntity delete = new ArchiveAchievementEntity();
 
         try {
-            delete = AAR.findById(AAID).get();
+            delete = archiveAchievementRepository.findById(archiveAchievementID).get();
 
             delete.setDeleted(true);
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Achievement " + AAID + " does not exist!");
+            throw new NoSuchElementException("Achievement " + archiveAchievementID + " does not exist!");
         }finally {
-            return AAR.save(delete);
+            return archiveAchievementRepository.save(delete);
         }
     }
 }

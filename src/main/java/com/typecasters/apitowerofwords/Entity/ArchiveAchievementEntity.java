@@ -7,8 +7,9 @@ import javax.persistence.*;
 public class ArchiveAchievementEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int AAID;
+    private int archiveAchievementID;
 
+    private int userID;
     private String name;
     private String description;
     private String imagePath;
@@ -17,20 +18,29 @@ public class ArchiveAchievementEntity {
     public ArchiveAchievementEntity() {
     }
 
-    public ArchiveAchievementEntity(int AAID, String name, String description, String imagePath, boolean isDeleted) {
-        this.AAID = AAID;
+    public ArchiveAchievementEntity(int archiveAchievementID, int userID, String name, String description, String imagePath, boolean isDeleted) {
+        this.archiveAchievementID = archiveAchievementID;
+        this.userID = userID;
         this.name = name;
         this.description = description;
         this.imagePath = imagePath;
         this.isDeleted = isDeleted;
     }
 
-    public int getAAID() {
-        return AAID;
+    public int getArchiveAchievementID() {
+        return archiveAchievementID;
     }
 
-    public void setAAID(int AAID) {
-        this.AAID = AAID;
+    public void setArchiveAchievementID(int archiveAchievementID) {
+        this.archiveAchievementID = archiveAchievementID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getName() {

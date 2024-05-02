@@ -1,6 +1,5 @@
 package com.typecasters.apitowerofwords.Service;
 
-import com.typecasters.apitowerofwords.Entity.ArchiveAchievementEntity;
 import com.typecasters.apitowerofwords.Entity.ArchiveWordsEntity;
 import com.typecasters.apitowerofwords.Repository.ArchiveWordsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,48 +12,72 @@ import java.util.Optional;
 @Service
 public class ArchiveWordsService {
     @Autowired
-    ArchiveWordsRepository AWR;
+    ArchiveWordsRepository archiveWordsRepository;
+    @Autowired
+    UserDetailsService userDetailsService;
 
-    public ArchiveWordsEntity insertArchiveWords(ArchiveWordsEntity word) {
-        return AWR.save(word);
+    public ArchiveWordsEntity insertArchiveWords(int userID, ArchiveWordsEntity word) {
+        boolean wordExists = false;
+
+        try {
+            List<ArchiveWordsEntity> insert = archiveWordsRepository.findByUserID(userID);
+
+            for (ArchiveWordsEntity i : insert) {
+                if (i.getWord().equals(word.getWord())) {
+                    wordExists = true;
+                    break;
+                }
+            }
+
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException("Word " + word.getArchiveWordsID() + " does not exist");
+        }
+
+        if (!wordExists) {
+            userDetailsService.incrementUserDetailWords(userID);
+            return archiveWordsRepository.save(word);
+        } else {
+            System.out.print("Word Already Exist!");
+            return word;
+        }
     }
 
-    public List<ArchiveWordsEntity> viewAllArchiveWords() {
-        return AWR.findAll();
+    public List<ArchiveWordsEntity> viewAllArchiveWords(int userID) {
+        return archiveWordsRepository.findByUserID(userID);
     }
 
-    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(int archive_words_id) {
-        return AWR.findById(archive_words_id);
+    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(int archiveWordsID) {
+        return archiveWordsRepository.findById(archiveWordsID);
     }
 
     public ArchiveWordsEntity editArchiveWords(ArchiveWordsEntity word) {
         ArchiveWordsEntity edit = new ArchiveWordsEntity();
 
         try {
-            edit = AWR.findById(word.getAWID()).get();
+            edit = archiveWordsRepository.findById(word.getArchiveWordsID()).get();
 
-            edit.setUID(word.getUID());
+            edit.setUserID(word.getUserID());
             edit.setWord(word.getWord());
             edit.setCheck(word.isCheck());
 
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Word " + word.getAWID() + " does not exist");
-        }finally {
-            return AWR.save(edit);
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException("Word " + word.getArchiveWordsID() + " does not exist");
+        } finally {
+            return archiveWordsRepository.save(edit);
         }
     }
 
-    public ArchiveWordsEntity removeArchiveWords(int AWID) {
+    public ArchiveWordsEntity removeArchiveWords(int archiveWordsID) {
         ArchiveWordsEntity delete = new ArchiveWordsEntity();
 
         try {
-            delete = AWR.findById(AWID).get();
+            delete = archiveWordsRepository.findById(archiveWordsID).get();
 
             delete.setDeleted(true);
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Word " + AWID + " does not exist!");
-        }finally {
-            return AWR.save(delete);
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException("Word " + archiveWordsID + " does not exist!");
+        } finally {
+            return archiveWordsRepository.save(delete);
         }
     }
 }

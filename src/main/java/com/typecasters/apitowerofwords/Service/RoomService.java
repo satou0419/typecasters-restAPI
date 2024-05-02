@@ -30,14 +30,12 @@ public class RoomService {
         RoomEntity edit = new RoomEntity();
 
         try {
-            edit = RR.findById(achievement.getRID()).get();
+            edit = RR.findById(achievement.getRoomID()).get();
 
-            edit.setName(achievement.getName());
-            edit.setDescription(achievement.getDescription());
-            edit.setImagePath(achievement.getImagePath());
+            edit.setRoomName(achievement.getRoomName());
 
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + achievement.getRID() + " does not exist");
+            throw new NoSuchElementException ("Achievement " + achievement.getRoomID() + " does not exist");
         }finally {
             return RR.save(edit);
         }

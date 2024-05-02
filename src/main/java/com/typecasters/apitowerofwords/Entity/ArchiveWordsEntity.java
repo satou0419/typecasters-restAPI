@@ -7,39 +7,39 @@ import javax.persistence.*;
 public class ArchiveWordsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int AWID;
+    private int archiveWordsID;
 
-    private int UID;
+    private int userID;
     private String word;
     @Column(name = "check_column")
-    private boolean check;
+    private boolean check = false;
     private boolean isDeleted = false;
 
     public ArchiveWordsEntity() {
     }
 
-    public ArchiveWordsEntity(int AWID, int UID, String word, boolean check, boolean isDeleted) {
-        this.AWID = AWID;
-        this.UID = UID;
+    public ArchiveWordsEntity(int archiveWordsID, int userID, String word, boolean check, boolean isDeleted) {
+        this.archiveWordsID = archiveWordsID;
+        this.userID = userID;
         this.word = word;
         this.check = check;
         this.isDeleted = isDeleted;
     }
 
-    public int getAWID() {
-        return AWID;
+    public int getArchiveWordsID() {
+        return archiveWordsID;
     }
 
-    public void setAWID(int AWID) {
-        this.AWID = AWID;
+    public void setArchiveWordsID(int archiveWordsID) {
+        this.archiveWordsID = archiveWordsID;
     }
 
-    public int getUID() {
-        return UID;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUID(int UID) {
-        this.UID = UID;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getWord() {

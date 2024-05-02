@@ -2,46 +2,53 @@ package com.typecasters.apitowerofwords.Entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_rooms")
 public class RoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int RID;
+    private int roomID;
 
-    private int CID;
+    private int creatorID;
     private String roomName;
     private String code;
-    private List<UserEntity> members = new ArrayList<UserEntity>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tbl_room_members",
+            joinColumns = @JoinColumn(name = "roomID"),
+            inverseJoinColumns = @JoinColumn(name = "userID")
+    )
+    private List<UserEntity> members = new ArrayList<>();
     private boolean isDeleted = false;
 
     public RoomEntity() {
     }
 
-    public RoomEntity(int RID, int CID, String roomName, String code, List<UserEntity> members, boolean isDeleted) {
-        this.RID = RID;
-        this.CID = CID;
+    public RoomEntity(int roomID, int CID, String roomName, String code, List<UserEntity> members, boolean isDeleted) {
+        this.roomID = roomID;
+        this.creatorID = creatorID;
         this.roomName = roomName;
         this.code = code;
         this.members = members;
         this.isDeleted = isDeleted;
     }
 
-    public int getRID() {
-        return RID;
+    public int getRoomID() {
+        return roomID;
     }
 
-    public void setRID(int RID) {
-        this.RID = RID;
+    public void setRoomID(int roomID) {
+        this.roomID = roomID;
     }
 
-    public int getCID() {
-        return CID;
+    public int getCreatorID() {
+        return creatorID;
     }
 
-    public void setCID(int CID) {
-        this.CID = CID;
+    public void setCreatorID(int creatorID) {
+        this.creatorID = creatorID;
     }
 
     public String getRoomName() {
