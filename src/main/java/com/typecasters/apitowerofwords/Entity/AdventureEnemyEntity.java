@@ -1,34 +1,50 @@
 package com.typecasters.apitowerofwords.Entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_adventure_enemy")
 public class AdventureEnemyEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int AEID;
+    @Column(name = "enemy_id")
+    private int enemyId;
 
+    private int towerFloorId;
     private String imagePath;
-    private int TFID;
-    private boolean isDeleted = false;
+
+    //    @OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ElementCollection
+    @CollectionTable(name = "adventure_words", joinColumns = @JoinColumn(name = "enemyId"))
+    private List<String> words = new ArrayList<>();
 
     public AdventureEnemyEntity() {
     }
 
-    public AdventureEnemyEntity(int AEID, String imagePath, int TFID, boolean isDeleted) {
-        this.AEID = AEID;
+    public AdventureEnemyEntity(int enemyId, int towerFloorId, String imagePath, List<String> words) {
+        this.enemyId = enemyId;
+        this.towerFloorId = towerFloorId;
         this.imagePath = imagePath;
-        this.TFID = TFID;
-        this.isDeleted = isDeleted;
+        this.words = words;
     }
 
-    public int getAEID() {
-        return AEID;
+    public int getEnemyId() {
+        return enemyId;
     }
 
-    public void setAEID(int AEID) {
-        this.AEID = AEID;
+    public void setEnemyId(int enemyId) {
+        this.enemyId = enemyId;
+    }
+
+    public int getTowerFloorId() {
+        return towerFloorId;
+    }
+
+    public void setTowerFloorId(int towerFloorId) {
+        this.towerFloorId = towerFloorId;
     }
 
     public String getImagePath() {
@@ -39,19 +55,11 @@ public class AdventureEnemyEntity {
         this.imagePath = imagePath;
     }
 
-    public int getTFID() {
-        return TFID;
+    public List<String> getWords() {
+        return words;
     }
 
-    public void setTFID(int TFID) {
-        this.TFID = TFID;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setWords(List<String> words) {
+        this.words = words;
     }
 }
