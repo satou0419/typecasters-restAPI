@@ -13,34 +13,34 @@ import java.util.Optional;
 @RequestMapping("/archive_words")
 public class ArchiveWordsController {
     @Autowired
-    ArchiveWordsService AWS;
+    ArchiveWordsService archiveWordsService;
 
     //Create
     @PostMapping("/insert")
     public ArchiveWordsEntity insertArchiveWords(@RequestBody ArchiveWordsEntity word) {
-        return AWS.insertArchiveWords(word);
+        return archiveWordsService.insertArchiveWords(word.getUserID(), word);
     }
 
     //Read
-    @GetMapping("/view")
-    public List<ArchiveWordsEntity> viewAllArchiveWords() {
-        return AWS.viewAllArchiveWords();
+    @GetMapping("/view/{userID}")
+    public List<ArchiveWordsEntity> viewAllArchiveWords(int userID) {
+        return archiveWordsService.viewAllArchiveWords(userID);
     }
 
-    @GetMapping("/view_by_id/{archive_words_id}")
-    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int archive_words_id) {
-        return AWS.viewArchiveWordsByID(archive_words_id);
+    @GetMapping("/view_by_id/{archiveWordsID}")
+    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int archiveWordsID) {
+        return archiveWordsService.viewArchiveWordsByID(archiveWordsID);
     }
 
     //Update
-    @PutMapping("/edit/{archive_words_id}")
-    public ArchiveWordsEntity editArchiveWords(@PathVariable int archive_words_id,@RequestBody ArchiveWordsEntity new_archive_words) {
-        return AWS.editArchiveWords(archive_words_id, new_archive_words);
+    @PutMapping("/edit")
+    public ArchiveWordsEntity editArchiveWords(@RequestBody ArchiveWordsEntity word) {
+        return archiveWordsService.editArchiveWords(word);
     }
 
     //Delete
-    @PutMapping("/remove/{archive_words_id}")
-    public ArchiveWordsEntity removeArchiveWords(@PathVariable int archive_words_id) {
-        return AWS.removeArchiveWords(archive_words_id);
+    @PutMapping("/remove/{archiveWordsID}")
+    public ArchiveWordsEntity removeArchiveWords(@PathVariable int archiveWordsID) {
+        return archiveWordsService.removeArchiveWords(archiveWordsID);
     }
 }

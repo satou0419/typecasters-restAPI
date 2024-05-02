@@ -13,34 +13,34 @@ import java.util.Optional;
 @RequestMapping("/archive_achievement")
 public class ArchiveAchievementController {
     @Autowired
-    ArchiveAchievementService AAS;
+    ArchiveAchievementService archiveAchievementService;
 
     //Create
     @PostMapping("/insert")
     public ArchiveAchievementEntity insertArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
-        return AAS.insertArchiveAchievement(achievement);
+        return archiveAchievementService.insertArchiveAchievement(achievement.getUserID(), achievement);
     }
 
     //Read
-    @GetMapping("/view")
-    public List<ArchiveAchievementEntity> viewAllArchiveAchievement() {
-        return AAS.viewAllArchiveAchievement();
+    @GetMapping("/view/{userID}")
+    public List<ArchiveAchievementEntity> viewAllArchiveAchievement(@PathVariable int userID) {
+        return archiveAchievementService.viewAllArchiveAchievement(userID);
     }
 
-    @GetMapping("/view_by_id/{archive_achievement_id}")
-    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int archive_achievement_id) {
-        return AAS.viewArchiveAchievementByID(archive_achievement_id);
+    @GetMapping("/view_by_id/{archiveAchievementID}")
+    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int archiveAchievementID) {
+        return archiveAchievementService.viewArchiveAchievementByID(archiveAchievementID);
     }
 
     //Update
-    @PutMapping("/edit/{archive_achievement_id}")
-    public ArchiveAchievementEntity editArchiveAchievement(@PathVariable int archive_achievement_id, @RequestBody ArchiveAchievementEntity new_archive_achievement) {
-        return AAS.editArchiveAchievement(archive_achievement_id, new_archive_achievement);
+    @PutMapping("/edit")
+    public ArchiveAchievementEntity editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+        return archiveAchievementService.editArchiveAchievement(achievement);
     }
 
     //Delete
-    @PutMapping("/remove/{archive_achievement_id}")
-    public ArchiveAchievementEntity removeArchiveAchievement(@PathVariable int archive_achievement_id) {
-        return AAS.removeArchiveAchievement(archive_achievement_id);
+    @PutMapping("/remove/{archiveAchievementID}")
+    public ArchiveAchievementEntity removeArchiveAchievement(@PathVariable int archiveAchievementID) {
+        return archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
     }
 }

@@ -1,14 +1,10 @@
 package com.typecasters.apitowerofwords.Repository;
 
-import com.typecasters.apitowerofwords.Entity.AdventureEnemyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.typecasters.apitowerofwords.Entity.AdventureEnemyEntity;
 
 @Repository
 public interface AdventureEnemyRepository extends JpaRepository<AdventureEnemyEntity, Integer> {
-    Optional<List<AdventureEnemyEntity>> findAllByTowerFloorId(int towerFloorId);
 }

@@ -1,50 +1,34 @@
 package com.typecasters.apitowerofwords.Entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "tbl_adventure_enemy")
 public class AdventureEnemyEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "enemy_id")
-    private int enemyId;
+    private int AEID;
 
-    private int towerFloorId;
     private String imagePath;
-
-//    @OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ElementCollection
-    @CollectionTable(name = "adventure_words", joinColumns = @JoinColumn(name = "enemyId"))
-    private List<String> words = new ArrayList<>();
+    private int TFID;
+    private boolean isDeleted = false;
 
     public AdventureEnemyEntity() {
     }
 
-    public AdventureEnemyEntity(int enemyId, int towerFloorId, String imagePath, List<String> words) {
-        this.enemyId = enemyId;
-        this.towerFloorId = towerFloorId;
+    public AdventureEnemyEntity(int AEID, String imagePath, int TFID, boolean isDeleted) {
+        this.AEID = AEID;
         this.imagePath = imagePath;
-        this.words = words;
+        this.TFID = TFID;
+        this.isDeleted = isDeleted;
     }
 
-    public int getEnemyId() {
-        return enemyId;
+    public int getAEID() {
+        return AEID;
     }
 
-    public void setEnemyId(int enemyId) {
-        this.enemyId = enemyId;
-    }
-
-    public int getTowerFloorId() {
-        return towerFloorId;
-    }
-
-    public void setTowerFloorId(int towerFloorId) {
-        this.towerFloorId = towerFloorId;
+    public void setAEID(int AEID) {
+        this.AEID = AEID;
     }
 
     public String getImagePath() {
@@ -55,11 +39,19 @@ public class AdventureEnemyEntity {
         this.imagePath = imagePath;
     }
 
-    public List<String> getWords() {
-        return words;
+    public int getTFID() {
+        return TFID;
     }
 
-    public void setWords(List<String> words) {
-        this.words = words;
+    public void setTFID(int TFID) {
+        this.TFID = TFID;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }
