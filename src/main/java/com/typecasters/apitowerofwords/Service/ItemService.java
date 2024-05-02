@@ -1,38 +1,35 @@
 package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.ItemEntity;
-import com.typecasters.apitowerofwords.Entity.UserEntity;
-import com.typecasters.apitowerofwords.Entity.UserItemEntity;
 import com.typecasters.apitowerofwords.Repository.ItemRepository;
-import com.typecasters.apitowerofwords.Repository.UserItemRepository;
-import com.typecasters.apitowerofwords.Repository.UserRepository;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class ItemService {
 
     @Autowired
-    private ItemRepository item_repo;
+    private ItemRepository itemRepository;
 
     // Create
     public ItemEntity insertItem(ItemEntity item) {
-        return item_repo.save(item);
+        return itemRepository.save(item);
     }
 
     // Read
     public List<ItemEntity> getAllItems() {
-        return item_repo.findAll();
+        return itemRepository.findAll();
     }
 
-    public Optional<ItemEntity> getItemById(int item_id) {
-        return item_repo.findById(item_id);
+//    public Optional<ItemEntity> getItemById(int item_id) {
+//        return item_repo.findById(item_id);
+//    }
+
+    public ItemEntity getItem(int itemId){
+        return itemRepository.findOneByItemId(itemId);
     }
 
     // Update
@@ -41,7 +38,7 @@ public class ItemService {
         ItemEntity item = new ItemEntity();
 
         try {
-            item = item_repo.findById(item_id).get();
+            item = itemRepository.findById(item_id).get();
 
             item.setItem_name(new_item_details.getItem_name());
             item.setItem_description(new_item_details.getItem_description());
@@ -50,7 +47,7 @@ public class ItemService {
         }catch (NoSuchElementException ex) {
             throw new NoSuchElementException("Item " + item_id + " does not exist!");
         }finally {
-            return item_repo.save(item);
+            return itemRepository.save(item);
         }
     }
 
@@ -59,8 +56,8 @@ public class ItemService {
     public String deleteItem(int item_id) {
         String msg = "";
 
-        if(item_repo.findById(item_id).isPresent()) {
-            item_repo.deleteById(item_id);
+        if(itemRepository.findById(item_id).isPresent()) {
+            itemRepository.deleteById(item_id);
 
             msg = "Item " + item_id + " is successfully deleted!";
         }

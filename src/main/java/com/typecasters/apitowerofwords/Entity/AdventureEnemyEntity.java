@@ -16,7 +16,7 @@ public class AdventureEnemyEntity {
     private int towerFloorId;
     private String imagePath;
 
-//    @OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL, orphanRemoval = true)
+    //    @OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL, orphanRemoval = true)
     @ElementCollection
     @CollectionTable(name = "adventure_words", joinColumns = @JoinColumn(name = "enemyId"))
     private List<String> words = new ArrayList<>();
