@@ -8,7 +8,7 @@ export default function AdventureMode() {
     <main className="Simulation-wrapper">
       <div className="txt-Rooms">Rooms</div>
       <section className="game-card-wrapper">
-        <Link to="/simulation_room">
+        <Link to="/simulation_room_student">
       <CardSimulation
         className="card card-simulation"
         title="Class Name"
@@ -19,7 +19,7 @@ export default function AdventureMode() {
         // onClick={handleCardSimulationClick}
       />
        </Link>
-       <Link to="/simulation_room">
+       <Link to="/simulation_room_student">
       <CardSimulation
         className="card card-simulation game"
         title="Class Name"
@@ -30,8 +30,8 @@ export default function AdventureMode() {
         // onClick={handleCardSimulationClick}
       />
        </Link>
-      <Link to="/create_room">
-      <CardCreate title="+Create Room" />
+      <Link to="/join_room">
+      <CardCreate title="+Join Room" />
       </Link>
       </section>
 

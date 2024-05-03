@@ -1,0 +1,141 @@
+.word-search {
+    display: flex;
+  }
+  
+  .book-spine {
+    height: 50%;
+    width: 20px;
+    background-color: #666667;
+  }
+  
+  .book-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .page-container {
+    background-color: #909090;
+    width: 26%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .book-page {
+    background: linear-gradient(to top right, #461386, #b36dea);
+    height: 90%;
+    width: 90%;
+  
+    border-top: 5px solid #7f4ca9;
+    border-radius: 10px;
+    outline: 10px solid #666667;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .left-page {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+  
+  .right-page {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+  
+  .left-content {
+    height: 100%;
+    width: 100%;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .word-list {
+    color: #fff;
+    font-family: "Lilita One";
+  
+    height: 80%;
+    width: 95%;
+    overflow: auto; /* Add this line to make the container scrollable */
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+  
+  /* Style all scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px; /* Set the width of the scrollbar */
+  }
+  
+  /* Style the scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+    background-color: green; /* Set the color of the scrollbar thumb */
+    border-radius: 6px; /* Set the border radius of the scrollbar thumb */
+  }
+  
+  /* Style the scrollbar track */
+  ::-webkit-scrollbar-track {
+    background-color: transparent; /* Set the color of the scrollbar track */
+    border-radius: 6px; /* Set the border radius of the scrollbar track */
+  }
+  
+  /* Style the scrollbar corner */
+  ::-webkit-scrollbar-corner {
+    background-color: transparent; /* Set the color of the scrollbar corner */
+  }
+  
+  .word-list p {
+    cursor: pointer;
+  }
+  
+  .word-selected {
+    background: linear-gradient(to right, #f99417, transparent);
+    border-radius: 10px;
+    padding-left: 10px;
+    font-size: x-large;
+    transition: background-color 0.3s ease, font-size 0.3s ease; /* Smooth transitions for background color and font size */
+  }
+  
+  a {
+    text-decoration: none;
+  }
+.tab-section{
+    height: 46rem;
+    margin-top: 5rem;
+ position: absolute; 
+}
+
+.txt-creategame{
+    margin-left: -99rem;
+    margin-top: 2rem;
+    font-family: "lilita one";
+    font-size: 24px;
+}
+.search-box{
+    height: 3rem;
+    width: 40rem;
+    margin-left: 5%;
+    margin-top: 0.5rem;
+    padding-left: 1%;
+    border-radius: 5px;
+}
+.txt-words-added{
+    font-family: "lilita one";
+    font-size: 36px;
+    margin-left: 7%;
+}
+.words-container{
+    height: 30rem;
+    margin-top: -15rem;
+    margin-left: -57rem;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 37.5%;
+}

@@ -4,8 +4,9 @@ export default function AdventureMode() {
   return (
     
     <main className="adventure-wrapper">
+      <Link to="/dashboard">
       <button className="btn btn--large btn--danger--large btnBack">Back</button>
-     
+       </Link>
      {/* below is for the floor description */}
       <section className="floor-description"> 
 
@@ -25,7 +26,9 @@ export default function AdventureMode() {
               <div className="reward-item-container"></div>
             </div>
           </div>  
+          <Link to="/adventure_spelling">
           <button className="btn btn--small btn--primary btn-enter">Enter</button>
+          </Link>
         </div>
       </section>
       {/* end of floor description */}

@@ -1,37 +1,35 @@
 import { Link } from "react-router-dom";
-import "./simulationmode.css";
+import "./simulationroom.css";
+import "./components/button.css"
 import { CardSimulation, CardArchive,CardCreate } from "./components/Card";
 export default function AdventureMode() {
   
   return (
     
     <main className="Simulation-wrapper">
-      <div className="txt-Rooms">Rooms</div>
+     <button className="btn btn--small btn--primary btn-info">Room Information</button>
+      <div className="txt-Rooms">Simulation - =RoomName==RoomCode=</div>
       <section className="game-card-wrapper">
-        <Link to="/simulation_room">
       <CardSimulation
         className="card card-simulation"
-        title="Class Name"
-        content="Teacher"
+        title="Game Name"
+        // content="Teacher"
         bannerSrc="./assets/banner/banner_adventure.webp"
-        progressTitle="Students"
-        progressValue="4"
+        progressTitle="Students Done"
+        progressValue="1"
         // onClick={handleCardSimulationClick}
       />
-       </Link>
-       <Link to="/simulation_room">
       <CardSimulation
         className="card card-simulation game"
-        title="Class Name"
-        content="Teacher"
+        title="Game Name"
+        // content="Teacher"
         bannerSrc="./assets/banner/banner_adventure.webp"
-        progressTitle="Students"
+        progressTitle="Students Done"
         progressValue="4"
         // onClick={handleCardSimulationClick}
       />
-       </Link>
-      <Link to="/create_room">
-      <CardCreate title="+Create Room" />
+      <Link to="/create_game">
+      <CardCreate title="+Create Game" />
       </Link>
       </section>
 

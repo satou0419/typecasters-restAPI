@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navigation.css";
 
+
 export default function Navigation({ onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -29,6 +30,9 @@ export default function Navigation({ onLogout }) {
           <span className="bar"></span>
         </div>
         <div className={`menu ${menuOpen ? "open" : "close"}`}>
+          <Link to="/adventure_mode">Adventure Mode</Link>
+          <Link to="/simulation_mode">Simulation Mode</Link>
+          <Link to="/arhive">Archive</Link>
           <Link to="/about">About</Link>
           <Link to="/inventory_shop">Inventory</Link>
         </div>
