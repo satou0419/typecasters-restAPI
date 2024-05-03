@@ -26,7 +26,7 @@ public class RoomEntity {
     public RoomEntity() {
     }
 
-    public RoomEntity(int roomID, int CID, String roomName, String code, List<UserEntity> members, boolean isDeleted) {
+    public RoomEntity(int roomID, int creatorID, String roomName, String code, List<UserEntity> members, boolean isDeleted) {
         this.roomID = roomID;
         this.creatorID = creatorID;
         this.roomName = roomName;
@@ -81,5 +81,9 @@ public class RoomEntity {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public void addMembers(UserEntity user) {
+        this.members.add(user);
     }
 }
