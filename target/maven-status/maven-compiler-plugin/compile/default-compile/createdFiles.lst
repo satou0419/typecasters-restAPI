@@ -1,4 +1,5 @@
 com\typecasters\apitowerofwords\Repository\StudentRepository.class
+com\typecasters\apitowerofwords\Config\WebMvcConfig$1.class
 com\typecasters\apitowerofwords\Controller\ItemController.class
 com\typecasters\apitowerofwords\DataPopulator\StudentDataPopulator.class
 com\typecasters\apitowerofwords\Service\UserItemService.class

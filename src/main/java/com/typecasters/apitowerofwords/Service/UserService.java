@@ -1,6 +1,8 @@
 package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.UserEntity;
+import com.typecasters.apitowerofwords.Exception.IncorrectPasswordException;
+import com.typecasters.apitowerofwords.Exception.UsernameNotFoundException;
 import com.typecasters.apitowerofwords.LoginRequest;
 import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import com.typecasters.apitowerofwords.Repository.UserRepository;
@@ -72,27 +74,26 @@ public class UserService {
         }
     }
 
-    //Login
+    // Login
     @SuppressWarnings("finally")
-    public UserEntity login(LoginRequest logReq){
-        UserEntity user = new UserEntity();
-        try{
-            user = urepo.findOneByUsername(logReq.getUsername());
-
-            if(user == null){
-                throw new Exception("username not found");
-            }
-
-            if(!(user.getPassword().equals(logReq.getPassword()))){
-                throw new Exception("password does not match");
-            }else{
-                return user;
-            }
-        }catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-
+    public UserEntity login(LoginRequest logReq) {
+        if (logReq.getUsername() == null || logReq.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("Please provide a username.");
         }
+        if (logReq.getPassword() == null || logReq.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Please provide a password.");
+        }
+
+        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
+        if (user == null) {
+            throw new UsernameNotFoundException("Username cannot be found!");
+        }
+
+        if (!user.getPassword().equals(logReq.getPassword())) {
+            throw new IncorrectPasswordException("Incorrect password.");
+        }
+
+        return user;
     }
 
     //Account Edit
