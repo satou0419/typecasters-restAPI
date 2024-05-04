@@ -1,12 +1,17 @@
 package com.typecasters.apitowerofwords.Controller;
 import com.typecasters.apitowerofwords.Entity.UserEntity;
+import com.typecasters.apitowerofwords.Exception.IncorrectPasswordException;
+import com.typecasters.apitowerofwords.Exception.UsernameNotFoundException;
 import com.typecasters.apitowerofwords.LoginRequest;
 import com.typecasters.apitowerofwords.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.NoSuchElementException;
 
 
 @RestController
@@ -27,9 +32,35 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserEntity loginUser(@RequestBody LoginRequest logReq){
-        return userv.login(logReq);
+    public ResponseEntity<Object> loginUser(@RequestBody LoginRequest logReq) {
+        try {
+            UserEntity user = userv.login(logReq);
+            return ResponseEntity.ok(user); // 200 OK
+        }
+
+        catch (IllegalArgumentException e) {
+            // Bad request for missing or invalid input
+            return ResponseEntity.badRequest().body(e.getMessage()); // 400 Bad Request
+        }
+
+        catch (UsernameNotFoundException e) {
+            // Username not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // 404 Not Found
+        }
+
+        catch (IncorrectPasswordException e) {
+            // Incorrect password
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage()); // 401 Unauthorized
+        }
+
+        catch (RuntimeException e) {
+            // Internal Server Error for any other unhandled error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal error occurred. Please try again later."); // 500 Internal Server Error
+        }
     }
+
+
+
 
     @PutMapping("/update_user")
     public UserEntity updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo){
