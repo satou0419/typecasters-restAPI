@@ -73,50 +73,61 @@ public class UserItemService {
     }
 
     public String buyItem(int userId, int itemId, int itemQuantity) {
-        UserDetailsEntity userDetails = userDetailsService.getUserDetails(userId);
-        ItemEntity item = itemService.getItem(itemId);
-        int totalAmountOfItemPurchased = item.getItem_price() * itemQuantity;
+        UserDetailsEntity userDetails = null;
+        ItemEntity item = null;
         String msg = "";
 
-        // Stores the UserItemId when it find a correct ID
-        Optional<Integer> existingUserItemId = getUserItemIdByUserIdAndItemId(userId,itemId);
+        try {
+            userDetails = userDetailsService.getUserDetails(userId);
+            item = itemService.getItem(itemId);
+            int totalAmountOfItemPurchased = item.getItem_price() * itemQuantity;
 
-        //Checks if the userItemId exist in the database
-        if (existingUserItemId.isPresent()) {
-            //Stores the Integer UserItemId to int
-            int convertedUserItemId = existingUserItemId.get();
-            //Stores the object of the UserItemId (it returns the whole UserItem Object of that UserItemId)
-            Optional<UserItemEntity> existingUserItemObject = getUserItemById(convertedUserItemId);
+            // Stores the UserItemId when it finds a correct ID
+            Optional<Integer> existingUserItemId = getUserItemIdByUserIdAndItemId(userId, itemId);
 
-            //Checks again if the User Item Object exist
-            if(existingUserItemObject.isPresent()){
+            //Checks if the itemQuantity is above 0
+            if (itemQuantity > 0) {
+                //Checks if the userItemId exists in the database
+                if (existingUserItemId.isPresent()) {
+                    //Stores the Integer UserItemId to int
+                    int convertedUserItemId = existingUserItemId.get();
+                    //Stores the object of the UserItemId (it returns the whole UserItem Object of that UserItemId)
+                    Optional<UserItemEntity> existingUserItemObject = getUserItemById(convertedUserItemId);
 
-                //Stores the Object inside this Object variable
-                UserItemEntity existingUserItem = existingUserItemObject.get();
+                    //Checks again if the User Item Object exists
+                    if (existingUserItemObject.isPresent()) {
+                        //Stores the Object inside this Object variable
+                        UserItemEntity existingUserItem = existingUserItemObject.get();
 
+                        if (userDetails.getCredit_amount() >= totalAmountOfItemPurchased) {
+                            userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
+                            int newQuantity = existingUserItem.getQuantity() + itemQuantity;
+                            existingUserItem.setQuantity(newQuantity);
+                            userItemRepository.saveAndFlush(existingUserItem);
+                            msg = "Item bought successfully";
+                        } else {
+                            msg = "Insufficient credit to buy this item.";
+                        }
+                    }
+                } else {
+                    UserItemEntity userItem = new UserItemEntity(itemQuantity, userId, item);
 
-                if(userDetails.getCredit_amount() >= totalAmountOfItemPurchased) {
-                    userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
-                    int newQuantity = existingUserItem.getQuantity() + itemQuantity;
-                    existingUserItem.setQuantity(newQuantity);
-                    userItemRepository.saveAndFlush(existingUserItem);
-                    msg = "Item quantity updated successfully.";
-                }else{
-                    msg = "Insufficient credit to buy this item.";
+                    if (userDetails.getCredit_amount() >= totalAmountOfItemPurchased) {
+                        userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
+                        insertUserItem(userItem);
+                        msg = "Item bought successfully";
+                    } else {
+                        msg = "Insufficient credit to buy this item.";
+                    }
                 }
-
-            }
-        } else {
-
-            UserItemEntity userItem = new UserItemEntity(itemQuantity, userId, item);
-
-            if (userDetails.getCredit_amount() >= (totalAmountOfItemPurchased)) {
-                userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
-                insertUserItem(userItem);
-                msg = "Item purchased successfully.";
             } else {
-                msg = "Insufficient credit to buy this item.";
+                throw new IllegalArgumentException("Quantity should be above 0.");
             }
+        }catch (IllegalArgumentException e){
+            msg = e.getMessage();
+        } catch (Exception e) {
+            msg = "An error occurred while processing the request.";
+            e.printStackTrace();
         }
 
         return msg;
