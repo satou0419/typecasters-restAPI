@@ -23,7 +23,7 @@ public class ArchiveWordsController {
 
     //Read
     @GetMapping("/view/{userID}")
-    public List<ArchiveWordsEntity> viewAllArchiveWords(int userID) {
+    public List<ArchiveWordsEntity> viewAllArchiveWords(@PathVariable int userID) {
         return archiveWordsService.viewAllArchiveWords(userID);
     }
 
