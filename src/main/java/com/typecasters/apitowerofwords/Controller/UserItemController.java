@@ -1,10 +1,8 @@
 package com.typecasters.apitowerofwords.Controller;
 
-import com.typecasters.apitowerofwords.Entity.ItemEntity;
 import com.typecasters.apitowerofwords.Entity.UserItemEntity;
 import com.typecasters.apitowerofwords.Service.UserDetailsService;
 import com.typecasters.apitowerofwords.Service.UserItemService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +47,12 @@ public class UserItemController {
         String buyResult = userItemService.buyItem(userId, itemId, itemQuantity);
         HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(buyResult);
+    }
+
+    @PutMapping("/use_item/{userId}/{itemId}")
+    public ResponseEntity<String> useUserItem(@PathVariable int userId, @PathVariable int itemId) {
+        String msg = userItemService.useUserItem(userId, itemId);
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
     }
 
     @GetMapping("/get_user_item_id_by/{userId}/{itemId}")

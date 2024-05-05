@@ -7,6 +7,7 @@ import com.typecasters.apitowerofwords.Repository.UserItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -45,6 +46,12 @@ public class UserItemService {
         return userItemRepository.findAllByUserId(userId);
     }
 
+    public Optional <UserItemEntity> getUserItemByUserIdAndItemId(int userId, int itemId){
+        ItemEntity itemEntity = new ItemEntity();
+        itemEntity.setItemId(itemId);
+        return userItemRepository.findOneByUserIdAndItemId(userId, itemEntity);
+    }
+
     @SuppressWarnings({"finally", "ReturnInsideFinallyBlock"})
     public UserItemEntity updateUserItem(int userItemId, UserItemEntity newUserItemDetails){
 
@@ -72,6 +79,7 @@ public class UserItemService {
         return msg;
     }
 
+    @Transactional
     public String buyItem(int userId, int itemId, int itemQuantity) {
         UserDetailsEntity userDetails = null;
         ItemEntity item = null;
@@ -82,48 +90,36 @@ public class UserItemService {
             item = itemService.getItem(itemId);
             int totalAmountOfItemPurchased = item.getItem_price() * itemQuantity;
 
-            // Stores the UserItemId when it finds a correct ID
-            Optional<Integer> existingUserItemId = getUserItemIdByUserIdAndItemId(userId, itemId);
-
-            //Checks if the itemQuantity is above 0
-            if (itemQuantity > 0) {
-                //Checks if the userItemId exists in the database
-                if (existingUserItemId.isPresent()) {
-                    //Stores the Integer UserItemId to int
-                    int convertedUserItemId = existingUserItemId.get();
-                    //Stores the object of the UserItemId (it returns the whole UserItem Object of that UserItemId)
-                    Optional<UserItemEntity> existingUserItemObject = getUserItemById(convertedUserItemId);
-
-                    //Checks again if the User Item Object exists
-                    if (existingUserItemObject.isPresent()) {
-                        //Stores the Object inside this Object variable
-                        UserItemEntity existingUserItem = existingUserItemObject.get();
-
-                        if (userDetails.getCredit_amount() >= totalAmountOfItemPurchased) {
-                            userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
-                            int newQuantity = existingUserItem.getQuantity() + itemQuantity;
-                            existingUserItem.setQuantity(newQuantity);
-                            userItemRepository.saveAndFlush(existingUserItem);
-                            msg = "Item bought successfully";
-                        } else {
-                            msg = "Insufficient credit to buy this item.";
-                        }
-                    }
-                } else {
-                    UserItemEntity userItem = new UserItemEntity(itemQuantity, userId, item);
-
-                    if (userDetails.getCredit_amount() >= totalAmountOfItemPurchased) {
-                        userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
-                        insertUserItem(userItem);
-                        msg = "Item bought successfully";
-                    } else {
-                        msg = "Insufficient credit to buy this item.";
-                    }
-                }
-            } else {
+            //Check if item quantity is valid
+            if (itemQuantity <= 0) {
                 throw new IllegalArgumentException("Quantity should be above 0.");
             }
-        }catch (IllegalArgumentException e){
+
+            //Check if user has sufficient credit
+            if (userDetails.getCredit_amount() < totalAmountOfItemPurchased) {
+                return "Insufficient credit to buy this item.";
+            }
+            // Fetch existing user item
+            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
+
+            // Update user credit
+            userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
+
+            // If user item exists, update quantity
+            if (existingUserItemObject.isPresent()) {
+                UserItemEntity existingUserItem = existingUserItemObject.get();
+                int newQuantity = existingUserItem.getQuantity() + itemQuantity;
+                existingUserItem.setQuantity(newQuantity);
+                userItemRepository.saveAndFlush(existingUserItem);
+            } else {
+                // Insert new user item
+                UserItemEntity userItem = new UserItemEntity(itemQuantity, userId, item);
+                insertUserItem(userItem);
+            }
+
+            msg = "Item bought successfully";
+
+        } catch (IllegalArgumentException e) {
             msg = e.getMessage();
         } catch (Exception e) {
             msg = "An error occurred while processing the request.";
@@ -134,5 +130,33 @@ public class UserItemService {
     }
 
 
+    public String useUserItem(int userId, int itemId){
+        String msg = "";
+
+        try{
+            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
+//            String itemName = itemService.getItemName(itemId);
+                if(existingUserItemObject.isPresent()){
+                    UserItemEntity existingUserItem = existingUserItemObject.get();
+                    int userItemQuantity = existingUserItem.getQuantity();
+                    if(userItemQuantity > 0){
+                        existingUserItem.setQuantity(userItemQuantity - 1);
+                        userItemRepository.saveAndFlush(existingUserItem);
+//                        msg = "The item " + itemName + " is successfully used!";
+                        msg = "The item is successfully used!";
+                    }else{
+//                        throw new IllegalArgumentException("The item " + itemName + " cannot be used when quantity is 0 or below.");
+                        throw new IllegalArgumentException("The item cannot be used when quantity is 0 or below.");
+                    }
+                }
+        }catch (IllegalArgumentException e){
+            msg = e.getMessage();
+        } catch (Exception e) {
+            msg = "An error occurred while processing the request.";
+            e.printStackTrace();
+        }
+
+        return msg;
+    }
 
 }

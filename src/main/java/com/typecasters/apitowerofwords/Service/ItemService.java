@@ -28,6 +28,10 @@ public class ItemService {
 //        return item_repo.findById(item_id);
 //    }
 
+    public String getItemName(int itemId){
+        return itemRepository.findItemNameByItemId(itemId);
+    }
+
     public ItemEntity getItem(int itemId){
         return itemRepository.findOneByItemId(itemId);
     }

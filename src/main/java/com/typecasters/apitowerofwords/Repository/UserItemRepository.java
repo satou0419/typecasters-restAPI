@@ -16,4 +16,6 @@ public interface UserItemRepository extends JpaRepository<UserItemEntity, Intege
 
     @Query("SELECT ui.userItemId FROM UserItemEntity ui WHERE ui.userId = ?1 AND ui.itemId = ?2")
     Optional<Integer> findUserItemIdByUserIdAndItemId(int userId, ItemEntity itemId);
+
+    Optional<UserItemEntity> findOneByUserIdAndItemId(int userId, ItemEntity itemId);
 }
