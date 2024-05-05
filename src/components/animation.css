@@ -81,3 +81,30 @@
 .character-main.hit {
   animation: blink 0.5s ease-in-out, shake 0.5s ease-in-out;
 }
+
+.animate-error {
+  animation: shake 0.5s ease;
+  border: 2px solid #ff9999; /* Light red border */
+  box-shadow: 0 0 5px #ff9999; /* Soft red shadow */
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

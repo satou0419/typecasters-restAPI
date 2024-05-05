@@ -80,5 +80,18 @@
   color: #9488b6;
 }
 
-a {
+.toast-box {
+  height: 50px;
+  width: 320px;
+  background-color: #ff9999; /* Light red background */
+  color: #fff; /* Light text color */
+  position: absolute;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  right: 20px;
+  top: 20px;
+  padding: 10px; /* Add padding for content */
+  display: flex; /* Use flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
 }

@@ -38,12 +38,14 @@ export default function GameplayAdventureSpelling() {
     <main className="gameplay-container">
       <div className="floor_indicator">
         <span>FLOOR 1</span>
+        {/* Put the floor number */}
+        <span>Section </span>
       </div>
 
       <section className="gameplay-platform">
         <div className={`character character-main ${isHit ? "hit" : ""}`}>
           <img
-            src="./assets/sprites/character_main.webp"
+            src="./assets/sprites/character_main.webp" //ths is the path
             alt="Main Character"
           />
         </div>
@@ -92,7 +94,7 @@ export default function GameplayAdventureSpelling() {
         </div>
         <div className="control-input">
           <div className="input-wrapper">
-            <button className="btn btn--small btn--primary"></button>
+            <button className="btn btn--small btn--primary">Audio</button>
             <input type="textbox" />
             <button
               className="btn btn--medium btn--primary"

@@ -1,22 +1,14 @@
-// Login.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import DialogBox from "./components/DialogBox";
 import "./components/input.css";
 import "./login.css";
+import "./components/animation.css";
 import { LOGIN_ENDPOINT } from "./api";
 
 export default function Login({ setIsLoggedIn, setUserDetails }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [showDialog, setShowDialog] = useState(false); // State to manage dialog visibility
-  const [dialogContent, setDialogContent] = useState({
-    title: "",
-    content: "",
-    buttons: [],
-  });
-
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -35,46 +27,45 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
       });
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorMessage = await response.text();
+        if (response.status === 404) {
+          // Username not found
+          setError("Username not found");
+          document
+            .querySelector(".input-box-form")
+            .classList.add("animate-error");
+        } else {
+          // Password incorrect
+          setError("Incorrect password");
+          document
+            .querySelectorAll(".input-box-form")[1]
+            .classList.add("animate-error");
+        }
+        throw new Error(errorMessage);
       }
 
-      const userData = await response.json(); // Extract user data from response
+      const userData = await response.json();
 
-      // Set authentication status to true and store it in session storage
       sessionStorage.setItem("isLoggedIn", "true");
-      sessionStorage.setItem("userDetails", JSON.stringify(userData)); // Store user details
+      sessionStorage.setItem("userDetails", JSON.stringify(userData));
 
-      setIsLoggedIn(true); // Update the loggedIn state
+      setIsLoggedIn(true);
       setUserDetails(userData);
 
-      navigate("/dashboard"); // Redirect to the dashboard
-
-      console.log("Login successful!");
+      navigate("/dashboard");
     } catch (error) {
-      openDialog("Error", "Invalid username or password", [
-        { label: "Retry", onClick: closeDialog },
-      ]);
-      setError("Invalid username or password");
-      console.error(error);
+      setTimeout(() => setError(null), 5000); // Clear the error after 5 seconds
     }
-  };
-
-  // Function to open the dialog box
-  const openDialog = (title, content, buttons) => {
-    setDialogContent({ title, content, buttons });
-    setShowDialog(true);
-  };
-
-  // Function to close the dialog box
-  const closeDialog = () => {
-    setShowDialog(false);
   };
 
   return (
     <main className="login-container">
-      {/* Overlay */}
-      {showDialog && <div className="overlay" />}
-
+      {error && (
+        <div className="toast-box">
+          {/* Display error message */}
+          <p>{error}</p>
+        </div>
+      )}
       <section className="card card-form">
         <div className="card-form-banner">
           <img src="./assets/banner/banner_login.webp" alt="Login Banner" />
@@ -122,15 +113,6 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
           </div>
         </form>
       </section>
-
-      {/* DialogBox component */}
-      {showDialog && (
-        <DialogBox
-          title={dialogContent.title}
-          content={dialogContent.content}
-          buttons={dialogContent.buttons}
-        />
-      )}
     </main>
   );
 }

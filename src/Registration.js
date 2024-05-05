@@ -5,29 +5,57 @@ import "./components/input.css";
 import { REGISTER_ENDPOINT } from "./api";
 
 export default function Registration() {
-  // State variables to store form data
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    confirmPassword: "",
     firstname: "",
     lastname: "",
     userType: "",
-    confirmPassword: "",
     email: "",
   });
-
+  const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
 
-  // Function to handle form input changes
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.username) {
+      errors.username = "Username is required";
+    }
+    if (!formData.password) {
+      errors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      errors.password = "Password must be at least 8 characters";
+    }
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+    if (!formData.firstname) {
+      errors.firstname = "Firstname is required";
+    }
+    if (!formData.lastname) {
+      errors.lastname = "Lastname is required";
+    }
+    if (!formData.email) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = "Invalid email address";
+    }
+    if (!formData.userType) {
+      errors.userType = "User type is required";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // API URL for user registration
+    if (!validateForm()) return;
 
     try {
       const response = await fetch(REGISTER_ENDPOINT, {
@@ -51,6 +79,7 @@ export default function Registration() {
   return (
     <main className="registration-container">
       <section className="card card-form">
+        {/* Banner section */}
         <aside className="form-registration-banner">
           <img
             src="./assets/banner/banner_registration.webp"
@@ -58,9 +87,11 @@ export default function Registration() {
           />
         </aside>
 
+        {/* Registration form */}
         <form className="card form-login" onSubmit={handleSubmit}>
           <h1 className="registration-heading">Create Account</h1>
 
+          {/* Form fields */}
           <section className="form-section">
             <div className="small-input-group">
               <input
@@ -73,6 +104,9 @@ export default function Registration() {
                 autoFocus
                 required
               />
+              {formErrors.firstname && (
+                <div className="error">{formErrors.firstname}</div>
+              )}
               <input
                 type="text"
                 className="input input-box-form__s"
@@ -82,6 +116,9 @@ export default function Registration() {
                 onChange={handleInputChange}
                 required
               />
+              {formErrors.lastname && (
+                <div className="error">{formErrors.lastname}</div>
+              )}
             </div>
 
             <input
@@ -93,6 +130,10 @@ export default function Registration() {
               onChange={handleInputChange}
               required
             />
+            {formErrors.username && (
+              <div className="error">{formErrors.username}</div>
+            )}
+
             <input
               type="password"
               className="input input-box-form"
@@ -102,6 +143,10 @@ export default function Registration() {
               onChange={handleInputChange}
               required
             />
+            {formErrors.password && (
+              <div className="error">{formErrors.password}</div>
+            )}
+
             <input
               type="password"
               className="input input-box-form"
@@ -111,6 +156,10 @@ export default function Registration() {
               onChange={handleInputChange}
               required
             />
+            {formErrors.confirmPassword && (
+              <div className="error">{formErrors.confirmPassword}</div>
+            )}
+
             <input
               type="email"
               className="input input-box-form"
@@ -120,6 +169,9 @@ export default function Registration() {
               onChange={handleInputChange}
               required
             />
+            {formErrors.email && (
+              <div className="error">{formErrors.email}</div>
+            )}
 
             <select
               id="usertype"
@@ -135,11 +187,16 @@ export default function Registration() {
               <option value="student">Student</option>
               <option value="teacher">Teacher</option>
             </select>
+            {formErrors.userType && (
+              <div className="error">{formErrors.userType}</div>
+            )}
+
             <button type="submit" className="btn btn--small btn--primary">
               Sign Up
             </button>
           </section>
 
+          {/* Links section */}
           <div className="link-group">
             <span>
               Already have an account?
