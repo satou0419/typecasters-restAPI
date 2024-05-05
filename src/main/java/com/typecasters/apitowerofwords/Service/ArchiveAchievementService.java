@@ -63,6 +63,7 @@ public class ArchiveAchievementService {
             edit.setName(achievement.getName());
             edit.setDescription(achievement.getDescription());
             edit.setImagePath(achievement.getImagePath());
+            edit.setCheck(achievement.isCheck());
 
         }catch(NoSuchElementException ex) {
             throw new NoSuchElementException ("Achievement " + achievement.getArchiveAchievementID() + " does not exist");
