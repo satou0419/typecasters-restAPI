@@ -1,0 +1,14 @@
+/* Oval style */
+.oval {
+    fill: purple;
+    /* Add any other styles you need */
+    border-radius: 20px;
+  }
+  
+  /* Circle style */
+  .circle {
+    fill: orange;
+    
+    /* Add any other styles you need */
+  }
+  

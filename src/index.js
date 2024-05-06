@@ -16,6 +16,7 @@ import AdventureMode from "./AdventureMode";
 import CreateRoom from "./CreateRoom";
 import Input from "./components/Input"
 import DialogBox from "./components/DialogBox";
+import Switch from "./components/Switch";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
