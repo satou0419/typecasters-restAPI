@@ -136,6 +136,7 @@
   text-align: center;
   padding-left: 0;
   padding-right: 0;
+  z-index: 5;
 }
 .menu:hover{
   color: #a893bf;
@@ -187,4 +188,7 @@
 .profile.open{
   transform: translateY(-50%) translateX(839%);
   right: 0;
+}
+.profile-container{
+  overflow: hidden;
 } */

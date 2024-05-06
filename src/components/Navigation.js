@@ -35,12 +35,15 @@ export default function Navigation({ onLogout }) {
           <Link to="/arhive">Archive</Link>
           <Link to="/about">About</Link>
           <Link to="/inventory_shop">Inventory</Link>
+          <Link to="/Settings">Settings</Link>
         </div>
-        <div className="profile-icon" onClick={toggleProfile}>
-          <span className="circle"></span>
-        </div>
-        <div className={`profile ${profileOpen ? "open" : "close"}`}>
-          <Link onClick={onLogout}>Logout</Link>
+        <div className="profile-container">
+          <div className="profile-icon" onClick={toggleProfile}>
+           <span className="circle"></span>
+          </div>
+          <div className={`profile ${profileOpen ? "open" : "close"}`}>
+            <Link onClick={onLogout}>Logout</Link>
+          </div>
         </div>
       </nav>
     </section>

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import "./components/tab.css";
 import "./creategame.css";
 import "./components/input.css";
-import Button from "./components/Button";
+import { Link } from "react-router-dom";
 
 export default function CreateGame() {
   const [activeTab, setActiveTab] = useState("Spelling");
@@ -133,10 +133,12 @@ export default function CreateGame() {
               </div>
                <p className="placeholder">Set Allow Replay</p>
             </div>
+            <Link to={"/simulation_room"}>
             <div className="btn-container">
               <button className="btn btn--large btn--danger--large">Cancel</button>
               <button className="btn btn--small btn--primary">Confirm</button>
             </div>
+            </Link>
           </div>
         </div>
 
