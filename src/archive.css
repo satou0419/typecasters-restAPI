@@ -106,3 +106,77 @@
 a {
   text-decoration: none;
 }
+
+.achievement-archive{
+  height: 100%;
+  width: 100%;
+  /* border: solid red; */
+  display: flex;
+  align-items: center;
+  padding: 50px;
+  justify-content: center;
+}
+
+.locked-badge-container{
+  height: 150px;
+  width: 150px;
+  /* border: solid blue; */
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.locked-badge{
+  height: 140px;
+  width: 140px;
+}
+
+.unlocked-badge-container{
+  height: 380px;
+  width: 250px;
+  /* border: solid orange; */
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+  justify-content: center;
+  background: linear-gradient(to bottom, #9A6DEA 0%, #573D84 100%);
+}
+
+.unlocked-badge{
+  height: 230px;
+  width: 230px;
+}
+
+/* Tooltip container */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip-wrapper:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 55%;
+  transform: translateX(-50%);
+  background-color: #333; /* Tooltip background color */
+  color: #fff; /* Tooltip text color */
+  padding: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* Tooltip arrow */
+.tooltip-wrapper:hover::before {
+  content: "";
+  position: absolute;
+  bottom: -5px; /* Adjust based on tooltip height */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}

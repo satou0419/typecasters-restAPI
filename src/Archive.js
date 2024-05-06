@@ -67,7 +67,33 @@ export default function Archive() {
           </div>
         );
       case "achievement":
-        return <div className="tab-content word-archive">Hello</div>;
+        return (
+        <div className="tab-content achievement-archive">
+          <div className="locked-badge-container">
+            <img className="locked-badge" src="./images/locked-badge.png"></img>
+          </div>
+          <div className="locked-badge-container">
+            <img className="locked-badge" src="./images/locked-badge.png"></img>
+          </div>
+          <div className="locked-badge-container">
+            <img className="locked-badge" src="./images/locked-badge.png"></img>
+          </div>
+          <div title="Queen Bee" className="tooltip-wrapper">
+            <div className="unlocked-badge-container">
+            <img className="unlocked-badge" src="./images/unlocked-badge.png"></img>
+          </div>
+          </div>
+          <div className="locked-badge-container">
+            <img className="locked-badge" src="./images/locked-badge.png"></img>
+          </div>
+          <div className="locked-badge-container">
+            <img className="locked-badge" src="./images/locked-badge.png"></img>
+          </div>
+          <div className="locked-badge-container">
+            <img className="locked-badge" src="./images/locked-badge.png"></img>
+          </div>
+        </div>
+        );
       default:
         return <div className="tab-content">Select a tab</div>;
     }

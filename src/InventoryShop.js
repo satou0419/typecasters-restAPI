@@ -7,6 +7,7 @@ import { GET_ALL_ITEMS_ENDPOINT } from "./api"; // Import the endpoint for fetch
 export default function InventoryShop() {
   const [activeTab, setActiveTab] = useState("inventory"); // Default to "archive"
   const [items, setItems] = useState([]); // State to store items
+  const [selectedItem, setSelectedItem] = useState(""); 
 
   useEffect(() => {
     // Fetch all items when component mounts
@@ -32,13 +33,64 @@ export default function InventoryShop() {
     setActiveTab(tab);
   };
 
+  const handleItemClick = (itemName) => {
+    setSelectedItem(itemName);
+  };  
+
   // Conditional rendering based on activeTab
   const renderContent = () => {
     switch (activeTab) {
       case "inventory":
         return (
           <div className="tab-content">
-            <section></section>
+            <section className="inventory-section">
+              <div className="inventory-item-selection-box">
+              <div
+                className={`inventory-item-box ${selectedItem === "Medkit" ? "active" : ""}`}
+                onClick={() => handleItemClick("Medkit")}
+              >
+                <div className="inventory-item-sub-box"></div>
+                <div className="item-description-box">
+                  <div className="item-title">Medkit</div>
+                  <div className="item-description">Lorem ipsum dolor sit amet</div>
+                </div>
+              </div>
+              <div
+                className={`inventory-item-box ${selectedItem === "Bandage" ? "active" : ""}`}
+                onClick={() => handleItemClick("Bandage")}
+              >
+                <div className="inventory-item-sub-box"></div>
+                <div className="item-description-box">
+                  <div className="item-title">Bandage</div>
+                  <div className="item-description">Lorem ipsum dolor sit amet</div>
+                </div>
+              </div>
+              <div
+                className={`inventory-item-box ${selectedItem === "Unusual Battery" ? "active" : ""}`}
+                onClick={() => handleItemClick("Unusual Battery")}
+              > 
+                <div className="inventory-item-sub-box"></div>
+                <div className="item-description-box">
+                  <div className="item-title">Unusual Battery</div>
+                  <div className="item-description">Lorem ipsum dolor sit amet</div>
+                </div>
+              </div>
+
+              </div>
+              <div className="inventory-item-display-box">
+                <div className="inventory-item-picture">
+                  
+                </div>
+                <div className="inventory-item-title">
+                    MEDKIT
+                  </div>
+                  <div className="inventory-item-description">
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                  sed do eiusmod tempor incididunt ut labore et dolore 
+                  magna aliqua.
+                  </div>
+              </div>
+            </section>
           </div>
         );
       case "shop":

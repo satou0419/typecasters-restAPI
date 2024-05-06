@@ -29,8 +29,8 @@
 }
 
 .card-setting--2f {
-  width: 430px;
-  height: 200px;
+  width: 530px;
+  height: 250px;
 }
 
 .card-setting__heading {
@@ -78,7 +78,7 @@
   height: 80px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   padding-top: 5px;
   background-color: #662b9a;
@@ -150,8 +150,8 @@
 }
 
 .card-status {
-  width: 520px;
-  height: 120px;
+  width: 720px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -159,7 +159,7 @@
 
 .card-status__banner {
   height: 90%;
-  width: 110px;
+  width: 130px;
   margin-left: 10px;
   border-radius: 10px;
   background-color: #000;
@@ -171,12 +171,12 @@
 }
 
 .card-status__banner img {
-  width: 100%;
+  width: 100%;  
 }
 .status-progress {
   border-radius: 10px;
   padding-top: 0;
-  width: 120px;
+  width: 160px;
   height: 100%;
 }
 

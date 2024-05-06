@@ -1,0 +1,38 @@
+.main-container{
+    /* border: solid blue; */
+    display: flex;
+}
+.leftbox{
+    margin-left: 100px;
+    padding: 5px;
+    /* border: solid red; */
+    width: 50%;
+}
+.cardstatus{
+    margin-top: 30px;
+}
+
+.rightbox{
+    margin-right: 100px;
+    padding: 5px;
+    /* border: solid pink; */
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.words-added{
+    margin-top: 15px;
+    font-family: 'lilita one';
+    
+}
+
+.words{
+    margin-top: 60px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}

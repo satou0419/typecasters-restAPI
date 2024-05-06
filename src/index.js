@@ -14,12 +14,15 @@ import GameplayAdventureSpelling from "./GameplayAdventureSpelling";
 import Animation from "./components/Animation";
 import AdventureMode from "./AdventureMode";
 import CreateRoom from "./CreateRoom";
+import TeacherRoom from "./TeacherRoomSettings";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+      {/* <Card/> */}
+      {/* <Button/> */}
     </BrowserRouter>
   </React.StrictMode>
 );
