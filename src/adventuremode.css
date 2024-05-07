@@ -1,13 +1,22 @@
+.adventure-wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #1b1b1b;
+  position: relative;
+}
 .tower-container {
   height: 372px;
   width: 211px;
   outline: 2px solid green;
   background: url("/public/assets/misc/15_tower.png");
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
-  gap: 5rem;
+  gap: 2rem;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .floor-card {
@@ -19,10 +28,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
   font-family: "Lilita One";
   color: #5e5e5e;
   background-color: rgba(198, 198, 198, 0.5); /* Adjust the opacity here */
+  cursor: pointer;
 }
 .border-progress {
   outline: 2px solid #593796;
@@ -43,7 +52,6 @@
   font-size: 40px;
   font-family: "Lilita One";
   margin-top: 5%;
-  margin-left: 24%;
 }
 .progress-bar {
   border: 2px solid black;
@@ -58,31 +66,32 @@
   width: 40%;
   height: 30rem;
   margin-left: 30%;
-  margin-top: 2rem;
-  position: absolute;
   background-color: #909090;
   border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .inner-box {
   /*for darker grey*/
   width: 95%;
   height: 28rem;
-  margin-left: 2.5%;
-  margin-top: 1rem;
-  position: absolute;
   background-color: #666667;
   border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .desc-container {
   /*for purple background*/
   width: 90%;
   height: 25rem;
-  margin-left: 5%;
-  margin-top: 2.5rem;
-  position: absolute;
   background: linear-gradient(-170deg, #b36dea, #461386);
   border-radius: 20px;
   box-shadow: inset 0px 10px 4px 2px #563474;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .txt-floor {
   /*for the literal text of Floor 1*/
@@ -98,7 +107,6 @@
   font-family: "lilita one";
   color: white;
   font-size: 2rem;
-  margin-left: 5rem;
   margin-top: 1px;
 }
 .reward-item {
@@ -124,12 +132,34 @@
   /*for the items orientation and spacing*/
   display: flex;
   gap: 5rem;
-  margin-left: 7rem;
 }
 .btn-enter {
-  margin-left: 18.5rem;
   width: 6.5rem;
   height: 3rem;
   font-size: larger;
   margin-top: 2rem;
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress span {
+  font-size: 16pt;
+  width: auto;
+  outline: 2px solid #333;
+  background-color: ivory;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.time-input-container {
+  position: relative;
+}
+
+.time-input {
+  position: relative;
+  z-index: 1;
 }

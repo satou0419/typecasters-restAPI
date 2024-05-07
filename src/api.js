@@ -1,11 +1,14 @@
 // Define your base URL
-const BASE_URL = "http://localhost:8080";
-// const BASE_URL = "https://api-typecasters.azurewebsites.net";
+// const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://api-typecasters.azurewebsites.net";
 // Define your API endpoints
 export const LOGIN_ENDPOINT = `${BASE_URL}/user/login`;
 export const REGISTER_ENDPOINT = `${BASE_URL}/user/register`;
 export const LOGOUT_ENDPOINT = `${BASE_URL}/user/logout`;
 export const GET_ALL_ITEMS_ENDPOINT = `${BASE_URL}/item/get_all_items`;
+export const GET_ALL_FLOORS_ENDPOINT = `${BASE_URL}/floor/get_all_floors`;
+export const GET_ENEMIES_BY_FLOOR_ID_ENDPOINT = `${BASE_URL}/adventure_enemy/get_enemy_by_floor_id`;
+
 export const GET_USER_DETAILS_ENDPOINT = `${BASE_URL}/user_details/get_user_detail?user_id=`;
 
 // Function to fetch user details

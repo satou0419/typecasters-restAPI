@@ -118,8 +118,14 @@ function App() {
             <Route path="/simulation_mode" element={<SimulationMode />} />
             <Route path="/simulation_room" element={<SimulationRoom />} />
             <Route path="/create_game" element={<CreateGame />} />
-            <Route path="/simulation_mode_student" element={<SimulationModeStudent />} />
-            <Route path="/simulation_room_student" element={<SimulationRoomStudent />} />
+            <Route
+              path="/simulation_mode_student"
+              element={<SimulationModeStudent />}
+            />
+            <Route
+              path="/simulation_room_student"
+              element={<SimulationRoomStudent />}
+            />
             <Route path="/join_room" element={<JoinRoom />} />
           </>
         )}
