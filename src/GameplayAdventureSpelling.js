@@ -13,6 +13,9 @@ export default function GameplayAdventureSpelling() {
   });
 
   const [isHit, setIsHit] = useState(false); // State to manage if character is hit
+  const [userInput, setUserInput] = useState(""); // State to store user input
+  const [hearts, setHearts] = useState(6); // State to store remaining heart count
+  const [gameOver, setGameOver] = useState(false); // State to track game over
 
   const [enemies, setEnemies] = useState([]);
   const [currentEnemyIndex, setCurrentEnemyIndex] = useState(0);
@@ -20,6 +23,9 @@ export default function GameplayAdventureSpelling() {
   const [currentWordData, setCurrentWordData] = useState(null);
   const [audioUrl, setAudioUrl] = useState("");
   const [audioElement, setAudioElement] = useState(null);
+  const [inputDisabled, setInputDisabled] = useState(false); // State to disable the input
+  const [goButtonDisabled, setGoButtonDisabled] = useState(false); // State to disable the GO! button
+  const [audioButtonDisabled, setAudioButtonDisabled] = useState(false); // State to disable the audio button
 
   useEffect(() => {
     if (storedFloor) {
@@ -38,10 +44,10 @@ export default function GameplayAdventureSpelling() {
   };
 
   const fetchWordDefinition = async (word) => {
-    const apiKey = "95454221-2935-4778-b4e6-be2ca5ede0cb";
-    const url = `https://www.dictionaryapi.com/api/v3/references/sd2/json/${word}?key=${apiKey}`;
-
     try {
+      const apiKey = "95454221-2935-4778-b4e6-be2ca5ede0cb";
+      const url = `https://www.dictionaryapi.com/api/v3/references/sd2/json/${word}?key=${apiKey}`;
+
       const response = await fetch(url);
       const data = await response.json();
 
@@ -67,6 +73,9 @@ export default function GameplayAdventureSpelling() {
 
         setCurrentWordData({ pronunciation, definition });
         setAudioUrl(audioUrl);
+
+        // Debugging: Log audioUrl
+        console.log("Audio URL:", audioUrl);
       } else {
         setCurrentWordData({
           pronunciation: "",
@@ -82,8 +91,26 @@ export default function GameplayAdventureSpelling() {
         definition: "Error fetching the definition.",
       });
       setAudioUrl("");
+
+      // Debugging: Log error
+      console.error("Fetch word definition error:", error);
     }
   };
+
+  useEffect(() => {
+    console.log("audioUrl changed:", audioUrl);
+    if (audioUrl && audioElement) {
+      // Delay audio playback by 2 seconds
+      setTimeout(() => {
+        audioElement.src = audioUrl;
+        audioElement.play();
+        setInputDisabled(false);
+        setGoButtonDisabled(false);
+        setAudioButtonDisabled(false);
+        setUserInput("");
+      }, 1500);
+    }
+  }, [audioUrl]);
 
   useEffect(() => {
     const audio = new Audio();
@@ -104,40 +131,63 @@ export default function GameplayAdventureSpelling() {
   }, [enemies, currentEnemyIndex]);
 
   const handleGoClick = () => {
-    // Move the enemy forward and switch to attack animation
-    setEnemyState({
-      className: "attack",
-      style: { transform: "translateX(-550px)" },
-    });
+    const words = enemies[currentEnemyIndex].words;
+    const currentWord = words[currentWordIndex];
+    if (userInput.trim().toLowerCase() === currentWord.toLowerCase()) {
+      // User input matches the current word, perform attack animation
+      setEnemyState({
+        className: "attack",
+        style: { transform: "translateX(-550px)" },
+      });
 
-    // After the attack animation starts (around 1300), simulate the main character being hit
-    setTimeout(() => {
+      // After the attack animation starts (around 1300), simulate the main character being hit
+      setTimeout(() => {
+        setIsHit(true);
+        setTimeout(() => {
+          setIsHit(false);
+        }, 500); // Duration of blink animation
+      }, 1300);
+
+      // After the attack animation completes, move back and switch to idle
+      setTimeout(() => {
+        setEnemyState({
+          className: "idle",
+          style: { transform: "translateX(0px)" },
+        });
+      }, 1500); // duration of the attack animation
+
+      if (currentWordIndex < words.length - 1) {
+        setCurrentWordIndex(currentWordIndex + 1);
+        fetchWordDefinition(words[currentWordIndex + 1]);
+      } else if (currentEnemyIndex < enemies.length - 1) {
+        setCurrentEnemyIndex(currentEnemyIndex + 1);
+      } else {
+        alert("All enemies are defeated!");
+      }
+
+      // Log the current word after updating the currentWordIndex
+      console.log("Current Word:", words[currentWordIndex]);
+
+      // Disable input, GO! button, and audio button
+      setInputDisabled(true);
+      setGoButtonDisabled(true);
+      setAudioButtonDisabled(true);
+    } else {
+      // User input does not match the current word, enemy attacks and decrease heart count
       setIsHit(true);
       setTimeout(() => {
         setIsHit(false);
+        setHearts((prevHearts) => prevHearts - 1);
       }, 500); // Duration of blink animation
-    }, 1300);
 
-    // After the attack animation completes, move back and switch to idle
-    setTimeout(() => {
-      setEnemyState({
-        className: "idle",
-        style: { transform: "translateX(0px)" },
-      });
-    }, 1500); // duration of the attack animation
+      // Log the incorrect word
+      console.log("Incorrect Word:", userInput);
 
-    const words = enemies[currentEnemyIndex].words;
-    if (currentWordIndex < words.length - 1) {
-      setCurrentWordIndex(currentWordIndex + 1);
-      fetchWordDefinition(words[currentWordIndex + 1]);
-    } else if (currentEnemyIndex < enemies.length - 1) {
-      setCurrentEnemyIndex(currentEnemyIndex + 1);
-    } else {
-      alert("All enemies are defeated!");
+      // Check if hearts are zero, set game over
+      if (hearts === 0) {
+        setGameOver(true);
+      }
     }
-
-    // Log the current word after updating the currentWordIndex
-    console.log("Current Word:", words[currentWordIndex]);
   };
 
   const handleAudioClick = () => {
@@ -146,6 +196,11 @@ export default function GameplayAdventureSpelling() {
       audioElement.play();
     }
   };
+
+  // Render game over message if game over
+  if (gameOver) {
+    return <div className="game-over">Game Over</div>;
+  }
 
   return (
     <main className="gameplay-container">
@@ -208,23 +263,31 @@ export default function GameplayAdventureSpelling() {
             <button
               className="btn btn--small btn--primary"
               onClick={handleAudioClick}
+              disabled={audioButtonDisabled}
             >
               Audio
             </button>
-            <input type="textbox" />
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              disabled={inputDisabled}
+            />
             <button
               className="btn btn--medium btn--primary"
               onClick={handleGoClick}
+              disabled={goButtonDisabled}
             >
               GO!
             </button>
             <div className="lives-container">
-              <img src="./assets/icon/ic_heart.png" alt="Heart Icon" />
-              <img src="./assets/icon/ic_heart.png" alt="Heart Icon" />
-              <img src="./assets/icon/ic_heart.png" alt="Heart Icon" />
-              <img src="./assets/icon/ic_heart.png" alt="Heart Icon" />
-              <img src="./assets/icon/ic_heart.png" alt="Heart Icon" />
-              <img src="./assets/icon/ic_heart.png" alt="Heart Icon" />
+              {[...Array(hearts)].map((_, index) => (
+                <img
+                  key={index}
+                  src="./assets/icon/ic_heart.png"
+                  alt="Heart Icon"
+                />
+              ))}
             </div>
           </div>
         </div>
