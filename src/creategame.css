@@ -8,23 +8,12 @@
     background-color: #666667;
   }
   
-  .book-container {
+  .added-word {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* outline: 1px solid red; */
     
-  }
-  
-  .page-container {
-    background-color: #909090;
-    width: 26%;
-    height: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: -10%;
   }
   
   .book-page {
@@ -45,12 +34,7 @@
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
   }
-  
-  .right-page {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-  }
-  
+
   .left-content {
     height: 100%;
     width: 100%;
@@ -155,7 +139,7 @@
   justify-content: right;
 }
 
-.tab-content{
+.create{
   display: flex;
   justify-content: space-evenly;
   flex-direction: row;

@@ -42,15 +42,15 @@ export default function CreateGame() {
   const renderContent = () => {
     switch (activeTab) {
       case "Syllable":
-        return <div className="tab-content">This is a tab</div>;
+        return <div className="tab-content create">This is a tab</div>;
       case "Silent":
-        return <div className="tab-content">Hello</div>;
+        return <div className="tab-content create">Hello</div>;
       default:
-        return <div className="tab-content">
+        return <div className="tab-content create">
           <div className="textfield-left-container">
             <input type="text" className="input input-box search-box" placeholder="Search Word" />
             <p className="txt-words-added">Words Added:</p>
-            <section className="book-container">
+            <section className="book-container added-word">
               <div className="left-page page-container words-container">
                 <div className="book-page">
                   <div className="left-content">

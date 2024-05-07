@@ -32,7 +32,7 @@ export default function Navigation({ onLogout }) {
         <div className={`menu ${menuOpen ? "open" : "close"}`}>
           <Link to="/adventure_mode">Adventure Mode</Link>
           <Link to="/simulation_mode">Simulation Mode</Link>
-          <Link to="/arhive">Archive</Link>
+          <Link to="/archive">Archive</Link>
           <Link to="/about">About</Link>
           <Link to="/inventory_shop">Inventory</Link>
           <Link to="/Settings">Settings</Link>
