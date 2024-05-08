@@ -45,7 +45,7 @@ public class ArchiveWordsController {
     }
 
     // Delete
-    @DeleteMapping("/remove/{archiveWordsID}")
+    @PutMapping("/remove/{archiveWordsID}")
     public ResponseEntity<Void> removeArchiveWords(@PathVariable int archiveWordsID) {
         archiveWordsService.removeArchiveWords(archiveWordsID);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -45,7 +45,7 @@ public class ArchiveAchievementController {
     }
 
     // Delete
-    @DeleteMapping("/remove/{archiveAchievementID}")
+    @PutMapping("/remove/{archiveAchievementID}")
     public ResponseEntity<Void> removeArchiveAchievement(@PathVariable int archiveAchievementID) {
         archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
         return new ResponseEntity<>(HttpStatus.OK);
