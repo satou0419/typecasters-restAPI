@@ -13,20 +13,19 @@ public class RoomEntity {
 
     private int creatorID;
     private String roomName;
+    @Column(unique = true)
     private String code;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "tbl_room_members",
-            joinColumns = @JoinColumn(name = "roomID"),
-            inverseJoinColumns = @JoinColumn(name = "userID")
-    )
-    private List<UserEntity> members = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "tbl_room_members",
+            joinColumns = @JoinColumn(name = "room_id"))
+    @Column(name = "user_id")
+    private List<Integer> members = new ArrayList<>();
     private boolean isDeleted = false;
 
     public RoomEntity() {
     }
 
-    public RoomEntity(int roomID, int creatorID, String roomName, String code, List<UserEntity> members, boolean isDeleted) {
+    public RoomEntity(int roomID, int creatorID, String roomName, String code, List<Integer> members, boolean isDeleted) {
         this.roomID = roomID;
         this.creatorID = creatorID;
         this.roomName = roomName;
@@ -67,11 +66,11 @@ public class RoomEntity {
         this.code = code;
     }
 
-    public List<UserEntity> getMembers() {
+    public List<Integer> getMembers() {
         return members;
     }
 
-    public void setMembers(List<UserEntity> members) {
+    public void setMembers(List<Integer> members) {
         this.members = members;
     }
 
@@ -83,7 +82,7 @@ public class RoomEntity {
         isDeleted = deleted;
     }
 
-    public void addMembers(UserEntity user) {
+    public void addMembers(Integer user) {
         this.members.add(user);
     }
 }

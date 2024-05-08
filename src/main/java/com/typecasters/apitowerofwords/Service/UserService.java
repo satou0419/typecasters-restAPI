@@ -4,13 +4,11 @@ import com.typecasters.apitowerofwords.Entity.UserEntity;
 import com.typecasters.apitowerofwords.Exception.IncorrectPasswordException;
 import com.typecasters.apitowerofwords.Exception.UsernameNotFoundException;
 import com.typecasters.apitowerofwords.LoginRequest;
-import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import com.typecasters.apitowerofwords.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,55 +22,45 @@ public class UserService {
     UserDetailsService ud_serv;
 
 
-    //Registration
+   //Registration
     @Transactional
-    public String registerUser(UserEntity user){
-        int user_id;
-
-        if(user.getUsername().isEmpty() && user.getPassword().isEmpty() && user.getUserType().isEmpty() && user.getEmail().isEmpty() && user.getFirstname().isEmpty() && user.getLastname().isEmpty()){
+    public String registerUser(UserEntity user) {
+        if (userContainsEmptyFields(user)) {
             return "Fields are empty";
         }
 
-        if(urepo.findOneByUsername(user.getUsername()) == null){
-
-//            user_id = urepo.save(user).getUserID();
-//            ud_serv.initUserDetails(user_id);
-
-            if (user.getPassword().length() < 8) {
-                return "Password must be at least 8 characters";
-            }
-
-            // Check for at least one lowercase letter
-            if (!user.getPassword().matches(".*[a-z].*")) {
-                return "Password must have at least one lowercase letter";
-            }
-
-            // Check for at least one uppercase letter
-            if (!user.getPassword().matches(".*[A-Z].*")) {
-                return "Password must have at least one uppercase letter";
-            }
-
-            // Check for at least one digit
-            if (!user.getPassword().matches(".*\\d.*")) {
-                return "Password must have at least one digit";
-            }
-
-            // Check for at least one special character
-            Pattern specialCharPattern = Pattern.compile("[^a-zA-Z0-9]");
-            Matcher matcher = specialCharPattern.matcher(user.getPassword());
-            if (!matcher.find()) {
-                return "Password must have at least one special character";
-            }
-
-            user_id = urepo.save(user).getUserID();
-            ud_serv.initUserDetails(user_id);
-
-            return "Registration Succesful";
-
-        }else{
-            return "Username already exist";
+        if (urepo.findOneByUsername(user.getUsername()) != null) {
+            return "Username already exists";
         }
+
+        if (!isValidUsername(user.getUsername())) {
+            return "Username must be at least 3 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character";
+        }
+
+        if (!isValidPassword(user.getPassword())) {
+            return "Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character";
+        }
+
+        int userId = urepo.save(user).getUserID();
+        ud_serv.initUserDetails(userId);
+
+        return "Registration Successful";
     }
+
+    private boolean userContainsEmptyFields(UserEntity user) {
+        return user.getUsername().isEmpty() || user.getPassword().isEmpty() ||
+                user.getUserType().isEmpty() || user.getEmail().isEmpty() ||
+                user.getFirstname().isEmpty() || user.getLastname().isEmpty();
+    }
+
+    private boolean isValidUsername(String username) {
+        return username.length() >= 3 && username.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d\\s]).+$");
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() >= 8 && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d\\s]).+$");
+    }
+
 
     // Login
     @SuppressWarnings("finally")
