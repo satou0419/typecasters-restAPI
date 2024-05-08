@@ -1,52 +1,51 @@
 package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.RoomEntity;
-import com.typecasters.apitowerofwords.Entity.UserEntity;
 import com.typecasters.apitowerofwords.Repository.RoomRepository;
-import com.typecasters.apitowerofwords.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RoomService {
     @Autowired
     RoomRepository roomRepository;
-    @Autowired
-    UserRepository userRepository;
 
     public RoomEntity insertRoom(RoomEntity room) {
+        room.setCode(generateUniqueCode());
         return roomRepository.save(room);
     }
 
-    public RoomEntity insertMember(int userID, RoomEntity room) {
-        UserEntity user = new UserEntity();
+    private String generateUniqueCode() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMdd-HHmm-ss");
+        String timestamp = formatter.format(now);
 
-        try {
-            user = userRepository.findById(userID).get();
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-            room.addMembers(user);
-
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + userID + " does not exist");
-        }finally {
-            return roomRepository.save(room);
+        StringBuilder codeBuilder = new StringBuilder(timestamp);
+        Random random = new Random();
+        for (int i = 0; i < 2; i++) {
+            char randomChar = characters.charAt(random.nextInt(characters.length()));
+            codeBuilder.append(randomChar);
         }
+        return codeBuilder.toString();
     }
 
-    public RoomEntity insertMemberByCode(int userID, String code) {
-        UserEntity user = new UserEntity();
+    public RoomEntity insertMember(Integer userID, RoomEntity room) {
+        room.addMembers(userID);
+        return roomRepository.save(room);
+    }
+
+    public RoomEntity insertMemberByCode(Integer userID, String code) {
         RoomEntity room = new RoomEntity();
 
         try {
-            user = userRepository.findById(userID).get();
-
             room = roomRepository.findByCode(code);
-            room.addMembers(user);
+            room.addMembers(userID);
 
         }catch(NoSuchElementException ex) {
             throw new NoSuchElementException ("Achievement " + userID + " does not exist");
@@ -67,24 +66,21 @@ public class RoomService {
         return roomRepository.findById(roomID);
     }
 
-    public List<RoomEntity> viewRoomByMember(int userID) {
+    public List<RoomEntity> viewRoomByMember(Integer userID) {
         List<RoomEntity> roomList = new ArrayList<>();
         try {
-            Optional<UserEntity> user = userRepository.findById(userID);
             List<RoomEntity> room = roomRepository.findAll();
 
-
-
             for(RoomEntity i : room) {
-                for(UserEntity j : i.getMembers()) {
-                    if(j.equals(user)) {
+                for(Integer j : i.getMembers()) {
+                    if(j.equals(userID)) {
                         roomList.add(i);
                     }
                 }
             }
 
         } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("Achievement " /*+ achievement.getArchiveAchievementID()*/ + " does not exist");
+            throw new NoSuchElementException("User " + userID + " does not exist");
         }
         return roomList;
     }
@@ -98,7 +94,7 @@ public class RoomService {
             edit.setRoomName(room.getRoomName());
 
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + room.getRoomID() + " does not exist");
+            throw new NoSuchElementException ("Room " + room.getRoomID() + " does not exist");
         }finally {
             return roomRepository.save(edit);
         }
@@ -112,7 +108,7 @@ public class RoomService {
 
             delete.setDeleted(true);
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Achievement " + roomID + " does not exist!");
+            throw new NoSuchElementException("Room " + roomID + " does not exist!");
         }finally {
             return roomRepository.save(delete);
         }
