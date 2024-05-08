@@ -1,5 +1,6 @@
 package com.typecasters.apitowerofwords.Controller;
 
+
 import com.typecasters.apitowerofwords.Entity.AdventureEnemyEntity;
 import com.typecasters.apitowerofwords.Service.AdventureEnemyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,35 +12,41 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/adventure_enemy")
 public class AdventureEnemyController {
+
     @Autowired
-    AdventureEnemyService AES;
+    private AdventureEnemyService ae_serv;
 
-    //Create
-    @PostMapping("/insert")
-    public AdventureEnemyEntity insertAdventureEnemy(@RequestBody AdventureEnemyEntity enemy) {
-        return AES.insertAdventureEnemy(enemy);
+    @PostMapping("/add_enemy")
+    public AdventureEnemyEntity insertEnemy(@RequestBody AdventureEnemyEntity enemy){
+        return ae_serv.insertEnemy(enemy);
     }
 
-    //Read
-    @GetMapping("/view")
-    public List<AdventureEnemyEntity> viewAllAdventureEnemy() {
-        return AES.viewAllAdventureEnemy();
+    //Read All
+    @GetMapping("/get_all_enemy")
+    public List<AdventureEnemyEntity> getAllEnemy(){
+        return ae_serv.getAllEnemy();
     }
 
-    @GetMapping("/view_by_id/{AEID}")
-    public Optional<AdventureEnemyEntity> viewAdventureEnemyByID(@PathVariable int AEID) {
-        return AES.viewAdventureEnemyByID(AEID);
+    //Read One
+    @GetMapping("/get_enemy_by_id")
+    public Optional<AdventureEnemyEntity> getEnemyById(@RequestParam int enemy_id){
+        return ae_serv.getEnemyById(enemy_id);
+    }
+
+    //Read By foreign key
+    @GetMapping("/get_enemy_by_floor_id")
+    public Optional<List<AdventureEnemyEntity>> getEnemyByFloorId(@RequestParam int floor_id){
+        return ae_serv.getAllByFloorId(floor_id);
     }
 
     //Update
-    @PutMapping("/edit")
-    public AdventureEnemyEntity editAdventureEnemy(@RequestBody AdventureEnemyEntity enemy) {
-        return AES.editAdventureEnemy(enemy);
+    @PutMapping("/update_enemy")
+    public AdventureEnemyEntity updateEnemy(@RequestParam int enemy_id, @RequestBody AdventureEnemyEntity newEnemyDetails){
+        return ae_serv.updateEnemy(enemy_id, newEnemyDetails);
     }
 
-    //Delete
-    @PutMapping("/remove/{AEID}")
-    public AdventureEnemyEntity removeAdventureEnemy(@PathVariable int AEID) {
-        return AES.removeAdventureEnemy(AEID);
+    @PutMapping("/delete_enemy")
+    public String deleteEnemy(@RequestParam int enemy_id){
+        return ae_serv.deleteEnemy(enemy_id);
     }
 }

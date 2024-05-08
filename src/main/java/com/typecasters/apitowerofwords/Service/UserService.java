@@ -1,6 +1,8 @@
 package com.typecasters.apitowerofwords.Service;
 
 import com.typecasters.apitowerofwords.Entity.UserEntity;
+import com.typecasters.apitowerofwords.Exception.IncorrectPasswordException;
+import com.typecasters.apitowerofwords.Exception.UsernameNotFoundException;
 import com.typecasters.apitowerofwords.LoginRequest;
 import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import com.typecasters.apitowerofwords.Repository.UserRepository;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -31,6 +35,35 @@ public class UserService {
 
         if(urepo.findOneByUsername(user.getUsername()) == null){
 
+//            user_id = urepo.save(user).getUserID();
+//            ud_serv.initUserDetails(user_id);
+
+            if (user.getPassword().length() < 8) {
+                return "Password must be at least 8 characters";
+            }
+
+            // Check for at least one lowercase letter
+            if (!user.getPassword().matches(".*[a-z].*")) {
+                return "Password must have at least one lowercase letter";
+            }
+
+            // Check for at least one uppercase letter
+            if (!user.getPassword().matches(".*[A-Z].*")) {
+                return "Password must have at least one uppercase letter";
+            }
+
+            // Check for at least one digit
+            if (!user.getPassword().matches(".*\\d.*")) {
+                return "Password must have at least one digit";
+            }
+
+            // Check for at least one special character
+            Pattern specialCharPattern = Pattern.compile("[^a-zA-Z0-9]");
+            Matcher matcher = specialCharPattern.matcher(user.getPassword());
+            if (!matcher.find()) {
+                return "Password must have at least one special character";
+            }
+
             user_id = urepo.save(user).getUserID();
             ud_serv.initUserDetails(user_id);
 
@@ -41,27 +74,26 @@ public class UserService {
         }
     }
 
-    //Login
+    // Login
     @SuppressWarnings("finally")
-    public UserEntity login(LoginRequest logReq){
-        UserEntity user = new UserEntity();
-        try{
-            user = urepo.findOneByUsername(logReq.getUsername());
-
-            if(user == null){
-                throw new Exception("username not found");
-            }
-
-            if(!(user.getPassword().equals(logReq.getPassword()))){
-                throw new Exception("password does not match");
-            }else{
-                return user;
-            }
-        }catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-
+    public UserEntity login(LoginRequest logReq) {
+        if (logReq.getUsername() == null || logReq.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("Please provide a username.");
         }
+        if (logReq.getPassword() == null || logReq.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Please provide a password.");
+        }
+
+        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
+        if (user == null) {
+            throw new UsernameNotFoundException("Username cannot be found!");
+        }
+
+        if (!user.getPassword().equals(logReq.getPassword())) {
+            throw new IncorrectPasswordException("Incorrect password.");
+        }
+
+        return user;
     }
 
     //Account Edit

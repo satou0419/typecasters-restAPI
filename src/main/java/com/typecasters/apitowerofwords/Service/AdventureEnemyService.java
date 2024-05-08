@@ -11,48 +11,59 @@ import java.util.Optional;
 
 @Service
 public class AdventureEnemyService {
+
     @Autowired
-    AdventureEnemyRepository AER;
+    private AdventureEnemyRepository ae_rep;
 
-    public AdventureEnemyEntity insertAdventureEnemy(AdventureEnemyEntity enemy) {
-        return AER.save(enemy);
+    //Create
+    public AdventureEnemyEntity insertEnemy(AdventureEnemyEntity enemy){
+        return ae_rep.save(enemy);
     }
 
-    public List<AdventureEnemyEntity> viewAllAdventureEnemy() {
-        return AER.findAll();
+    //Read
+    public List<AdventureEnemyEntity> getAllEnemy(){
+        return ae_rep.findAll();
     }
 
-    public Optional<AdventureEnemyEntity> viewAdventureEnemyByID(int enemyID) {
-        return AER.findById(enemyID);
+    public Optional<AdventureEnemyEntity> getEnemyById(int enemy_id){
+        return ae_rep.findById(enemy_id);
     }
 
-    public AdventureEnemyEntity editAdventureEnemy(AdventureEnemyEntity enemy) {
-        AdventureEnemyEntity edit = new AdventureEnemyEntity();
+    //Get All By TowerId
 
-        try {
-            edit = AER.findById(enemy.getAEID()).get();
+    public Optional<List<AdventureEnemyEntity>> getAllByFloorId(int tower_id){
+        return ae_rep.findAllByTowerFloorId(tower_id);
+    }
 
-            edit.setImagePath(enemy.getImagePath());
-            edit.setTFID(enemy.getTFID());
+    //Update
+    @SuppressWarnings({"finally", "ReturnInsideFinallyBlock"})
+    public AdventureEnemyEntity updateEnemy(int enemy_id, AdventureEnemyEntity newEnemyDetail){
+        AdventureEnemyEntity enemy = new AdventureEnemyEntity();
 
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + enemy.getAEID() + " does not exist");
-        }finally {
-            return AER.save(edit);
+        try{
+            enemy = ae_rep.findById(enemy_id).get();
+
+            enemy.setImagePath(newEnemyDetail.getImagePath());
+            enemy.setTowerFloorId(newEnemyDetail.getTowerFloorId());
+            enemy.setWords(newEnemyDetail.getWords());
+        }catch (NoSuchElementException ex){
+            throw new NoSuchElementException("Enemy does not exist");
+        }finally{
+            return ae_rep.save(enemy);
         }
     }
 
-    public AdventureEnemyEntity removeAdventureEnemy(int enemyID) {
-        AdventureEnemyEntity delete = new AdventureEnemyEntity();
+    //Delete
+    public String deleteEnemy(int enemy_id){
+        String msg = "enemy id does not exist";
 
-        try {
-            delete = AER.findById(enemyID).get();
-
-            delete.setDeleted(true);
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Achievement " + enemyID + " does not exist!");
-        }finally {
-            return AER.save(delete);
+        if(ae_rep.findById(enemy_id).isPresent()){
+            ae_rep.deleteById(enemy_id);
         }
+
+        return msg;
+
     }
+
+
 }

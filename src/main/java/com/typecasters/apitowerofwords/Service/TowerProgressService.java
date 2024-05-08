@@ -20,8 +20,11 @@ public class TowerProgressService {
         try{
             TowerProgressEntity towerProgress = tp_repo.findById(userProgId).get();
 
+
             towerProgress.setTowerSecProg(towerProgUpdate.getTowerSecProg());
             towerProgress.setFloorId(towerProgUpdate.getFloorId());
+
+            tp_repo.save(towerProgress);
         }catch(NoSuchElementException e){
             message = "User Progress Id Does not Exist";
         }
