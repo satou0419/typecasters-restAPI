@@ -35,9 +35,22 @@ public class RoomService {
         return codeBuilder.toString();
     }
 
-    public RoomEntity insertMember(Integer userID, RoomEntity room) {
-        room.addMembers(userID);
-        return roomRepository.save(room);
+    public RoomEntity insertMember(Integer userID, int roomID) {
+        RoomEntity room = new RoomEntity();
+        try {
+            room = roomRepository.findById(roomID).get();
+            for(Integer i : room.getMembers()){
+                if(i.equals(userID)){
+                    throw new IllegalArgumentException("User " + userID + " already exists in the room");
+                }
+            }
+            room.addMembers(userID);
+
+        }catch(NoSuchElementException ex) {
+            throw new NoSuchElementException ("User " + userID + " does not exist");
+        }finally {
+            return roomRepository.save(room);
+        }
     }
 
     public RoomEntity insertMemberByCode(Integer userID, String code) {
@@ -45,10 +58,15 @@ public class RoomService {
 
         try {
             room = roomRepository.findByCode(code);
+            for(Integer i : room.getMembers()){
+                if(i.equals(userID)){
+                    throw new IllegalArgumentException("User " + userID + " already exists in the room");
+                }
+            }
             room.addMembers(userID);
 
         }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Achievement " + userID + " does not exist");
+            throw new NoSuchElementException ("User " + userID + " does not exist");
         }finally {
             return roomRepository.save(room);
         }

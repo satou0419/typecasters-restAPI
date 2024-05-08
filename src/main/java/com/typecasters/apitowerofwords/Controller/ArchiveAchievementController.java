@@ -1,6 +1,8 @@
 package com.typecasters.apitowerofwords.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.typecasters.apitowerofwords.Entity.ArchiveAchievementEntity;
@@ -15,32 +17,37 @@ public class ArchiveAchievementController {
     @Autowired
     ArchiveAchievementService archiveAchievementService;
 
-    //Create
+    // Create
     @PostMapping("/insert")
-    public ArchiveAchievementEntity insertArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
-        return archiveAchievementService.insertArchiveAchievement(achievement.getUserID(), achievement);
+    public ResponseEntity<ArchiveAchievementEntity> insertArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+        ArchiveAchievementEntity insertedAchievement = archiveAchievementService.insertArchiveAchievement(achievement.getUserID(), achievement);
+        return new ResponseEntity<>(insertedAchievement, HttpStatus.OK);
     }
 
-    //Read
+    // Read
     @GetMapping("/view/{userID}")
-    public List<ArchiveAchievementEntity> viewAllArchiveAchievement(@PathVariable int userID) {
-        return archiveAchievementService.viewAllArchiveAchievement(userID);
+    public ResponseEntity<List<ArchiveAchievementEntity>> viewAllArchiveAchievement(@PathVariable int userID) {
+        List<ArchiveAchievementEntity> achievements = archiveAchievementService.viewAllArchiveAchievement(userID);
+        return new ResponseEntity<>(achievements, HttpStatus.OK);
     }
 
     @GetMapping("/view_by_id/{archiveAchievementID}")
-    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int archiveAchievementID) {
-        return archiveAchievementService.viewArchiveAchievementByID(archiveAchievementID);
+    public ResponseEntity<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int archiveAchievementID) {
+        Optional<ArchiveAchievementEntity> achievement = archiveAchievementService.viewArchiveAchievementByID(archiveAchievementID);
+        return achievement.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    //Update
+    // Update
     @PutMapping("/edit")
-    public ArchiveAchievementEntity editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
-        return archiveAchievementService.editArchiveAchievement(achievement);
+    public ResponseEntity<ArchiveAchievementEntity> editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+        ArchiveAchievementEntity updatedAchievement = archiveAchievementService.editArchiveAchievement(achievement);
+        return new ResponseEntity<>(updatedAchievement, HttpStatus.OK);
     }
 
-    //Delete
-    @PutMapping("/remove/{archiveAchievementID}")
-    public ArchiveAchievementEntity removeArchiveAchievement(@PathVariable int archiveAchievementID) {
-        return archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
+    // Delete
+    @DeleteMapping("/remove/{archiveAchievementID}")
+    public ResponseEntity<Void> removeArchiveAchievement(@PathVariable int archiveAchievementID) {
+        archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -23,9 +23,9 @@ public class RoomController {
         return new ResponseEntity<>(insertedRoom, HttpStatus.OK);
     }
 
-    @PutMapping("/insert_member/{userID}")
-    public ResponseEntity<RoomEntity> insertMember(@PathVariable int userID, @RequestBody RoomEntity room) {
-        RoomEntity updatedRoom = roomService.insertMember(userID, room);
+    @PutMapping("/insert_member/{userID}/room/{roomID}")
+    public ResponseEntity<RoomEntity> insertMember(@PathVariable int userID, @PathVariable int roomID) {
+        RoomEntity updatedRoom = roomService.insertMember(userID, roomID);
         return new ResponseEntity<>(updatedRoom, HttpStatus.OK);
     }
 

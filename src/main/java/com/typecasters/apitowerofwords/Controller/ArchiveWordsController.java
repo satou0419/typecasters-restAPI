@@ -1,6 +1,8 @@
 package com.typecasters.apitowerofwords.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.typecasters.apitowerofwords.Entity.ArchiveWordsEntity;
@@ -15,32 +17,37 @@ public class ArchiveWordsController {
     @Autowired
     ArchiveWordsService archiveWordsService;
 
-    //Create
+    // Create
     @PostMapping("/insert")
-    public ArchiveWordsEntity insertArchiveWords(@RequestBody ArchiveWordsEntity word) {
-        return archiveWordsService.insertArchiveWords(word.getUserID(), word);
+    public ResponseEntity<ArchiveWordsEntity> insertArchiveWords(@RequestBody ArchiveWordsEntity word) {
+        ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(word.getUserID(), word);
+        return new ResponseEntity<>(insertedWord, HttpStatus.OK);
     }
 
-    //Read
+    // Read
     @GetMapping("/view/{userID}")
-    public List<ArchiveWordsEntity> viewAllArchiveWords(@PathVariable int userID) {
-        return archiveWordsService.viewAllArchiveWords(userID);
+    public ResponseEntity<List<ArchiveWordsEntity>> viewAllArchiveWords(@PathVariable int userID) {
+        List<ArchiveWordsEntity> words = archiveWordsService.viewAllArchiveWords(userID);
+        return new ResponseEntity<>(words, HttpStatus.OK);
     }
 
     @GetMapping("/view_by_id/{archiveWordsID}")
-    public Optional<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int archiveWordsID) {
-        return archiveWordsService.viewArchiveWordsByID(archiveWordsID);
+    public ResponseEntity<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int archiveWordsID) {
+        Optional<ArchiveWordsEntity> word = archiveWordsService.viewArchiveWordsByID(archiveWordsID);
+        return word.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    //Update
+    // Update
     @PutMapping("/edit")
-    public ArchiveWordsEntity editArchiveWords(@RequestBody ArchiveWordsEntity word) {
-        return archiveWordsService.editArchiveWords(word);
+    public ResponseEntity<ArchiveWordsEntity> editArchiveWords(@RequestBody ArchiveWordsEntity word) {
+        ArchiveWordsEntity updatedWord = archiveWordsService.editArchiveWords(word);
+        return new ResponseEntity<>(updatedWord, HttpStatus.OK);
     }
 
-    //Delete
-    @PutMapping("/remove/{archiveWordsID}")
-    public ArchiveWordsEntity removeArchiveWords(@PathVariable int archiveWordsID) {
-        return archiveWordsService.removeArchiveWords(archiveWordsID);
+    // Delete
+    @DeleteMapping("/remove/{archiveWordsID}")
+    public ResponseEntity<Void> removeArchiveWords(@PathVariable int archiveWordsID) {
+        archiveWordsService.removeArchiveWords(archiveWordsID);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
