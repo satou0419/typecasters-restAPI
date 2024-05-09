@@ -1,13 +1,51 @@
-.idle {
+.explode {
+  height: 128px;
+  width: calc(1536px / 12);
+
+  background: url("/public/assets/sprites/explosion-4.png");
+  background-size: 1536px 128px;
+  animation: explode 1.5s steps(12) infinite;
+}
+
+@keyframes explode {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -1536px 0;
+  }
+}
+
+.idle-main {
+  height: 7782px;
+  width: calc(7782px / 19);
+
+  background: url("/public/assets/sprites/20_idle-main.png");
+  background-size: 7782px 410;
+  animation: idle-main 0.9167s steps(19) infinite;
+}
+
+@keyframes idle-main {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -7782px 0;
+  }
+}
+
+.idle-spring {
   height: 307px;
   width: calc(3379px / 11);
 
   background: url("/public/assets/sprites/15_enemy_spring_idle_spritesheet.png");
   background-size: 3379px 307;
-  animation: idle 0.9167s steps(11) infinite;
+  animation: idle-spring 0.9167s steps(11) infinite;
 }
 
-@keyframes idle {
+@keyframes idle-spring {
   0% {
     background-position: 0 0;
   }
@@ -78,7 +116,7 @@
   }
 }
 
-.character-main.hit {
+.hit {
   animation: blink 0.5s ease-in-out, shake 0.5s ease-in-out;
 }
 
@@ -86,6 +124,10 @@
   animation: shake 0.5s ease;
   border: 2px solid #ff9999; /* Light red border */
   box-shadow: 0 0 5px #ff9999; /* Soft red shadow */
+}
+
+.animate-shake {
+  animation: shake 0.5s ease;
 }
 
 @keyframes shake {

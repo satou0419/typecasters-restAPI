@@ -8,6 +8,9 @@ export default function Animation() {
 
       <label>attack</label>
       <div className="attack"></div>
+
+      <label>explode</label>
+      <div className="explode"></div>
     </section>
   );
 }

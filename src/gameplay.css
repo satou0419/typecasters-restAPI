@@ -166,8 +166,14 @@
   display: flex;
   justify-content: flex-end;
 }
-.character-main img {
-  height: 100%;
+
+.character {
+  display: flex;
+  justify-content: flex-end;
+}
+.character-main {
+  height: calc(7782px / 19);
+  width: 410px;
 }
 
 .floor_indicator {
@@ -213,4 +219,24 @@
 
 .lives-container img {
   width: 6%;
+}
+
+.input-answer {
+  font-family: "Lilita One";
+  text-align: center;
+  font-size: 18pt;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+.input-answer:disabled {
+  background-color: transparent;
+}
+
+.btn-go:disabled,
+.btn-audio:disabled {
+  background-color: pink;
 }
