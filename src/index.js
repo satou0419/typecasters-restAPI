@@ -14,9 +14,6 @@ import GameplayAdventureSpelling from "./GameplayAdventureSpelling";
 import Animation from "./components/Animation";
 import AdventureMode from "./AdventureMode";
 import CreateRoom from "./CreateRoom";
-import Input from "./components/Input";
-import DialogBox from "./components/DialogBox";
-import Navigation from "./components/Navigation";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

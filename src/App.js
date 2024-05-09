@@ -23,6 +23,8 @@ import CreateGame from "./CreateGame";
 import SimulationModeStudent from "./SimulationMode-Student";
 import SimulationRoomStudent from "./SimulationRoom-Student";
 import JoinRoom from "./JoinRoom";
+import TeacherRoomSettings from "./TeacherRoomSettings";
+import TeacherRoomInfo from "./TeacherRoomInfo";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -127,6 +129,11 @@ function App() {
               element={<SimulationRoomStudent />}
             />
             <Route path="/join_room" element={<JoinRoom />} />
+            <Route
+              path="/teacher_room_settings"
+              element={<TeacherRoomSettings />}
+            />
+            <Route path="/teacher_room_info" element={<TeacherRoomInfo />} />
           </>
         )}
       </Routes>

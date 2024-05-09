@@ -1,0 +1,27 @@
+.add-btn{
+    margin-left: 83%;
+}
+
+.rightbox-info{
+    margin-right: 100px;
+    padding: 5px;
+    /* border: solid pink; */
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+}
+
+.lower-box{
+    margin-top: 10%;
+}
+
+.btn-group-out{
+    display: flex;
+    margin-top: 20%;
+}
+
+.save-btn{
+    margin-left: 61%;
+}
