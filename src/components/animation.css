@@ -18,11 +18,11 @@
 }
 
 .idle-main {
-  height: 7782px;
-  width: calc(7782px / 19);
+  height: 7004px;
+  width: calc(7004px / 19);
 
-  background: url("/public/assets/sprites/20_idle-main.png");
-  background-size: 7782px 410;
+  background: url("/public/assets/sprites/18_idle-main.png");
+  background-size: 7004px 369;
   animation: idle-main 0.9167s steps(19) infinite;
 }
 
@@ -32,7 +32,26 @@
   }
 
   100% {
-    background-position: -7782px 0;
+    background-position: -7004px 0;
+  }
+}
+
+.attack-main {
+  height: 8568px;
+  width: calc(8568px / 21);
+
+  background: url("/public/assets/sprites/17_attack-main.png");
+  background-size: 8568px 408;
+  animation: attack-main 1.75s steps(21) infinite;
+}
+
+@keyframes attack-main {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -8568px 0;
   }
 }
 

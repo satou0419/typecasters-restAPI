@@ -172,8 +172,8 @@
   justify-content: flex-end;
 }
 .character-main {
-  height: calc(7782px / 19);
-  width: 410px;
+  height: calc(7004px / 19);
+  width: 369px;
 }
 
 .floor_indicator {
