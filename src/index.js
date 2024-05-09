@@ -15,14 +15,13 @@ import Animation from "./components/Animation";
 import AdventureMode from "./AdventureMode";
 import CreateRoom from "./CreateRoom";
 import TeacherRoom from "./TeacherRoomSettings";
+import Modal from "./components/Modal";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
-      {/* <Card/> */}
-      {/* <Button/> */}
     </BrowserRouter>
   </React.StrictMode>
 );
