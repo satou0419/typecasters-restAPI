@@ -108,15 +108,16 @@
 }
 
 .menu-icon.active .bar:nth-child(1) {
-  transform: translateY(50%) rotate(45deg);
+  transform: translateY(110%) rotate(45deg);
 }
 
 .menu-icon.active .bar:nth-child(2) {
   opacity: 0;
+
 }
 
 .menu-icon.active .bar:nth-child(3) {
-  transform: translateY(-50%) rotate(-45deg);
+  transform: translateY(-300%) rotate(-45deg);
 }
 
 .menu {/*editable for the menu sidebar*/
