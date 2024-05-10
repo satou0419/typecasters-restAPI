@@ -32,7 +32,7 @@ public class UserService {
             }
 
             if (!isValidUsername(user.getUsername())) {
-                throw new IllegalArgumentException("Username must be at least 3 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
+                throw new IllegalArgumentException("Username must be at least 3 characters long and may optionally contain a dot (.) or underscore (_) followed by one or more lowercase letters.");
             }
 
             if (!isValidPassword(user.getPassword())) {
