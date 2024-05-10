@@ -22,9 +22,26 @@ public class UserController {
     UserService userv;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody UserEntity user){
-        return userv.registerUser(user);
+    public ResponseEntity<String> registerUser(@RequestBody UserEntity user) {
+        try {
+            String registrationStatus = userv.registerUser(user);
+            // Check if registration was successful
+            if ("Registration Successful".equals(registrationStatus)) {
+                return ResponseEntity.ok(registrationStatus);
+            } else {
+                // Registration failed, return error message
+                return ResponseEntity.badRequest().body(registrationStatus);
+            }
+        } catch (IllegalArgumentException ex) {
+            // Catch specific exception thrown by service layer and return error message
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (Exception e) {
+            // Handle unexpected exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during registration");
+        }
     }
+
+
 
     @GetMapping("/user_test")
     public String testUser(){

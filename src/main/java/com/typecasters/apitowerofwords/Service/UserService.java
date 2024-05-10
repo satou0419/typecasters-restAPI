@@ -22,30 +22,33 @@ public class UserService {
     UserDetailsService ud_serv;
 
 
-   //Registration
     @Transactional
     public String registerUser(UserEntity user) {
-        if (userContainsEmptyFields(user)) {
-            return "Fields are empty";
+        try {
+
+
+            if (urepo.findOneByUsername(user.getUsername()) != null) {
+                throw new IllegalArgumentException("Username already exists");
+            }
+
+            if (!isValidUsername(user.getUsername())) {
+                throw new IllegalArgumentException("Username must be at least 3 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
+            }
+
+            if (!isValidPassword(user.getPassword())) {
+                throw new IllegalArgumentException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
+            }
+
+            int userId = urepo.save(user).getUserID();
+            ud_serv.initUserDetails(userId);
+
+            return "Registration Successful";
+        } catch (IllegalArgumentException ex) {
+            // Catch the exception and return the error message
+            return ex.getMessage();
         }
-
-        if (urepo.findOneByUsername(user.getUsername()) != null) {
-            return "Username already exists";
-        }
-
-        if (!isValidUsername(user.getUsername())) {
-            return "Username must be at least 3 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character";
-        }
-
-        if (!isValidPassword(user.getPassword())) {
-            return "Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character";
-        }
-
-        int userId = urepo.save(user).getUserID();
-        ud_serv.initUserDetails(userId);
-
-        return "Registration Successful";
     }
+
 
     private boolean userContainsEmptyFields(UserEntity user) {
         return user.getUsername().isEmpty() || user.getPassword().isEmpty() ||
@@ -54,7 +57,7 @@ public class UserService {
     }
 
     private boolean isValidUsername(String username) {
-        return username.length() >= 3 && username.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d\\s]).+$");
+        return username.matches("^[a-z]{3,}(?:[._][a-z]{1,})*$");
     }
 
     private boolean isValidPassword(String password) {
@@ -65,12 +68,7 @@ public class UserService {
     // Login
     @SuppressWarnings("finally")
     public UserEntity login(LoginRequest logReq) {
-        if (logReq.getUsername() == null || logReq.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("Please provide a username.");
-        }
-        if (logReq.getPassword() == null || logReq.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Please provide a password.");
-        }
+
 
         UserEntity user = urepo.findOneByUsername(logReq.getUsername());
         if (user == null) {
