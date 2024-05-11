@@ -1,136 +1,134 @@
 .word-search {
-    display: flex;
-  }
-  
-  .book-spine {
-    height: 50%;
-    width: 20px;
-    background-color: #666667;
-  }
-  
-  .added-word {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-  }
-  
-  .book-page {
-    background: linear-gradient(to top right, #461386, #b36dea);
-    height: 90%;
-    width: 90%;
-  
-    border-top: 5px solid #7f4ca9;
-    border-radius: 10px;
-    outline: 10px solid #666667;
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .left-page {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-  }
-
-  .left-content {
-    height: 100%;
-    width: 100%;
-  
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  
-  .word-list {
-    color: #fff;
-    font-family: "Lilita One";
-  
-    height: 80%;
-    width: 95%;
-    overflow: auto; /* Add this line to make the container scrollable */
-    margin-left: 20px;
-    margin-top: 20px;
-  }
-  
-  /* Style all scrollbars */
-  ::-webkit-scrollbar {
-    width: 8px; /* Set the width of the scrollbar */
-  }
-  
-  /* Style the scrollbar thumb */
-  ::-webkit-scrollbar-thumb {
-    background-color: green; /* Set the color of the scrollbar thumb */
-    border-radius: 6px; /* Set the border radius of the scrollbar thumb */
-  }
-  
-  /* Style the scrollbar track */
-  ::-webkit-scrollbar-track {
-    background-color: transparent; /* Set the color of the scrollbar track */
-    border-radius: 6px; /* Set the border radius of the scrollbar track */
-  }
-  
-  /* Style the scrollbar corner */
-  ::-webkit-scrollbar-corner {
-    background-color: transparent; /* Set the color of the scrollbar corner */
-  }
-  
-  .word-list p {
-    cursor: pointer;
-  }
-  
-  .word-selected {
-    background: linear-gradient(to right, #f99417, transparent);
-    border-radius: 10px;
-    padding-left: 10px;
-    font-size: x-large;
-    transition: background-color 0.3s ease, font-size 0.3s ease; /* Smooth transitions for background color and font size */
-  }
-  
-  a {
-    text-decoration: none;
-  }
-.tab-section{
-    height: 46rem;
-    margin-top: 5rem;
- position: absolute; 
+  display: flex;
 }
 
-.txt-creategame{
-    margin-left: -80%;
-    margin-top: 2rem;
-    font-family: "lilita one";
-    font-size: 24px;
+.book-spine {
+  height: 50%;
+  width: 20px;
+  background-color: #666667;
 }
-.search-box{
-    height: 3rem;
-    width: 100%;
-    /* margin-left: 5%; */
-    margin-top: 0.5rem;
-    padding-left: 1%;
-    border-radius: 5px;
-    outline: 1px solid #c0c0c0;
 
+.added-word {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.txt-words-added{
-    font-family: "lilita one";
-    font-size: 36px;
-    margin-top: 0;
-    margin-bottom: 0;
-    /* width: 30%; */
-    /* outline: 1px solid red; */
+
+.book-page {
+  background: linear-gradient(to top right, #461386, #b36dea);
+  height: 90%;
+  width: 90%;
+
+  border-top: 5px solid #7f4ca9;
+  border-radius: 10px;
+  outline: 10px solid #666667;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.words-container{
-    height: 30rem;
-    margin-top: -15%;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    width: 100%;
+
+.left-page {
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
-.textfield-right-container{
+
+.left-content {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.word-list {
+  color: #fff;
+  font-family: "Lilita One";
+
+  height: 80%;
+  width: 95%;
+  overflow: auto; /* Add this line to make the container scrollable */
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+/* Style all scrollbars */
+::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: green; /* Set the color of the scrollbar thumb */
+  border-radius: 6px; /* Set the border radius of the scrollbar thumb */
+}
+
+/* Style the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the color of the scrollbar track */
+  border-radius: 6px; /* Set the border radius of the scrollbar track */
+}
+
+/* Style the scrollbar corner */
+::-webkit-scrollbar-corner {
+  background-color: transparent; /* Set the color of the scrollbar corner */
+}
+
+.word-list p {
+  cursor: pointer;
+}
+
+.word-selected {
+  background: linear-gradient(to right, #f99417, transparent);
+  border-radius: 10px;
+  padding-left: 10px;
+  font-size: x-large;
+  transition: background-color 0.3s ease, font-size 0.3s ease; /* Smooth transitions for background color and font size */
+}
+
+a {
+  text-decoration: none;
+}
+.tab-section {
+  height: 46rem;
+  margin-top: 5rem;
+  position: absolute;
+}
+
+.txt-creategame {
+  margin-left: -80%;
+  margin-top: 2rem;
+  font-family: "lilita one";
+  font-size: 24px;
+}
+.search-box {
+  height: 3rem;
+  width: 100%;
+  /* margin-left: 5%; */
+  margin-top: 0.5rem;
+  padding-left: 1%;
+  border-radius: 5px;
+  outline: 1px solid #c0c0c0;
+}
+.txt-words-added {
+  font-family: "lilita one";
+  font-size: 36px;
+  margin-top: 0;
+  margin-bottom: 0;
+  /* width: 30%; */
+  /* outline: 1px solid red; */
+}
+.words-container {
+  height: 30rem;
+  margin-top: -15%;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  width: 100%;
+}
+.textfield-right-container {
   display: flex;
   flex-direction: column;
   right: 5%;
@@ -139,7 +137,7 @@
   justify-content: right;
 }
 
-.create{
+.create {
   display: flex;
   justify-content: space-evenly;
   flex-direction: row;
@@ -147,20 +145,20 @@
   padding-left: 1%;
   padding-right: 1%;
 }
-.textfield-left-container{
+.textfield-left-container {
   height: 100%;
   width: 45%;
   display: flex;
   flex-direction: column;
   gap: 5%;
 }
-.textfield-right-container .checker{
+.textfield-right-container .checker {
   border-radius: 10px;
   justify-content: flex-end;
   width: 84%;
-
 }
-.checkmark {/*this is the css for the textfields with switches*/
+.checkmark {
+  /*this is the css for the textfields with switches*/
   border: 2px solid #c0c0c0;
   border-radius: 5px;
   display: flex;
@@ -168,16 +166,17 @@
   flex-direction: row-reverse;
   width: auto; /* Or specify a width if needed */
   overflow: hidden; /* Hide any content that overflows the container */
-  box-sizing: border-box; 
+  box-sizing: border-box;
   height: 50px;
   margin-top: 2px;
   margin-top: 0.5rem;
 }
 
-.placeholder{
-  color: #c1c1c1;margin-left: 5px;
+.placeholder {
+  color: #c1c1c1;
+  margin-left: 5px;
 }
-.switch{
+.switch {
   margin-top: 3px;
   margin-right: 5px;
 }

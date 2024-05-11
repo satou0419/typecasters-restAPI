@@ -68,10 +68,6 @@
   width: 10%;
 }
 
-.custom-archive-card {
-  /* Add your custom styles here */
-}
-
 /* CSS FOR BORGIR */
 
 .menu-icon {
@@ -83,7 +79,6 @@
   transform: translateY(-50%);
   cursor: pointer;
 
-  outline: 1px solid green;
   display: flex;
   flex-direction: column;
   justify-content: center;

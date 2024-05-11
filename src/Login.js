@@ -9,7 +9,6 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [userObject, setUserObject] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -52,6 +51,7 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
 
       setIsLoggedIn(true);
       setUserDetails(userData);
+
       navigate("/dashboard");
     } catch (error) {
       setTimeout(() => setError(null), 5000); // Clear the error after 5 seconds
