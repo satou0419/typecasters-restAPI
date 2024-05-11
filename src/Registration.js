@@ -16,6 +16,7 @@ export default function Registration() {
   });
   const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const validateForm = () => {
     const errors = {};
@@ -65,12 +66,19 @@ export default function Registration() {
         },
         body: JSON.stringify(formData),
       });
+
       if (!response.ok) {
-        throw new Error("Registration failed");
+        // If response status is not ok, parse the error message as text
+        const errorMessage = await response.text();
+        alert(errorMessage); // Display the error message to the user
+        setError(errorMessage);
+      } else {
+        // Registration successful
+        alert("Registration successful!");
+        navigate("/login");
       }
-      alert("Registration successful!");
-      navigate("/login");
     } catch (error) {
+      // Handle unexpected errors
       console.error("Registration error:", error.message);
       alert("Registration failed. Please try again.");
     }
@@ -78,6 +86,11 @@ export default function Registration() {
 
   return (
     <main className="registration-container">
+      <div className="toast-box">
+        {/* Display error message */}
+        <p>{error}</p>
+      </div>
+
       <section className="card card-form">
         {/* Banner section */}
         <aside className="form-registration-banner">
@@ -130,9 +143,6 @@ export default function Registration() {
               onChange={handleInputChange}
               required
             />
-            {formErrors.username && (
-              <div className="error">{formErrors.username}</div>
-            )}
 
             <input
               type="password"
@@ -143,9 +153,6 @@ export default function Registration() {
               onChange={handleInputChange}
               required
             />
-            {formErrors.password && (
-              <div className="error">{formErrors.password}</div>
-            )}
 
             <input
               type="password"

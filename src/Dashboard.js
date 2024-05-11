@@ -38,13 +38,13 @@ export default function Dashboard() {
           />
         </Link>
         <Link to="/simulation_mode">
-        <CardGame
-          title="Room"
-          content="Lorem ipsum dolor sit amet, consectetur adipiscing"
-          progressTitle="Room"
-          progressValue={4} // Placeholder value, replace with actual data if available
-          imageSrc="./assets/banner/banner_simulation.png"
-        />
+          <CardGame
+            title="Room"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing"
+            progressTitle="Room"
+            progressValue={4} // Placeholder value, replace with actual data if available
+            imageSrc="./assets/banner/banner_simulation.png"
+          />
         </Link>
       </section>
 

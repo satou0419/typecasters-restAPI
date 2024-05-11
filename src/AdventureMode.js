@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GET_ALL_FLOORS_ENDPOINT } from "./api";
+import {
+  GET_ALL_FLOORS_ENDPOINT,
+  GET_USER_DETAILS_ENDPOINT,
+  fetchUserData,
+} from "./api";
 import "./adventuremode.css";
 
 export const FLOOR_STORAGE_KEY = "selectedFloor"; // Define sessionStorage key for floor ID
@@ -8,7 +12,43 @@ export const FLOOR_STORAGE_KEY = "selectedFloor"; // Define sessionStorage key f
 export default function AdventureMode() {
   const [FLOOR_DATA, setFloorData] = useState([]);
   const [selectedFloor, setSelectedFloor] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      const storedUserDetailsString = sessionStorage.getItem("userDetails");
+      if (storedUserDetailsString) {
+        const storedUserDetails = JSON.parse(storedUserDetailsString);
+        console.log("User ID: ", storedUserDetails.userID);
+
+        // Fetch user details using userID
+        fetch(`${GET_USER_DETAILS_ENDPOINT}${storedUserDetails.userID}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("User:", data);
+            setUserDetails(data); // Store the fetched user details in the state variable
+
+            // Set the selected floor and progress section if user progress data exists
+            if (data.userProgress) {
+              setSelectedFloor(data.userProgress.floorId);
+              // Assuming towerSecProg corresponds to section in progress
+              handleProgressClick(data.userProgress.towerSecProg);
+            }
+          })
+          .catch((error) =>
+            console.error("Error fetching user details:", error)
+          );
+      }
+    } catch (error) {
+      console.error("Error parsing user details:", error);
+    }
+  }, []);
 
   useEffect(() => {
     fetch(GET_ALL_FLOORS_ENDPOINT)
@@ -25,6 +65,18 @@ export default function AdventureMode() {
   const handleFloorClick = (floor) => {
     setSelectedFloor(floor);
     sessionStorage.setItem(FLOOR_STORAGE_KEY, JSON.stringify(floor));
+  };
+
+  const handleProgressClick = (section) => {
+    // Calculate the start floor of the section
+    const sectionFloors = FLOOR_DATA.filter(
+      (floor) => floor.towerSection === section
+    );
+    if (sectionFloors.length > 0) {
+      const startFloor = sectionFloors[0].sectionFloor;
+      setSelectedFloor(startFloor);
+      sessionStorage.setItem(FLOOR_STORAGE_KEY, JSON.stringify(startFloor));
+    }
   };
 
   const handleEnterClick = () => {
@@ -44,10 +96,7 @@ export default function AdventureMode() {
       new Set(FLOOR_DATA.map((floor) => floor.towerSection))
     );
     return uniqueSections.map((section) => (
-      <span
-        key={section}
-        onClick={() => handleFloorClick((section - 1) * 5 + 1)}
-      >
+      <span key={section} onClick={() => handleProgressClick(section)}>
         Section {section}
       </span>
     ));

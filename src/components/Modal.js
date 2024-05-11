@@ -1,50 +1,39 @@
-import React, {useState} from "react";
-import"./modal.css";
+import React, { useState } from "react";
+import "./modal.css";
 
-export default function Modal(){
+export default function Modal({
+  cancelButtonLabel = "Cancel",
+  confirmButtonLabel = "Confirm",
+  modalTitle = "Hello Modal",
+  modalContent = "Lorem ipsum dolor sit amet consectetur adipiscing.",
+}) {
+  const [modal, setModal] = useState(false);
 
-    const [modal, setModal] = useState(false);
-
-    const toggleModal = () => {
-        setModal(!modal)
-    }
-
-    return(
-        <>
-        
-        <button 
-        onClick={toggleModal}
-        className="btn-modal">
-            Open
-        </button>
-
-        {modal && (
-            <div className="modal">
-            <div className="overlay"></div>
-            <div className="modal-content">
-                <h1>Hello Modal</h1>
-                <p>
-                 Lorem ipsum dolor sit amet conssectetur 
-                 adispicng.                        
-                </p>
-                <div className="btn-container">
-                <button 
+  return (
+    <>
+      {modal && (
+        <div className="modal">
+          <div className="overlay"></div>
+          <div className="modal-content">
+            <h1>{modalTitle}</h1>
+            <p>{modalContent}</p>
+            <div className="btn-container">
+              <button
                 onClick={toggleModal}
-                className="btn btn--small btn--danger close-modal">
-                    Cancel
-                </button>
-                <button 
+                className="btn btn--small btn--danger close-modal"
+              >
+                {cancelButtonLabel}
+              </button>
+              <button
                 onClick={toggleModal}
-                className="btn btn--small btn--primary close-modal">
-                    Confirm
-                </button>
-                </div>
-            </div>      
+                className="btn btn--small btn--primary close-modal"
+              >
+                {confirmButtonLabel}
+              </button>
+            </div>
+          </div>
         </div>
-        )}
-        
-
-        </>
-
-    );
+      )}
+    </>
+  );
 }
