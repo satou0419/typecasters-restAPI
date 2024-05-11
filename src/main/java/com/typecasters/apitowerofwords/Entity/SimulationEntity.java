@@ -30,16 +30,18 @@ public class SimulationEntity {
     )
     private List<SimulationEnemyEntity> words = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(name = "tbl_simulation_participants",
-            joinColumns = @JoinColumn(name = "simulation_id"))
-    @Column(name = "user_id")
-    private List<Integer> participants = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tbl_simulation_users",
+            joinColumns = @JoinColumn(name = "simulationID"),
+            inverseJoinColumns = @JoinColumn(name = "simulationParticipantsID")
+    )
+    private List<SimulationParticipantsEntity> participants = new ArrayList<>();
 
     public SimulationEntity() {
     }
 
-    public SimulationEntity(int simulationID, int roomID, int simulationType, String name, String deadline, int duration, boolean items, boolean description, boolean pronunciation, boolean allowReply, List<Integer> participants, boolean isDeleted, List<SimulationEnemyEntity> words) {
+    public SimulationEntity(int simulationID, int roomID, int simulationType, String name, String deadline, int duration, boolean items, boolean description, boolean pronunciation, boolean allowReply, List<SimulationParticipantsEntity> participants, boolean isDeleted, List<SimulationEnemyEntity> words) {
         this.simulationID = simulationID;
         this.roomID = roomID;
         this.simulationType = simulationType;
@@ -135,11 +137,11 @@ public class SimulationEntity {
         this.allowReply = allowReply;
     }
 
-    public List<Integer> getParticipants() {
+    public List<SimulationParticipantsEntity> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<Integer> participants) {
+    public void setParticipants(List<SimulationParticipantsEntity> participants) {
         this.participants = participants;
     }
 
@@ -161,5 +163,9 @@ public class SimulationEntity {
 
     public void addWord(SimulationEnemyEntity word) {
         this.words.add(word);
+    }
+
+    public void addParticipants(SimulationParticipantsEntity participants){
+        this.participants.add(participants);
     }
 }

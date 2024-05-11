@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface RoomRepository extends JpaRepository<RoomEntity, Integer> {
-    List<RoomEntity> findByCreatorID(int creatorID);
+    List<RoomEntity> findAllByCreatorID(int creatorID);
     RoomEntity findByCode(String code);
 }

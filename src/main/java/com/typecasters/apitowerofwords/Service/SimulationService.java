@@ -1,9 +1,6 @@
 package com.typecasters.apitowerofwords.Service;
 
-import com.typecasters.apitowerofwords.Entity.RoomEntity;
-import com.typecasters.apitowerofwords.Entity.SimulationEnemyEntity;
-import com.typecasters.apitowerofwords.Entity.SimulationEntity;
-import com.typecasters.apitowerofwords.Entity.UserEntity;
+import com.typecasters.apitowerofwords.Entity.*;
 import com.typecasters.apitowerofwords.Repository.RoomRepository;
 import com.typecasters.apitowerofwords.Repository.SimulationRepository;
 import com.typecasters.apitowerofwords.Repository.UserRepository;
@@ -28,7 +25,11 @@ public class SimulationService {
     public SimulationEntity insertSimulation(SimulationEntity simulation) {
         Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID());
         if (room.isPresent()) {
-            simulation.getParticipants().addAll(room.get().getMembers());
+            for(Integer i : room.get().getMembers()){
+                SimulationParticipantsEntity user = new SimulationParticipantsEntity();
+                user.setUserID(i.intValue());
+                simulation.addParticipants(user);
+            }
             simulationRepository.save(simulation);
         }
         if (simulation.getWords().size() != 10) {
@@ -58,7 +59,7 @@ public class SimulationService {
             List<SimulationEntity> room = simulationRepository.findAll();
 
             for(SimulationEntity i : room) {
-                for(Integer j : i.getParticipants()) {
+                for(SimulationParticipantsEntity j : i.getParticipants()) {
                     if(j.equals(userID)) {
                         simulationList.add(i);
                     }

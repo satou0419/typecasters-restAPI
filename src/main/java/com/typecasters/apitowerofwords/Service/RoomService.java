@@ -48,7 +48,7 @@ public class RoomService {
 
         }catch(NoSuchElementException ex) {
             throw new NoSuchElementException ("User " + userID + " does not exist");
-        }finally {
+        }finally{
             return roomRepository.save(room);
         }
     }
@@ -73,7 +73,7 @@ public class RoomService {
     }
 
     public List<RoomEntity> viewCreatedRooms(int creatorID) {
-        return roomRepository.findByCreatorID(creatorID);
+        return roomRepository.findAllByCreatorID(creatorID);
     }
 
     public RoomEntity viewRoomByCode(String code) {
