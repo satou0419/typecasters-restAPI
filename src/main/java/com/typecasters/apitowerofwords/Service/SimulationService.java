@@ -55,12 +55,11 @@ public class SimulationService {
     public List<SimulationEntity> viewSimulationsByMember(Integer userID) {
         List<SimulationEntity> simulationList = new ArrayList<>();
         try {
-            Optional<UserEntity> user = userRepository.findById(userID);
-            List<SimulationEntity> room = simulationRepository.findAll();
+            List<SimulationEntity> simulation = simulationRepository.findAll();
 
-            for(SimulationEntity i : room) {
+            for(SimulationEntity i : simulation) {
                 for(SimulationParticipantsEntity j : i.getParticipants()) {
-                    if(j.equals(userID)) {
+                    if(userID.equals(j.getUserID())) {
                         simulationList.add(i);
                     }
                 }
