@@ -100,7 +100,7 @@
 }
 
 .menu-icon.active .bar:nth-child(1) {
-  transform: translateY(50%) rotate(45deg);
+  transform: translateY(110%) rotate(45deg);
 }
 
 .menu-icon.active .bar:nth-child(2) {
@@ -108,7 +108,7 @@
 }
 
 .menu-icon.active .bar:nth-child(3) {
-  transform: translateY(-50%) rotate(-45deg);
+  transform: translateY(-300%) rotate(-45deg);
 }
 
 .menu {
@@ -130,7 +130,7 @@
   text-align: center;
   padding-left: 0;
   padding-right: 0;
-  padding-top: 0;
+  z-index: 5;
 }
 .menu:hover {
   color: #a893bf;
@@ -156,3 +156,36 @@
   background-color: #a893bf;
   width: 100%;
 }
+/*CSS FOR PROFILE*/
+.profile-icon .circle {
+  /*profile itself*/
+  height: 35px;
+  width: 35px;
+  background-color: #000000;
+  border-radius: 50%;
+  display: inline-block;
+  margin-top: 1.5rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+/* .profile{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 2rem;
+  left: 0px;
+  height: 0.2rem;
+  width: 200px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-50%) translateX(1090%);
+  transition: transform 0.3s ease;
+}
+.profile.open{
+  transform: translateY(-50%) translateX(839%);
+  right: 0;
+}
+.profile-container{
+  overflow: hidden;
+} */

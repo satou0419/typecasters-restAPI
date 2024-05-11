@@ -8,20 +8,12 @@
     background-color: #666667;
   }
   
-  .book-container {
+  .added-word {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .page-container {
-    background-color: #909090;
-    width: 26%;
-    height: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    
   }
   
   .book-page {
@@ -42,12 +34,7 @@
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
   }
-  
-  .right-page {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-  }
-  
+
   .left-content {
     height: 100%;
     width: 100%;
@@ -113,29 +100,84 @@
 }
 
 .txt-creategame{
-    margin-left: -99rem;
+    margin-left: -80%;
     margin-top: 2rem;
     font-family: "lilita one";
     font-size: 24px;
 }
 .search-box{
     height: 3rem;
-    width: 40rem;
-    margin-left: 5%;
+    width: 100%;
+    /* margin-left: 5%; */
     margin-top: 0.5rem;
     padding-left: 1%;
     border-radius: 5px;
+    outline: 1px solid #c0c0c0;
+
 }
 .txt-words-added{
     font-family: "lilita one";
     font-size: 36px;
-    margin-left: 7%;
+    margin-top: 0;
+    margin-bottom: 0;
+    /* width: 30%; */
+    /* outline: 1px solid red; */
 }
 .words-container{
     height: 30rem;
-    margin-top: -15rem;
-    margin-left: -57rem;
+    margin-top: -15%;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    width: 37.5%;
+    width: 100%;
+}
+.textfield-right-container{
+  display: flex;
+  flex-direction: column;
+  right: 5%;
+  margin-top: 0;
+  width: 45%;
+  justify-content: right;
+}
+
+.create{
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  overflow-y: scroll;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+.textfield-left-container{
+  height: 100%;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 5%;
+}
+.textfield-right-container .checker{
+  border-radius: 10px;
+  justify-content: flex-end;
+  width: 84%;
+
+}
+.checkmark {/*this is the css for the textfields with switches*/
+  border: 2px solid #c0c0c0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  width: auto; /* Or specify a width if needed */
+  overflow: hidden; /* Hide any content that overflows the container */
+  box-sizing: border-box; 
+  height: 50px;
+  margin-top: 2px;
+  margin-top: 0.5rem;
+}
+
+.placeholder{
+  color: #c1c1c1;margin-left: 5px;
+}
+.switch{
+  margin-top: 3px;
+  margin-right: 5px;
 }

@@ -25,6 +25,7 @@ import SimulationRoomStudent from "./SimulationRoom-Student";
 import JoinRoom from "./JoinRoom";
 import TeacherRoomSettings from "./TeacherRoomSettings";
 import TeacherRoomInfo from "./TeacherRoomInfo";
+import Settings from "./Settings";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -134,6 +135,7 @@ function App() {
               element={<TeacherRoomSettings />}
             />
             <Route path="/teacher_room_info" element={<TeacherRoomInfo />} />
+            <Route path="/Settings" element={<Settings />} />
           </>
         )}
       </Routes>
