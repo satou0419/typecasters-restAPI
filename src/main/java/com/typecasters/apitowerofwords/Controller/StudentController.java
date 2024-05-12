@@ -27,4 +27,9 @@ public class StudentController {
         List<StudentEntity> students = studentService.getAllStudents();
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
+
+    @GetMapping("/hello_world")
+    public String helloWorld() {
+        return studentService.helloWorld();
+    }
 }
