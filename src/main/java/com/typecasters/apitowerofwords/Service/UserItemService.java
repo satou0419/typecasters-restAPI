@@ -81,55 +81,84 @@ public class UserItemService {
         return msg;
     }
 
+    // Buy item At Any Amount ( 1 to * )
     @Transactional
-    public String buyItem(int userId, int itemId, int itemQuantity) {
+    public String butItemAnyAmount(int userId, int itemId, int itemQuantity) {
         UserDetailsEntity userDetails = null;
         ItemEntity item = null;
-        String msg = "";
 
         try {
             userDetails = userDetailsService.getUserDetails(userId);
             item = itemService.getItem(itemId);
             int totalAmountOfItemPurchased = getTotalAmountOfItemPurchased(itemQuantity, item, userDetails);
-            // Fetch existing user item
-            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
 
-            // Update user credit
             userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
 
-            // If user item exists, update quantity
+            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
+
             if (existingUserItemObject.isPresent()) {
                 UserItemEntity existingUserItem = existingUserItemObject.get();
                 int newQuantity = existingUserItem.getQuantity() + itemQuantity;
                 existingUserItem.setQuantity(newQuantity);
-                userItemRepository.saveAndFlush(existingUserItem);
+//                userItemRepository.saveAndFlush(existingUserItem);
             } else {
-                // Insert new user item
                 UserItemEntity userItem = new UserItemEntity(itemQuantity, userId, item);
                 insertUserItem(userItem);
             }
 
-            msg = "Item bought successfully";
+            return "Item bought successfully";
 
-        } catch (InvalidItemQuantityException | InsufficientCreditException e) {
-            msg = e.getMessage();
+        }catch (InsufficientCreditException e) {
+            return e.getMessage();
         } catch (Exception e) {
-            msg = "An error occurred while processing the request.";
             e.printStackTrace();
+            return "An error occurred while processing the request.";
         }
 
-        return msg;
+    }
+
+    @Transactional
+    public String buyItemSingle(int userId, int itemId) {
+        try {
+            UserDetailsEntity userDetails = userDetailsService.getUserDetails(userId);
+            ItemEntity item = itemService.getItem(itemId);
+            int itemPrice = item.getItem_price();
+
+            if (userDetails.getCredit_amount() < itemPrice) {
+                throw new InsufficientCreditException("Insufficient credit to buy this item.");
+            }
+
+            userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -itemPrice);
+
+            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
+            if (existingUserItemObject.isPresent()) {
+                UserItemEntity existingUserItem = existingUserItemObject.get();
+                existingUserItem.setQuantity(existingUserItem.getQuantity() + 1);
+                userItemRepository.save(existingUserItem);
+            } else {
+                UserItemEntity userItem = new UserItemEntity(1, userId, item);
+                insertUserItem(userItem);
+            }
+
+            return "Item bought successfully";
+
+        } catch (InsufficientCreditException e) {
+            return e.getMessage();
+        } catch (NoSuchElementException e) {
+            return "User or Item does not exist.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "An error occurred while processing the request.";
+        }
     }
 
     private static int getTotalAmountOfItemPurchased(int itemQuantity, ItemEntity item, UserDetailsEntity userDetails) {
         int totalAmountOfItemPurchased = item.getItem_price() * itemQuantity;
 
-        //Check if item quantity is valid
         if (itemQuantity <= 0) {
             throw new InvalidItemQuantityException("The item cannot be used when quantity is 0 or below.");
         }
 
-        //Check if user has sufficient credit
         if (userDetails.getCredit_amount() < totalAmountOfItemPurchased) {
             throw new InsufficientCreditException("Insufficient credit to buy this item.");
         }
