@@ -13,18 +13,24 @@
   flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
-  gap: 4rem;
+  gap: 2rem;
   position: absolute;
   top: 0;
   right: 2px;
   padding-left: 60px;
+  padding-top: 20px;
+  padding-top: 20px;
+
+  overflow-y: auto;
+  flex-wrap: nowrap;
 }
 .floor-card:hover {
   transform: scale(1.03); /* Slight increase in size on hover for feedback */
 }
 
 .floor-card {
-  height: 45px;
+  min-height: 45px;
+
   width: 110px;
   border: 3px solid #593796;
   border-radius: 10px;

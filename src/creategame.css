@@ -93,14 +93,14 @@ a {
   text-decoration: none;
 }
 .tab-section {
-  height: 46rem;
+  /* height: 46rem;
   margin-top: 5rem;
-  position: absolute;
+  position: absolute; */
 }
 
 .txt-creategame {
-  margin-left: -80%;
-  margin-top: 2rem;
+  /* margin-left: -80%;
+  margin-top: 2rem; */
   font-family: "lilita one";
   font-size: 24px;
 }

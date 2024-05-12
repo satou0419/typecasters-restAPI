@@ -1,38 +1,37 @@
-.tab-content{
-    padding-top: 10px;
-    padding-bottom: 10px;
+.tab-content {
+  /* padding-top: 10px;
+    padding-bottom: 10px; */
 }
-.account-container{
-    border: 1px solid red;
-    border-radius: 20px;
-    background-color: #9a6dea;
+.account-container {
+  border: 1px solid red;
+  border-radius: 20px;
+  background-color: #9a6dea;
 
-    position: relative;
-    border: 1px solid red;
-    border-radius: 20px;
-    background-color: #9a6dea;
-    width: 35%;
-    min-height: 200px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
+  position: relative;
+  border: 1px solid red;
+  border-radius: 20px;
+  background-color: #9a6dea;
+  width: 35%;
+  min-height: 200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.account-container p {
+  font-family: "lilita one";
+  color: white;
+  font-size: xx-large;
+  text-align: center;
+}
 
+.textfield {
+  width: 50%;
+  margin-left: 25%;
+  margin-bottom: 50px;
 }
-.account-container p{
-    font-family: "lilita one";
-    color: white;
-    font-size: xx-large;
-    text-align: center;
-}
-
-.textfield{
-    width: 50%;
-    margin-left: 25%;
-    margin-bottom: 50px;
-}
-.btn-save{
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+.btn-save {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
 }

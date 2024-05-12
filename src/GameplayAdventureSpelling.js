@@ -2,17 +2,104 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   GET_ENEMIES_BY_FLOOR_ID_ENDPOINT,
   GET_USER_ITEMS_ENDPOINT,
+  INSERT_WORD_ARCHIVE,
+  UPDATE_USER_PROGRESS_ENDPOINT,
   fetchUserData,
 } from "./api";
 import "./gameplay.css";
 import "./components/animation.css";
 
-import { FLOOR_STORAGE_KEY } from "./AdventureMode";
+import {
+  FLOOR_ID,
+  PROGRESS_ID,
+  SECTION_PROGRESS,
+  NEXT_FLOOR,
+  NEXT_SECTION,
+  CURRENT_FLOOR,
+  CURRENT_SECTION,
+} from "./AdventureMode";
+import { useNavigate } from "react-router-dom";
 
 export default function GameplayAdventureSpelling() {
   const [storedFloor, setStoredFloor] = useState(
-    sessionStorage.getItem(FLOOR_STORAGE_KEY)
+    sessionStorage.getItem(FLOOR_ID)
   );
+  const [flag, setFlag] = useState(0);
+
+  const [storedProgressID, setProgressID] = useState(
+    sessionStorage.getItem(PROGRESS_ID)
+  );
+
+  const [storedSectionProgress, setSectionProgress] = useState(
+    sessionStorage.getItem(SECTION_PROGRESS)
+  );
+
+  const storedNextFloor = parseInt(sessionStorage.getItem(NEXT_FLOOR), 10);
+
+  const currentFloor = parseInt(sessionStorage.getItem(CURRENT_FLOOR), 10);
+
+  const enteredFloor = parseInt(sessionStorage.getItem(FLOOR_ID), 10);
+
+  const [storedNextSection, setStoredNextSection] = useState(
+    sessionStorage.getItem(NEXT_SECTION)
+  );
+
+  const [storedCurrentFloor, setCurrentFloor] = useState(
+    sessionStorage.getItem(CURRENT_FLOOR)
+  );
+
+  const [storedCurrentSection, setCurrentSection] = useState(
+    sessionStorage.getItem(CURRENT_SECTION)
+  );
+
+  console.log("Current Floor", storedCurrentFloor);
+  console.log("Enter floor ", storedFloor);
+
+  const [isComplete, setIsComplete] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isConquered = enteredFloor <= currentFloor;
+
+    console.log("Conquered", isConquered);
+    if (flag === 5 && !isConquered) {
+      fetch(`${UPDATE_USER_PROGRESS_ENDPOINT}${storedProgressID}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          towerSecProg: storedNextSection,
+          floorId: storedNextFloor,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text(); // Read response as text
+        })
+        .then((data) => {
+          console.log("Response:", data); // Log the response received from the server
+          if (data === "User Progress Updated!") {
+            console.log("Updated Progress: Updated Successful");
+            setIsComplete(false);
+            // Navigate after 3 seconds
+            setTimeout(() => {
+              navigate("/adventure_mode");
+            }, 3000);
+          } else {
+            console.error(
+              "Error updating progress: Unexpected response -",
+              data
+            );
+          }
+        })
+        .catch((error) => console.error("Error updating progress:", error));
+    } else {
+      console.log("Floor already conquered!!!");
+    }
+  }, [flag]);
 
   const [animateShake, setAnimateShake] = useState("");
   const [autoFocusValue, setAutoFocusValue] = useState(true);
@@ -40,10 +127,51 @@ export default function GameplayAdventureSpelling() {
   const [goButtonDisabled, setGoButtonDisabled] = useState(false); // State to disable the GO! button
   const [audioButtonDisabled, setAudioButtonDisabled] = useState(false); // State to disable the audio button
   const inputRef = useRef(null); // Create a ref for the input element
+  const [insertWord, setInsertWord] = useState(false);
+  const [userID, setUserID] = useState();
 
-  const [flag, setFlag] = useState(0);
+  useEffect(() => {
+    if (insertWord === true) {
+      fetch(INSERT_WORD_ARCHIVE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userID: userID,
+          word: currentWord,
+          check: true,
+          deleted: false,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // Parse the JSON from the response
+        })
+        .then((data) => {
+          // Handle the response data here
+          console.log(data);
+          setInsertWord(false);
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error(
+            "There was a problem with your fetch operation:",
+            error
+          );
+        });
+    }
+  }, [insertWord]);
+  const [currentWord, setCurrentWord] = useState();
+
+  useEffect(() => {
+    console.log("This is the Current Word ::::::::::>", currentWord);
+  }, [currentWord]);
+
   const handleStartClick = () => {
-    setFlag(1);
+    setFlag(5);
   };
   useEffect(() => {
     console.log("Flag value:", flag);
@@ -75,6 +203,7 @@ export default function GameplayAdventureSpelling() {
       );
       if (storedUserDetails) {
         console.log("User ID: ", storedUserDetails.userID);
+        setUserID(storedUserDetails.userID);
 
         // Fetch user items using userID
         fetch(`${GET_USER_ITEMS_ENDPOINT}${storedUserDetails.userID}`)
@@ -116,14 +245,15 @@ export default function GameplayAdventureSpelling() {
       console.log(`Enemy ${enemy.enemyId}:`);
       words.forEach((word, index) => {
         console.log(`${index + 1}. ${word}`);
+        setCurrentWord(word);
       });
     }
   }, [enemies, currentEnemyIndex, flag]);
 
-  // Effect to update storedFloor when FLOOR_STORAGE_KEY changes
+  // Effect to update storedFloor when FLOOR_ID changes
   useEffect(() => {
-    setStoredFloor(sessionStorage.getItem(FLOOR_STORAGE_KEY));
-  }, [sessionStorage.getItem(FLOOR_STORAGE_KEY)]);
+    setStoredFloor(sessionStorage.getItem(FLOOR_ID));
+  }, [sessionStorage.getItem(FLOOR_ID)]);
 
   // Effect to handle audioUrl changes
   useEffect(() => {
@@ -241,6 +371,7 @@ export default function GameplayAdventureSpelling() {
 
     if (userInput.trim().toLowerCase() === currentWord.toLowerCase()) {
       // Correct word handling
+      setInsertWord(true);
       setFlag(0);
       console.log(0);
       setMainState({
@@ -291,6 +422,8 @@ export default function GameplayAdventureSpelling() {
           } else {
             console.log("All enemies are defeated!");
             // Add logic for completing the game if needed
+            setIsComplete(true);
+            console.log(isComplete);
           }
         }
       }, 1500);
