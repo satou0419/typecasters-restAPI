@@ -9,6 +9,7 @@ public class SimulationEnemyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int simulationEnemyID;
     private String imagePath;
+    @Column(unique = true)
     private String word;
 
     public SimulationEnemyEntity() {
