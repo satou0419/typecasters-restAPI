@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_simulations")
+@Table(name = "tbl_simulation")
 public class SimulationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,26 @@ public class SimulationEntity {
     private boolean allowReply;
     private boolean isDeleted = false;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tbl_simulation_words")
-    private List<SimulationWordEntity> words = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tbl_simulation_word",
+            joinColumns = @JoinColumn(name = "simulationID"),
+            inverseJoinColumns = @JoinColumn(name = "simulationEnemyID")
+    )
+    private List<SimulationEnemyEntity> words = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "tbl_simulation_participants",
+            name = "tbl_simulation_users",
             joinColumns = @JoinColumn(name = "simulationID"),
-            inverseJoinColumns = @JoinColumn(name = "userID")
+            inverseJoinColumns = @JoinColumn(name = "simulationParticipantsID")
     )
-    private List<UserEntity> participants = new ArrayList<>();
+    private List<SimulationParticipantsEntity> participants = new ArrayList<>();
 
     public SimulationEntity() {
     }
 
-    public SimulationEntity(int simulationID, int roomID, int simulationType, String name, String deadline, int duration, boolean items, boolean description, boolean pronunciation, boolean allowReply, List<UserEntity> participants, boolean isDeleted, List<SimulationWordEntity> words) {
+    public SimulationEntity(int simulationID, int roomID, int simulationType, String name, String deadline, int duration, boolean items, boolean description, boolean pronunciation, boolean allowReply, List<SimulationParticipantsEntity> participants, boolean isDeleted, List<SimulationEnemyEntity> words) {
         this.simulationID = simulationID;
         this.roomID = roomID;
         this.simulationType = simulationType;
@@ -133,11 +137,11 @@ public class SimulationEntity {
         this.allowReply = allowReply;
     }
 
-    public List<UserEntity> getParticipants() {
+    public List<SimulationParticipantsEntity> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<UserEntity> participants) {
+    public void setParticipants(List<SimulationParticipantsEntity> participants) {
         this.participants = participants;
     }
 
@@ -149,15 +153,19 @@ public class SimulationEntity {
         isDeleted = deleted;
     }
 
-    public List<SimulationWordEntity> getWords() {
+    public List<SimulationEnemyEntity> getWords() {
         return words;
     }
 
-    public void setWords(List<SimulationWordEntity> words) {
+    public void setWords(List<SimulationEnemyEntity> words) {
         this.words = words;
     }
 
-    public void addWord(SimulationWordEntity word) {
+    public void addWord(SimulationEnemyEntity word) {
         this.words.add(word);
+    }
+
+    public void addParticipants(SimulationParticipantsEntity participants){
+        this.participants.add(participants);
     }
 }

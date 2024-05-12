@@ -13,13 +13,16 @@ public class RoomEntity {
 
     private int creatorID;
     private String roomName;
+
     @Column(unique = true)
     private String code;
+
     @ElementCollection
     @CollectionTable(name = "tbl_room_members",
             joinColumns = @JoinColumn(name = "room_id"))
     @Column(name = "user_id")
     private List<Integer> members = new ArrayList<>();
+
     private boolean isDeleted = false;
 
     public RoomEntity() {

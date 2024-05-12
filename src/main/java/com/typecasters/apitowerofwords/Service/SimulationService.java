@@ -1,8 +1,7 @@
 package com.typecasters.apitowerofwords.Service;
 
-import com.typecasters.apitowerofwords.Entity.SimulationEntity;
-import com.typecasters.apitowerofwords.Entity.SimulationWordEntity;
-import com.typecasters.apitowerofwords.Entity.UserEntity;
+import com.typecasters.apitowerofwords.Entity.*;
+import com.typecasters.apitowerofwords.Repository.RoomRepository;
 import com.typecasters.apitowerofwords.Repository.SimulationRepository;
 import com.typecasters.apitowerofwords.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,27 @@ public class SimulationService {
     SimulationRepository simulationRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RoomRepository roomRepository;
+
 
     public SimulationEntity insertSimulation(SimulationEntity simulation) {
+        Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID());
+        if (room.isPresent()) {
+            for(Integer i : room.get().getMembers()){
+                SimulationParticipantsEntity user = new SimulationParticipantsEntity();
+                user.setUserID(i.intValue());
+                simulation.addParticipants(user);
+            }
+            simulationRepository.save(simulation);
+        }
+        if (simulation.getWords().size() != 10) {
+            throw new IllegalArgumentException("The number of words must be 10.");
+        }
         return simulationRepository.save(simulation);
     }
 
-    public SimulationEntity insertWord(SimulationEntity simulation, SimulationWordEntity word) {
+    public SimulationEntity insertWord(SimulationEntity simulation, SimulationEnemyEntity word) {
         simulation.addWord(word);
 
         return simulation;
@@ -38,15 +52,14 @@ public class SimulationService {
         return simulationRepository.findById(simulationID);
     }
 
-    public List<SimulationEntity> viewSimulationsByMember(int userID) {
+    public List<SimulationEntity> viewSimulationsByMember(Integer userID) {
         List<SimulationEntity> simulationList = new ArrayList<>();
         try {
-            Optional<UserEntity> user = userRepository.findById(userID);
-            List<SimulationEntity> room = simulationRepository.findAll();
+            List<SimulationEntity> simulation = simulationRepository.findAll();
 
-            for(SimulationEntity i : room) {
-                for(UserEntity j : i.getParticipants()) {
-                    if(j.equals(user)) {
+            for(SimulationEntity i : simulation) {
+                for(SimulationParticipantsEntity j : i.getParticipants()) {
+                    if(userID.equals(j.getUserID())) {
                         simulationList.add(i);
                     }
                 }

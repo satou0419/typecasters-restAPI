@@ -17,12 +17,14 @@ public class SimulationController {
     @Autowired
     SimulationService simulationService;
 
+    //CREATE
     @PostMapping("/insert")
     public ResponseEntity<SimulationEntity> insertSimulation(@RequestBody SimulationEntity simulation) {
         SimulationEntity insertedSimulation = simulationService.insertSimulation(simulation);
         return new ResponseEntity<>(insertedSimulation, HttpStatus.OK);
     }
 
+    //READ
     @GetMapping("/view_by_room/{roomID}")
     public ResponseEntity<List<SimulationEntity>> viewSimulationsByRoomID(@PathVariable int roomID) {
         List<SimulationEntity> simulations = simulationService.viewSimulationsByRoomID(roomID);
@@ -42,6 +44,7 @@ public class SimulationController {
         return new ResponseEntity<>(simulations, HttpStatus.OK);
     }
 
+    //UPDATE
     @PutMapping("/edit")
     public ResponseEntity<SimulationEntity> editSimulation(@RequestBody SimulationEntity simulation) {
         try {
@@ -52,6 +55,7 @@ public class SimulationController {
         }
     }
 
+    //DELETE
     @PutMapping("/remove/{simulationID}")
     public ResponseEntity<Void> removeSimulation(@PathVariable int simulationID) {
         try {
