@@ -55,11 +55,6 @@ public class UserController {
             return ResponseEntity.ok(user); // 200 OK
         }
 
-        catch (IllegalArgumentException e) {
-            // Bad request for missing or invalid input
-            return ResponseEntity.badRequest().body(e.getMessage()); // 400 Bad Request
-        }
-
         catch (UsernameNotFoundException e) {
             // Username not found
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // 404 Not Found
