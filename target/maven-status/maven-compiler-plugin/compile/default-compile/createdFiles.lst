@@ -25,6 +25,7 @@ com\typecasters\apitowerofwords\HelloController.class
 com\typecasters\apitowerofwords\Entity\UserCharacterEntity.class
 com\typecasters\apitowerofwords\Controller\CharacterController.class
 com\typecasters\apitowerofwords\Entity\ArchiveAchievementEntity.class
+com\typecasters\apitowerofwords\Config\WebSocketConfig.class
 com\typecasters\apitowerofwords\Service\CharacterService.class
 com\typecasters\apitowerofwords\Service\ArchiveAchievementService.class
 com\typecasters\apitowerofwords\Service\ArchiveWordsService.class

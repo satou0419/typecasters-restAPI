@@ -1,5 +1,3 @@
-
-
 ### STS ###
 .apt_generated
 .classpath
@@ -33,4 +31,3 @@ target/
 *.log
 *.class
 .DS_Store
-
