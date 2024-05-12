@@ -44,15 +44,27 @@ public class UserItemController {
     }
 
 
-    //Buy Item
-    @PostMapping("/buy_item/{userId}/{itemId}/{itemQuantity}")
-    public ResponseEntity<String> buyItem(@PathVariable int userId, @PathVariable int itemId, @PathVariable int itemQuantity) {
+    //Buy Item at Any Amount
+    @PostMapping("/buy_item_any_amount/{userId}/{itemId}/{itemQuantity}")
+    public ResponseEntity<String> buyItemAnyAmount(@PathVariable int userId, @PathVariable int itemId, @PathVariable int itemQuantity) {
         try {
-            String buyResult = userItemService.buyItem(userId, itemId, itemQuantity);
+            String buyResult = userItemService.butItemAnyAmount(userId, itemId, itemQuantity);
             HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
             return ResponseEntity.status(status).body(buyResult);
         } catch (InvalidItemQuantityException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (InsufficientCreditException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    //Buy Item one at a time
+    @PostMapping("/buy_item_single/{userId}/{itemId}")
+    public ResponseEntity<String> buyItemSingle(@PathVariable int userId, @PathVariable int itemId) {
+        try {
+            String buyResult = userItemService.buyItemSingle(userId, itemId);
+            HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(status).body(buyResult);
         } catch (InsufficientCreditException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
