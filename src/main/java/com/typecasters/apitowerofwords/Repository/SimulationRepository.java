@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SimulationRepository extends JpaRepository<SimulationEntity, Integer> {
-    List<SimulationEntity> findByRoomID(int roomID);
+    List<SimulationEntity> findAllByRoomID(int roomID);
 }

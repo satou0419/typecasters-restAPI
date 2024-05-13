@@ -19,9 +19,9 @@ public class ArchiveAchievementController {
 
     // Create
     @PostMapping("/insert")
-    public ResponseEntity<ArchiveAchievementEntity> insertArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+    public ResponseEntity<String> insertArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
         ArchiveAchievementEntity insertedAchievement = archiveAchievementService.insertArchiveAchievement(achievement.getUserID(), achievement);
-        return new ResponseEntity<>(insertedAchievement, HttpStatus.OK);
+        return ResponseEntity.ok("Achievement Acquired!");
     }
 
     // Read
@@ -39,15 +39,15 @@ public class ArchiveAchievementController {
 
     // Update
     @PutMapping("/edit")
-    public ResponseEntity<ArchiveAchievementEntity> editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+    public ResponseEntity<String> editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
         ArchiveAchievementEntity updatedAchievement = archiveAchievementService.editArchiveAchievement(achievement);
-        return new ResponseEntity<>(updatedAchievement, HttpStatus.OK);
+        return ResponseEntity.ok("Achievement Updated!");
     }
 
     // Delete
     @PutMapping("/remove/{archiveAchievementID}")
-    public ResponseEntity<Void> removeArchiveAchievement(@PathVariable int archiveAchievementID) {
+    public ResponseEntity<String> removeArchiveAchievement(@PathVariable int archiveAchievementID) {
         archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("Achievement Removed!");
     }
 }
