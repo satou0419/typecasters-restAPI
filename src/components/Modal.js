@@ -9,6 +9,11 @@ export default function Modal({
 }) {
   const [modal, setModal] = useState(false);
 
+  // Define function to toggle modal visibility
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+
   return (
     <>
       {modal && (

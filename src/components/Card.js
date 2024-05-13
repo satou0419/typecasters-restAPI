@@ -174,7 +174,7 @@ export const CardArchive = ({
 );
 
 export const CardItem = ({ bannerSrc, itemName, itemBtnPrice, onClick }) => (
-  <section className="card card-item" onClick={onClick}>
+  <section className="card card-item">
     <div className="card-item__banner">
       <img src={bannerSrc} alt={itemName} />
     </div>

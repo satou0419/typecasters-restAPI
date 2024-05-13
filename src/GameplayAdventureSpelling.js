@@ -60,9 +60,9 @@ export default function GameplayAdventureSpelling() {
 
   useEffect(() => {
     const isConquered = enteredFloor <= currentFloor;
-
     console.log("Conquered", isConquered);
-    if (flag === 5 && !isConquered) {
+
+    if (flag === 5 && isConquered) {
       fetch(`${UPDATE_USER_PROGRESS_ENDPOINT}${storedProgressID}`, {
         method: "PUT",
         headers: {
@@ -538,9 +538,13 @@ export default function GameplayAdventureSpelling() {
                   <div className="item-qty">{`${item.quantity}x`}</div>
                 </div>
               ))}
+              {[...Array(3 - userItems.length)].map((_, index) => (
+                <div key={`default-${index}`} className="item-container"></div>
+              ))}
             </div>
           </div>
         </div>
+
         <div className="control-input">
           <div className="input-wrapper">
             <button

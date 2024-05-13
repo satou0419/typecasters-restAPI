@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GET_ALL_FLOORS_ENDPOINT, GET_USER_DETAILS_ENDPOINT } from "./api";
 import "./adventuremode.css";
 
-export const FLOOR_ID = "selectedFloor"; // Define sessionStorage key for floor ID
+export const FLOOR_ID = "selectedFloor";
 export const SECTION_PROGRESS = "sectionProgress";
 export const PROGRESS_ID = "progressID";
 export const NEXT_FLOOR = "nextFloor";
@@ -15,7 +15,7 @@ export default function AdventureMode() {
   const [FLOOR_DATA, setFloorData] = useState([]);
   const [selectedFloor, setSelectedFloor] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
-  const [progressID, setProgressID] = useState(null); // Changed from array to null
+  const [progressID, setProgressID] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [nextFloor, setNextFloor] = useState();
   const [nextSection, setNextSection] = useState();
@@ -24,48 +24,35 @@ export default function AdventureMode() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    try {
-      const storedUserDetailsString = sessionStorage.getItem("userDetails");
-      if (storedUserDetailsString) {
-        const storedUserDetails = JSON.parse(storedUserDetailsString);
-        console.log("User ID: ", storedUserDetails.userID);
+    const storedUserDetailsString = sessionStorage.getItem("userDetails");
+    if (storedUserDetailsString) {
+      const storedUserDetails = JSON.parse(storedUserDetailsString);
+      fetch(`${GET_USER_DETAILS_ENDPOINT}${storedUserDetails.userID}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setUserDetails(data);
+          if (data.userProgress) {
+            setSelectedFloor(data.userProgress.floorId);
+            setCurrentFloor(data.userProgress.floorId);
+            sessionStorage.setItem(CURRENT_FLOOR, data.userProgress.floorId);
 
-        // Fetch user details using userID
-        fetch(`${GET_USER_DETAILS_ENDPOINT}${storedUserDetails.userID}`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("User:", data);
-            setUserDetails(data); // Store the fetched user details in the state variable
+            setSelectedSection(data.userProgress.towerSecProg);
+            setCurrentSection(data.userProgress.towerSecProg);
+            sessionStorage.setItem(
+              CURRENT_SECTION,
+              data.userProgress.towerSecProg
+            );
 
-            // Set the selected floor if user progress data exists
-            if (data.userProgress) {
-              setSelectedFloor(data.userProgress.floorId);
-              setCurrentFloor(data.userProgress.floorId);
-              sessionStorage.setItem(CURRENT_FLOOR, data.userProgress.floorId);
-
-              setSelectedSection(data.userProgress.towerSecProg);
-
-              setCurrentSection(data.userProgress.towerSecProg);
-              sessionStorage.setItem(
-                CURRENT_SECTION,
-                data.userProgress.towerSecProg
-              );
-
-              setProgressID(data.userProgress.userProgId); // Set the progressID state
-              sessionStorage.setItem(PROGRESS_ID, data.userProgress.userProgId); // Save progressID in sessionStorage
-            }
-          })
-          .catch((error) =>
-            console.error("Error fetching user details:", error)
-          );
-      }
-    } catch (error) {
-      console.error("Error parsing user details:", error);
+            setProgressID(data.userProgress.userProgId);
+            sessionStorage.setItem(PROGRESS_ID, data.userProgress.userProgId);
+          }
+        })
+        .catch((error) => console.error("Error fetching user details:", error));
     }
   }, []);
 
@@ -73,15 +60,16 @@ export default function AdventureMode() {
     fetch(GET_ALL_FLOORS_ENDPOINT)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched floors data:", data); // Log fetched data
         setFloorData(data);
       })
       .catch((error) => console.error("Error fetching floors:", error));
   }, []);
 
   useEffect(() => {
-    getNextFloorAndSection(); // Log the next floor and section when the component mounts
-  }); // This effect runs only once when the component mounts
+    if (userDetails && FLOOR_DATA.length) {
+      getNextFloorAndSection();
+    }
+  }, [userDetails, FLOOR_DATA]);
 
   const getNextFloorAndSection = () => {
     if (!userDetails || !FLOOR_DATA.length) {
@@ -101,69 +89,74 @@ export default function AdventureMode() {
       (floor) => floor.towerFloorId === userFloorId
     );
     const nextFloorIndex = userFloorIndex + 1;
-    let nextFloor, nextSection;
 
     if (nextFloorIndex < FLOOR_DATA.length) {
-      nextFloor = FLOOR_DATA[nextFloorIndex].towerFloorId;
-      nextSection = FLOOR_DATA[nextFloorIndex].towerSection;
+      const nextFloor = FLOOR_DATA[nextFloorIndex].towerFloorId;
+      const nextSection = FLOOR_DATA[nextFloorIndex].towerSection;
+      setNextFloor(nextFloor);
+      setNextSection(nextSection);
+      sessionStorage.setItem(NEXT_FLOOR, nextFloor);
+      sessionStorage.setItem(NEXT_SECTION, nextSection);
     } else {
       console.log("User has completed all floors.");
-      return;
     }
-
-    setNextFloor(nextFloor);
-    setNextSection(nextSection);
-
-    sessionStorage.setItem(NEXT_FLOOR, nextFloor);
-    sessionStorage.setItem(NEXT_SECTION, nextSection);
   };
-
-  console.log("Next Floor :::::> ", nextFloor);
-  console.log("Next Section :::::> ", nextSection);
 
   const handleFloorClick = (floor) => {
     setSelectedFloor(floor);
-    sessionStorage.setItem(FLOOR_ID, JSON.stringify(floor));
-    console.log(`Selected floor: ${floor}`);
+    sessionStorage.setItem(FLOOR_ID, floor);
   };
 
-  console.log("Current: ", selectedFloor);
   const handleSectionClick = (section) => {
     setSelectedSection(section);
-    sessionStorage.setItem(SECTION_PROGRESS, JSON.stringify(section));
-    // Find the first floor of the clicked section and set it as the selected floor
+    sessionStorage.setItem(SECTION_PROGRESS, section);
+
     const firstFloorInSection = FLOOR_DATA.find(
       (floor) => floor.towerSection === section
     );
     if (firstFloorInSection) {
       setSelectedFloor(firstFloorInSection.towerFloorId);
-      sessionStorage.setItem(
-        FLOOR_ID,
-        JSON.stringify(firstFloorInSection.towerFloorId)
-      );
+      sessionStorage.setItem(FLOOR_ID, firstFloorInSection.towerFloorId);
     }
   };
 
   const handleEnterClick = () => {
-    // const selectedFloorData = JSON.parse(sessionStorage.getItem(FLOOR_ID));
-    // const selectedSectionData = JSON.parse(
-    //   sessionStorage.getItem(SECTION_PROGRESS)
-    // );
-    // const progressIDData = sessionStorage.getItem(PROGRESS_ID);
+    let selectedFloorData = selectedFloor;
+    let selectedSectionData = selectedSection;
 
-    // if (selectedFloorData && selectedSectionData && progressIDData) {
-    //   console.log("Selected floor:", selectedFloorData);
-    navigate("/adventure_spelling", {});
-    // } else {
-    //   console.error("Please select a floor before entering.");
-    // }
+    if (!selectedFloorData || !selectedSectionData) {
+      selectedFloorData = currentFloor;
+      selectedSectionData = currentSection;
+    }
+
+    if (selectedFloorData && selectedSectionData && progressID) {
+      sessionStorage.setItem(FLOOR_ID, selectedFloorData);
+      sessionStorage.setItem(SECTION_PROGRESS, selectedSectionData);
+      sessionStorage.setItem(PROGRESS_ID, progressID);
+
+      console.log(
+        "Navigating to: ",
+        selectedFloorData,
+        selectedSectionData,
+        progressID
+      );
+
+      navigate("/adventure_spelling", {
+        state: {
+          floor: selectedFloorData,
+          section: selectedSectionData,
+          progressId: progressID,
+        },
+      });
+    } else {
+      console.error("Please select a floor and section before entering.");
+    }
   };
 
   const renderProgressSections = () => {
     const uniqueSections = Array.from(
       new Set(FLOOR_DATA.map((floor) => floor.towerSection))
     );
-
     return uniqueSections.map((section) => (
       <span key={section} onClick={() => handleSectionClick(section)}>
         Section {section}
@@ -172,14 +165,10 @@ export default function AdventureMode() {
   };
 
   const renderFloorCards = () => {
-    if (selectedSection === null) {
-      return null;
-    }
-
+    if (selectedSection === null) return null;
     const sectionFloors = FLOOR_DATA.filter(
       (floor) => floor.towerSection === selectedSection
     );
-
     return sectionFloors.map((floor) => (
       <div
         key={floor.towerFloorId}
@@ -238,7 +227,6 @@ export default function AdventureMode() {
         </section>
         <section className="tower-container">{renderFloorCards()}</section>
       </section>
-
       <section className="lower-adventure">
         <div className="progress">
           PROGRESS:
