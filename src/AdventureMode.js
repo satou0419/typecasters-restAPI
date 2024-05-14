@@ -21,6 +21,7 @@ export default function AdventureMode() {
   const [nextSection, setNextSection] = useState();
   const [currentFloor, setCurrentFloor] = useState();
   const [currentSection, setCurrentSection] = useState();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -111,12 +112,20 @@ export default function AdventureMode() {
     setSelectedSection(section);
     sessionStorage.setItem(SECTION_PROGRESS, section);
 
-    const firstFloorInSection = FLOOR_DATA.find(
+    const sectionFloors = FLOOR_DATA.filter(
       (floor) => floor.towerSection === section
     );
-    if (firstFloorInSection) {
-      setSelectedFloor(firstFloorInSection.towerFloorId);
-      sessionStorage.setItem(FLOOR_ID, firstFloorInSection.towerFloorId);
+
+    // Find the first unlocked floor of the section
+    const firstUnlockedFloor = sectionFloors.find(
+      (floor) => floor.towerFloorId <= currentFloor
+    );
+
+    if (firstUnlockedFloor) {
+      setSelectedFloor(firstUnlockedFloor.towerFloorId);
+      sessionStorage.setItem(FLOOR_ID, firstUnlockedFloor.towerFloorId);
+    } else {
+      console.error("All floors in this section are locked.");
     }
   };
 
@@ -130,6 +139,13 @@ export default function AdventureMode() {
     }
 
     if (selectedFloorData && selectedSectionData && progressID) {
+      const lockedFloor = selectedFloorData > currentFloor; // Check if the selected floor is locked
+
+      if (lockedFloor) {
+        console.error("You cannot enter a locked floor.");
+        return; // Prevent navigation
+      }
+
       sessionStorage.setItem(FLOOR_ID, selectedFloorData);
       sessionStorage.setItem(SECTION_PROGRESS, selectedSectionData);
       sessionStorage.setItem(PROGRESS_ID, progressID);
@@ -157,35 +173,57 @@ export default function AdventureMode() {
     const uniqueSections = Array.from(
       new Set(FLOOR_DATA.map((floor) => floor.towerSection))
     );
-    return uniqueSections.map((section) => (
-      <span key={section} onClick={() => handleSectionClick(section)}>
-        Section {section}
-      </span>
-    ));
+
+    return uniqueSections.map((section) => {
+      let sectionStatusClass;
+      if (currentSection === null || section > currentSection) {
+        sectionStatusClass = "section-locked";
+      } else if (section === currentSection) {
+        sectionStatusClass = "section-ongoing";
+      } else {
+        sectionStatusClass = "section-conquered";
+      }
+
+      return (
+        <div
+          key={section}
+          className={`section ${sectionStatusClass}`}
+          onClick={() => handleSectionClick(section)}
+        >
+          Section {section}
+        </div>
+      );
+    });
   };
 
   const renderFloorCards = () => {
     if (selectedSection === null) return null;
+
     const sectionFloors = FLOOR_DATA.filter(
       (floor) => floor.towerSection === selectedSection
     );
-    return sectionFloors.map((floor) => (
-      <div
-        key={floor.towerFloorId}
-        className={`floor-card ${selectedFloor ? "selected" : ""}`}
-        onClick={() => handleFloorClick(floor.towerFloorId)}
-      >
+    return sectionFloors.map((floor) => {
+      const isLocked = currentFloor ? floor.towerFloorId > currentFloor : false;
+      return (
         <div
-          className={
-            selectedFloor === floor.towerFloorId
-              ? "floor-card-active"
-              : "floor-card"
-          }
+          key={floor.towerFloorId}
+          className={`floor-card ${isLocked ? "floor-card-locked" : ""} ${
+            selectedFloor === floor.towerFloorId ? "selected" : ""
+          }`}
+          onClick={() => !isLocked && handleFloorClick(floor.towerFloorId)}
         >
-          Floor {floor.towerFloorId}
+          <div
+            className={
+              selectedFloor === floor.towerFloorId
+                ? "floor-card-active"
+                : "floor-card"
+            }
+          >
+            Floor {floor.towerFloorId}
+          </div>
         </div>
-      </div>
-    ));
+      );
+    });
   };
 
   return (

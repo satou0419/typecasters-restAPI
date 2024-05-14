@@ -24,26 +24,7 @@
   overflow-y: auto;
   flex-wrap: nowrap;
 }
-.floor-card:hover {
-  transform: scale(1.03); /* Slight increase in size on hover for feedback */
-}
 
-.floor-card {
-  min-height: 45px;
-
-  width: 110px;
-  border: 3px solid #593796;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Lilita One";
-  color: #5e5e5e;
-  background-color: rgba(198, 198, 198, 0.5); /* Adjust the opacity here */
-  cursor: pointer;
-  font-size: 16pt;
-  transition: all 0.3s ease; /* Ensures smooth transitions */
-}
 .border-progress {
   outline: 2px solid #593796;
 }
@@ -161,6 +142,15 @@
   cursor: pointer;
 }
 
+.progress .section-conquered {
+  background-color: #ffc658;
+  color: white;
+}
+.progress .section-ongoing {
+  /* background-color: #4cb8c4; */
+  background-color: #b76fff;
+}
+
 .progress span:first-child {
   margin-left: 20px;
 }
@@ -189,6 +179,28 @@
   height: 100%;
 }
 
+.floor-card:hover {
+  transform: scale(1.03); /* Slight increase in size on hover for feedback */
+}
+
+.floor-card {
+  min-height: 65px;
+
+  width: 150px;
+  border: 3px solid #593796;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Lilita One";
+  color: #5e5e5e;
+  background-color: rgba(198, 198, 198, 0.5); /* Adjust the opacity here */
+  cursor: pointer;
+  font-size: 16pt;
+  transition: all 0.3s ease; /* Ensures smooth transitions */
+  position: relative;
+}
+
 .floor-card-active {
   border: 8px solid #666667;
   outline: 5px solid #909090;
@@ -202,4 +214,18 @@
   position: absolute;
   transform: scale(1.1); /* Enlarge when active */
   transition: transform 0.3s ease, border 0.3s ease; /* Smooth transition for transform and border */
+}
+
+.floor-card-locked::after {
+  content: "";
+  display: inline-block;
+  background: url("/public/assets/icon/ic_locked.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  top: 15px;
+  left: 90%; /* Move it halfway across horizontally */
+  transform: translate(-50%, -50%);
 }

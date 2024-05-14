@@ -26,6 +26,7 @@ import JoinRoom from "./JoinRoom";
 import TeacherRoomSettings from "./TeacherRoomSettings";
 import TeacherRoomInfo from "./TeacherRoomInfo";
 import Settings from "./Settings";
+import { CreditProvider } from "./CreditContext";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,80 +67,85 @@ function App() {
     isLoggedIn || location.pathname !== "/adventure_spelling";
 
   return (
-    <>
-      {showNavigation && <Navigation onLogout={handleLogout} />}
+    <CreditProvider>
+      <>
+        {showNavigation && <Navigation onLogout={handleLogout} />}
 
-      <Routes>
-        {isLoggedIn ? (
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-        ) : (
-          <Route path="/" element={<Navigate to="/login" />} />
-        )}
-        {isLoggedIn ? (
-          <Route path="/login" element={<Navigate to="/dashboard" />} />
-        ) : (
-          <Route
-            path="/login"
-            element={
-              <Login
-                setIsLoggedIn={setIsLoggedIn}
-                setUserDetails={setUserDetails}
+        <Routes>
+          {isLoggedIn ? (
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+          ) : (
+            <Route path="/" element={<Navigate to="/login" />} />
+          )}
+          {isLoggedIn ? (
+            <Route path="/login" element={<Navigate to="/dashboard" />} />
+          ) : (
+            <Route
+              path="/login"
+              element={
+                <Login
+                  setIsLoggedIn={setIsLoggedIn}
+                  setUserDetails={setUserDetails}
+                />
+              }
+            />
+          )}
+          {isLoggedIn ? (
+            <Route
+              path="/registration"
+              element={<Navigate to="/dashboard" />}
+            />
+          ) : (
+            <Route
+              path="/registration"
+              element={
+                <Registration
+                  setIsLoggedIn={setIsLoggedIn}
+                  setUserDetails={setUserDetails}
+                />
+              }
+            />
+          )}
+          {showAdventureSpelling && (
+            <Route
+              path="/adventure_spelling"
+              element={<GameplayAdventureSpelling />}
+            />
+          )}
+          {isLoggedIn && (
+            <>
+              <Route
+                path="/dashboard"
+                element={<Dashboard userDetails={userDetails} />}
               />
-            }
-          />
-        )}
-        {isLoggedIn ? (
-          <Route path="/registration" element={<Navigate to="/dashboard" />} />
-        ) : (
-          <Route
-            path="/registration"
-            element={
-              <Registration
-                setIsLoggedIn={setIsLoggedIn}
-                setUserDetails={setUserDetails}
+              <Route path="/student_room" element={<StudentRoom />} />
+              <Route path="/archive" element={<Archive />} />
+              <Route path="/inventory_shop" element={<InventoryShop />} />
+              <Route path="/create_room" element={<CreateRoom />} />
+              <Route path="/adventure_mode" element={<AdventureMode />} />
+              <Route path="/simulation_mode" element={<SimulationMode />} />
+              <Route path="/simulation_room" element={<SimulationRoom />} />
+              <Route path="/create_game" element={<CreateGame />} />
+              <Route
+                path="/simulation_mode_student"
+                element={<SimulationModeStudent />}
               />
-            }
-          />
-        )}
-        {showAdventureSpelling && (
-          <Route
-            path="/adventure_spelling"
-            element={<GameplayAdventureSpelling />}
-          />
-        )}
-        {isLoggedIn && (
-          <>
-            <Route
-              path="/dashboard"
-              element={<Dashboard userDetails={userDetails} />}
-            />
-            <Route path="/student_room" element={<StudentRoom />} />
-            <Route path="/archive" element={<Archive />} />
-            <Route path="/inventory_shop" element={<InventoryShop />} />
-            <Route path="/create_room" element={<CreateRoom />} />
-            <Route path="/adventure_mode" element={<AdventureMode />} />
-            <Route path="/simulation_mode" element={<SimulationMode />} />
-            <Route path="/simulation_room" element={<SimulationRoom />} />
-            <Route path="/create_game" element={<CreateGame />} />
-            <Route
-              path="/simulation_mode_student"
-              element={<SimulationModeStudent />}
-            />
-            <Route
-              path="/simulation_room_student"
-              element={<SimulationRoomStudent />}
-            />
-            <Route path="/join_room" element={<JoinRoom />} />
-            <Route
-              path="/teacher_room_settings"
-              element={<TeacherRoomSettings />}
-            />
-            <Route path="/teacher_room_info" element={<TeacherRoomInfo />} />
-            <Route path="/Settings" element={<Settings />} />
-          </>
-        )}
-      </Routes>
-    </>
+              <Route
+                path="/simulation_room_student"
+                element={<SimulationRoomStudent />}
+              />
+              <Route path="/join_room" element={<JoinRoom />} />
+              <Route
+                path="/teacher_room_settings"
+                element={<TeacherRoomSettings />}
+              />
+              <Route path="/teacher_room_info" element={<TeacherRoomInfo />} />
+              <Route path="/Settings" element={<Settings />} />
+            </>
+          )}
+        </Routes>
+      </>
+    </CreditProvider>
   );
 }
 

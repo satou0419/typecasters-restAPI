@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navigation.css";
 import { fetchUserData } from "../api";
+import { useCredit } from "../CreditContext"; // Import useCredit hook to access credit
 
 export default function Navigation({ onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [userData, setUserData] = useState(null); // State to store user data
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
-  const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails")); // Define storedUserDetails
+  const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+  const { credit } = useCredit(); // Access credit from the context
 
   useEffect(() => {
-    // Fetch user data when component mounts
     const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     if (storedUserDetails) {
       fetchUserData(storedUserDetails.userID)
@@ -23,7 +24,6 @@ export default function Navigation({ onLogout }) {
   }, []);
 
   const toggleMenu = () => {
-    // setMenuOpen(!menuOpen);
     setMenuOpen((prevMenuOpen) => !prevMenuOpen);
   };
 
@@ -64,7 +64,7 @@ export default function Navigation({ onLogout }) {
         {userData && (
           <>
             <p>Username: {storedUserDetails.username}</p>
-            <p>Credit: {userData.credit_amount}</p>
+            <p>Credit: {credit}</p> {/* Display credit from the context */}
           </>
         )}
       </nav>
