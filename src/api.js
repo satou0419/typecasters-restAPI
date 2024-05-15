@@ -11,7 +11,9 @@ export const GET_ENEMIES_BY_FLOOR_ID_ENDPOINT = `${BASE_URL}/adventure_enemy/get
 export const GET_USER_ITEMS_ENDPOINT = `${BASE_URL}/user_item/get_user_items_by/`;
 export const GET_USER_DETAILS_ENDPOINT = `${BASE_URL}/user_details/get_user_detail?user_id=`;
 export const INSERT_WORD_ARCHIVE = `${BASE_URL}/archive_words/insert`;
+export const UPDATE_USER_ENDPOINT = `${BASE_URL}/user/updateUser?uid=`;
 export const UPDATE_USER_PROGRESS_ENDPOINT = `${BASE_URL}/tower_progress/update_user_progress?user_prog_id=`;
+
 // Function to fetch user details
 export const fetchUserData = async (userID) => {
   try {

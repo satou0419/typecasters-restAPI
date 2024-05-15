@@ -135,7 +135,9 @@ function App() {
               element={<TeacherRoomSettings />}
             />
             <Route path="/teacher_room_info" element={<TeacherRoomInfo />} />
-            <Route path="/Settings" element={<Settings />} />
+            <Route 
+              path="/Settings" 
+              element={<Settings />} />
           </>
         )}
       </Routes>

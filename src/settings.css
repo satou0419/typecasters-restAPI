@@ -35,3 +35,24 @@
   left: 50%;
   transform: translateX(-50%);
 }
+.password-container {
+  border: 1px solid red;
+  border-radius: 20px;
+  background-color: #9a6dea;
+
+  position: relative;
+  border: 1px solid red;
+  border-radius: 20px;
+  background-color: #9a6dea;
+  width: 35%;
+  min-height: 200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.password-container p {
+  font-family: "lilita one";
+  color: white;
+  font-size: xx-large;
+  text-align: center;
+}

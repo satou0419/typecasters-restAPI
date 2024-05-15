@@ -16,6 +16,9 @@ import AdventureMode from "./AdventureMode";
 import CreateRoom from "./CreateRoom";
 import Fetch from "./Fetch";
 import Switch from "./components/Switch";
+import CreateGame from "./CreateGame";
+import Settings from "./Settings";
+import Archive from "./Archive";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
