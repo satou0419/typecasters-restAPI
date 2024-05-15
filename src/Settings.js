@@ -16,6 +16,7 @@ export default function Settings() {
         if (userDetailsFromSessionStorage) {
           const loggedInUserData = await fetchUserData(userDetailsFromSessionStorage.userID);
           setUserData(loggedInUserData);
+
         } else {
           // Handle case where user details are not available
         }
@@ -71,6 +72,7 @@ export default function Settings() {
         }
   
         console.log("User details updated successfully!");
+        console.log(storedUserDetails);
       } else {
         console.error("Stored user details not available.");
       }
@@ -79,7 +81,7 @@ export default function Settings() {
     }
   };
   
-  
+  console.log(storedUserDetails);
  
   const renderContent = () => {
     switch (activeTab) {
