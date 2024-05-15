@@ -19,9 +19,15 @@ public class SimulationController {
 
     //CREATE
     @PostMapping("/insert")
-    public ResponseEntity<SimulationEntity> insertSimulation(@RequestBody SimulationEntity simulation) {
-        SimulationEntity insertedSimulation = simulationService.insertSimulation(simulation);
-        return new ResponseEntity<>(insertedSimulation, HttpStatus.OK);
+    public ResponseEntity<String> insertSimulation(@RequestBody SimulationEntity simulation) {
+         try {
+            SimulationEntity insertedSimulation = simulationService.insertSimulation(simulation);
+             return ResponseEntity.ok("Simulation Added!");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (NoSuchElementException ex){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     //READ
@@ -46,23 +52,27 @@ public class SimulationController {
 
     //UPDATE
     @PutMapping("/edit")
-    public ResponseEntity<SimulationEntity> editSimulation(@RequestBody SimulationEntity simulation) {
+    public ResponseEntity<String> editSimulation(@RequestBody SimulationEntity simulation) {
         try {
             SimulationEntity editedSimulation = simulationService.editSimulation(simulation);
-            return new ResponseEntity<>(editedSimulation, HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok("Simulation Updated!");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (NoSuchElementException ex){
+            return ResponseEntity.notFound().build();
         }
     }
 
     //DELETE
     @PutMapping("/remove/{simulationID}")
-    public ResponseEntity<Void> removeSimulation(@PathVariable int simulationID) {
+    public ResponseEntity<String> removeSimulation(@PathVariable int simulationID) {
         try {
             simulationService.removeSimulation(simulationID);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok("Simulation Removed!");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (NoSuchElementException ex){
+            return ResponseEntity.notFound().build();
         }
     }
 }

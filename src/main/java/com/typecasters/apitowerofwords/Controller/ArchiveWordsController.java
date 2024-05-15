@@ -19,9 +19,9 @@ public class ArchiveWordsController {
 
     // Create
     @PostMapping("/insert")
-    public ResponseEntity<ArchiveWordsEntity> insertArchiveWords(@RequestBody ArchiveWordsEntity word) {
+    public ResponseEntity<String> insertArchiveWords(@RequestBody ArchiveWordsEntity word) {
         ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(word.getUserID(), word);
-        return new ResponseEntity<>(insertedWord, HttpStatus.OK);
+        return ResponseEntity.ok("Word Added!");
     }
 
     // Read
@@ -39,15 +39,15 @@ public class ArchiveWordsController {
 
     // Update
     @PutMapping("/edit")
-    public ResponseEntity<ArchiveWordsEntity> editArchiveWords(@RequestBody ArchiveWordsEntity word) {
+    public ResponseEntity<String> editArchiveWords(@RequestBody ArchiveWordsEntity word) {
         ArchiveWordsEntity updatedWord = archiveWordsService.editArchiveWords(word);
-        return new ResponseEntity<>(updatedWord, HttpStatus.OK);
+        return ResponseEntity.ok("Word Updated!");
     }
 
     // Delete
     @PutMapping("/remove/{archiveWordsID}")
-    public ResponseEntity<Void> removeArchiveWords(@PathVariable int archiveWordsID) {
+    public ResponseEntity<String> removeArchiveWords(@PathVariable int archiveWordsID) {
         archiveWordsService.removeArchiveWords(archiveWordsID);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("Word Removed!");
     }
 }
