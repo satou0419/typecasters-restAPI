@@ -181,5 +181,18 @@ a {
   border-color: #333 transparent transparent transparent;
 }
 .word-details{
-  margin-top: 1px;
+  margin-bottom: 50%;
+  overflow: hidden;
+  color: white;
+}
+.word-details p{
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.word-details h2{
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 80px;
 }

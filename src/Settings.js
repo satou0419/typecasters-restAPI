@@ -7,6 +7,10 @@ export default function Settings() {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [storedUserDetails, setStoredUserDetails] = useState(null);
+  // const [CurrentUsername, setCurrentUsername] = useState();
+  // const [CurrentFirstname, setCurrentFirstname] = useState();
+  // const [CurrentLastname, setCurrentLastname] = useState();
+  // const [currentPassword, setCurrentPassword] = useState();
 
   useEffect(() => {
     const fetchLoggedInUserDetails = async () => {
@@ -15,8 +19,8 @@ export default function Settings() {
         setStoredUserDetails(userDetailsFromSessionStorage);
         if (userDetailsFromSessionStorage) {
           const loggedInUserData = await fetchUserData(userDetailsFromSessionStorage.userID);
-          setUserData(loggedInUserData);
-
+          setUserData(loggedInUserData); 
+          // console.log(userData);
         } else {
           // Handle case where user details are not available
         }
@@ -28,7 +32,7 @@ export default function Settings() {
 
     fetchLoggedInUserDetails();
   }, []);
-
+ 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -40,12 +44,10 @@ export default function Settings() {
           username: storedUserDetails.username,
           firstname: storedUserDetails.firstname,
           lastname: storedUserDetails.lastname,
-          password: storedUserDetails.password
         };
   
         const updatedFirstName = document.getElementById("firstname").value;
         const updatedLastName = document.getElementById("lastname").value;
-        const updatedPassword = userData.password;  
         // Update the fields in updatedUserData only if they are not empty
         if (updatedFirstName.trim() !== "") {
           updatedUserData.firstname = updatedFirstName;
@@ -55,7 +57,7 @@ export default function Settings() {
           updatedUserData.lastname = updatedLastName;
         }
         
-        console.log("FIRSTNAME:", updatedUserData.firstname,"LASTNAME:", updatedUserData.lastname,"PASSWORD:", updatedUserData.password);
+        console.log("FIRSTNAME:", updatedUserData.firstname,"LASTNAME:", updatedUserData.lastname,);
 
         const updateUserURL = `${UPDATE_USER_ENDPOINT}${storedUserDetails.userID}`;
         // Call UPDATE_USER_ENDPOINT with PUT method
@@ -72,7 +74,6 @@ export default function Settings() {
         }
   
         console.log("User details updated successfully!");
-        console.log(storedUserDetails);
       } else {
         console.error("Stored user details not available.");
       }
@@ -80,9 +81,51 @@ export default function Settings() {
       console.error("Error updating user details:", error);
     }
   };
-  
   console.log(storedUserDetails);
- 
+  
+  const handleChangePassword = async () => {
+    try {
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmNewPassword = document.getElementById("confirmNewPassword").value;
+  
+      // Check if the new password matches the confirm password
+      if (newPassword !== confirmNewPassword) {
+        throw new Error("New password and confirm password do not match");
+      }
+  
+      // Prepare the request body
+      const updatedPasswordData = {
+        currentPassword: currentPassword,
+        newPassword: newPassword
+      };
+      // Make sure all fields are filled
+      if (!currentPassword || !newPassword || !confirmNewPassword) {
+        throw new Error("Please fill in all fields");
+      }
+  
+      // Call the backend endpoint to update the password
+      const updateUserPasswordURL = `${UPDATE_USER_ENDPOINT}${storedUserDetails.userID}`;
+      const response = await fetch(updateUserPasswordURL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedPasswordData)
+      });
+      console.log(updatedPasswordData);
+      if (!response.ok) {
+        throw new Error("Failed to update password");
+      }
+  
+      console.log("Password updated successfully!");
+    } catch (error) {
+      console.error("Error updating password:", error);
+    }
+  };
+  
+
+
   const renderContent = () => {
     switch (activeTab) {
       case "Account Information":
@@ -111,12 +154,12 @@ export default function Settings() {
                     placeholder={`Lastname: ${storedUserDetails.lastname}`}
                     id="lastname"
                   />
-                  <input
+                  {/* <input
                     type="password"
                     className="input input-line input-line--light textfield"
                     placeholder="Enter New password"
                     id="password"
-                  />
+                  /> */}
                 </div>
               )}
               <button className="btn btn--medium btn--primary btn-save" onClick={handleSaveChanges}>
@@ -135,19 +178,22 @@ export default function Settings() {
                   type="password"
                   className="input input-line input-line--light textfield"
                   placeholder="Current Password"
+                  id="currentPassword"
                 />
                 <input
                   type="password"
                   className="input input-line input-line--light textfield"
                   placeholder="New Password"
+                  id="newPassword"
                 />
                 <input
                   type="password"
                   className="input input-line input-line--light textfield"
                   placeholder="Confirm New Password"
+                  id="confirmNewPassword"
                 />
               </div>
-              <button className="btn btn--medium btn--primary btn-save">
+              <button className="btn btn--medium btn--primary btn-save" onClick={handleChangePassword}>
                 Save Changes
               </button>
             </div>
