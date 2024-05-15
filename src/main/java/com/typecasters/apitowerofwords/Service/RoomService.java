@@ -67,9 +67,9 @@ public class RoomService {
 
         }catch(NoSuchElementException ex) {
             throw new NoSuchElementException ("User " + userID + " does not exist");
-        }finally {
-            return roomRepository.save(room);
         }
+
+        return roomRepository.save(room);
     }
 
     public List<RoomEntity> viewCreatedRooms(int creatorID) {

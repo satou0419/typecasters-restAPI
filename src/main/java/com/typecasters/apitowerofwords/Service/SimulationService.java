@@ -45,7 +45,7 @@ public class SimulationService {
     }
 
     public List<SimulationEntity> viewSimulationsByRoomID(int roomID) {
-        return simulationRepository.findByRoomID(roomID);
+        return simulationRepository.findAllByRoomID(roomID);
     }
 
     public Optional<SimulationEntity> viewSimulationByID(int simulationID) {
