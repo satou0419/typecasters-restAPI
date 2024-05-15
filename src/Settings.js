@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./settings.css";
-import { fetchUserData, UPDATE_USER_ENDPOINT } from "./api";
+import { fetchUserData, UPDATE_USER_ENDPOINT } from './api';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("Account Information");
@@ -16,6 +16,7 @@ export default function Settings() {
         if (userDetailsFromSessionStorage) {
           const loggedInUserData = await fetchUserData(userDetailsFromSessionStorage.userID);
           setUserData(loggedInUserData);
+
         } else {
           // Handle case where user details are not available
         }
@@ -38,24 +39,40 @@ export default function Settings() {
         const updatedUserData = {
           username: storedUserDetails.username,
           firstname: storedUserDetails.firstname,
-          lastname: storedUserDetails.lastname
+          lastname: storedUserDetails.lastname,
+          password: storedUserDetails.password
         };
   
-        // Check if first name and last name fields are not empty
         const updatedFirstName = document.getElementById("firstname").value;
         const updatedLastName = document.getElementById("lastname").value;
-  
-        if (updatedFirstName.trim() !== "" && updatedLastName.trim() !== "") {
+        const updatedPassword = userData.password;  
+        // Update the fields in updatedUserData only if they are not empty
+        if (updatedFirstName.trim() !== "") {
           updatedUserData.firstname = updatedFirstName;
-          updatedUserData.lastname = updatedLastName;
-  
-          // Call UPDATE_USER_ENDPOINT with PUT method
-          await UPDATE_USER_ENDPOINT(storedUserDetails.userID, updatedUserData, "PUT");
-  
-          console.log("User details updated successfully!");
-        } else {
-          console.error("First name and last name cannot be empty.");
         }
+        
+        if (updatedLastName.trim() !== "") {
+          updatedUserData.lastname = updatedLastName;
+        }
+        
+        console.log("FIRSTNAME:", updatedUserData.firstname,"LASTNAME:", updatedUserData.lastname,"PASSWORD:", updatedUserData.password);
+
+        const updateUserURL = `${UPDATE_USER_ENDPOINT}${storedUserDetails.userID}`;
+        // Call UPDATE_USER_ENDPOINT with PUT method
+        const response = await fetch(updateUserURL, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(updatedUserData)
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to update user details");
+        }
+  
+        console.log("User details updated successfully!");
+        console.log(storedUserDetails);
       } else {
         console.error("Stored user details not available.");
       }
@@ -64,8 +81,8 @@ export default function Settings() {
     }
   };
   
-  
-
+  console.log(storedUserDetails);
+ 
   const renderContent = () => {
     switch (activeTab) {
       case "Account Information":
@@ -74,7 +91,7 @@ export default function Settings() {
             <div className="account-container">
               <p>Account Information</p>
               {userData && storedUserDetails && (
-                <div className="text-container">
+                <div className="text-container" key={activeTab}>
                   <input
                     type="text"
                     className="input input-line input-line--light textfield"
@@ -85,14 +102,20 @@ export default function Settings() {
                   <input
                     type="text"
                     className="input input-line input-line--light textfield"
-                    placeholder={`Firstname: ${storedUserDetails.firstname}`}
-                    
+                    placeholder={`Firstname: ${storedUserDetails.firstname }`}
+                    id="firstname"
                   />
                   <input
                     type="text"
                     className="input input-line input-line--light textfield"
                     placeholder={`Lastname: ${storedUserDetails.lastname}`}
-      
+                    id="lastname"
+                  />
+                  <input
+                    type="password"
+                    className="input input-line input-line--light textfield"
+                    placeholder="Enter New password"
+                    id="password"
                   />
                 </div>
               )}
