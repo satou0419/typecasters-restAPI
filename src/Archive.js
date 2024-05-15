@@ -18,6 +18,7 @@ const wordList = [
 export default function Archive() {
   const [activeTab, setActiveTab] = useState("word");
   const [selectedWord, setSelectedWord] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -27,8 +28,15 @@ export default function Archive() {
     setSelectedWord(word);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   const renderWordList = () => {
-    return wordList.map((word) => (
+    const filteredWords = wordList.filter((word) =>
+      word.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return filteredWords.map((word) => (
       <p
         key={word}
         className={selectedWord === word ? "word-selected" : ""}
@@ -51,8 +59,10 @@ export default function Archive() {
                     <div className="word-search">
                       <input
                         type="text"
-                        className="input input-line input-line--light"
+                        className="input input-line input-line--light search--word"
                         placeholder="Search words"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
                       />
                     </div>
                     <div className="word-list">{renderWordList()}</div>
@@ -61,38 +71,47 @@ export default function Archive() {
               </div>
               <div className="book-spine"></div>
               <section className="right-page page-container">
-                <div className="book-page"></div>
+                <div className="book-page book--container">
+                  {selectedWord ? (
+                    <div className="word-details">
+                      <h2>{selectedWord}</h2>
+                      <p>More information about {selectedWord}...</p>
+                    </div>
+                  ) : (
+                    <p>Select a word to see more details.</p>
+                  )}
+                </div>
               </section>
             </section>
           </div>
         );
       case "achievement":
         return (
-        <div className="tab-content achievement-archive">
-          <div className="locked-badge-container">
-            <img className="locked-badge" src="./images/locked-badge.png"></img>
+          <div className="tab-content achievement-archive">
+            <div className="locked-badge-container">
+              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+            </div>
+            <div className="locked-badge-container">
+              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+            </div>
+            <div className="locked-badge-container">
+              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+            </div>
+            <div title="Queen Bee" className="tooltip-wrapper">
+              <div className="unlocked-badge-container">
+                <img className="unlocked-badge" src="./images/unlocked-badge.png" alt="Unlocked Badge" />
+              </div>
+            </div>
+            <div className="locked-badge-container">
+              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+            </div>
+            <div className="locked-badge-container">
+              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+            </div>
+            <div className="locked-badge-container">
+              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+            </div>
           </div>
-          <div className="locked-badge-container">
-            <img className="locked-badge" src="./images/locked-badge.png"></img>
-          </div>
-          <div className="locked-badge-container">
-            <img className="locked-badge" src="./images/locked-badge.png"></img>
-          </div>
-          <div title="Queen Bee" className="tooltip-wrapper">
-            <div className="unlocked-badge-container">
-            <img className="unlocked-badge" src="./images/unlocked-badge.png"></img>
-          </div>
-          </div>
-          <div className="locked-badge-container">
-            <img className="locked-badge" src="./images/locked-badge.png"></img>
-          </div>
-          <div className="locked-badge-container">
-            <img className="locked-badge" src="./images/locked-badge.png"></img>
-          </div>
-          <div className="locked-badge-container">
-            <img className="locked-badge" src="./images/locked-badge.png"></img>
-          </div>
-        </div>
         );
       default:
         return <div className="tab-content">Select a tab</div>;
