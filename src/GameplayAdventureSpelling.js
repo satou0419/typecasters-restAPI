@@ -171,7 +171,7 @@ export default function GameplayAdventureSpelling() {
   }, [currentWord]);
 
   const handleStartClick = () => {
-    setFlag(5);
+    setFlag(1);
   };
   useEffect(() => {
     console.log("Flag value:", flag);
