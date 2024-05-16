@@ -7,6 +7,7 @@ import { LOGIN_ENDPOINT } from "./api";
 import Loader from "./Loader"; // Import Loader component
 
 export const USER_TYPE = "userType";
+export const USER_ID = "userID";
 
 export default function Login({ setIsLoggedIn, setUserDetails }) {
   const [username, setUsername] = useState("");
@@ -51,7 +52,7 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
       console.log("UserType:", userData.userType);
 
       sessionStorage.setItem(USER_TYPE, userData.userType);
-
+      sessionStorage.setItem(USER_ID, userData.userID);
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("userDetails", JSON.stringify(userData));
 

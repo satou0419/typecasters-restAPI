@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./components/tab.css";
 import "./archive.css";
+import { GET_ARCHIVE_WORD_ENDPOINT } from "./api";
+
+import { USER_ID } from "./Login";
 
 const wordList = [
   "Happy",
@@ -19,6 +22,17 @@ export default function Archive() {
   const [activeTab, setActiveTab] = useState("word");
   const [selectedWord, setSelectedWord] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [userID, setUserID] = useState(sessionStorage.getItem(USER_ID));
+  console.log("THIS IS ID: ", userID);
+
+  useEffect(() => {
+    fetch(`${GET_ARCHIVE_WORD_ENDPOINT}${userID}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.error("Error fetching archive word:", error));
+  }, []);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -75,9 +89,18 @@ export default function Archive() {
                   {selectedWord ? (
                     <div className="word-details">
                       <h2>{selectedWord}</h2>
-                      <p>"[Ha-PE]"...<button className="btn btn--small btn--primary">AUDIO</button></p>
+                      <p>
+                        "[Ha-PE]"...
+                        <button className="btn btn--small btn--primary">
+                          AUDIO
+                        </button>
+                      </p>
                       <h1>ADJECTIVE</h1>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </p>
                     </div>
                   ) : (
                     <p>Select a word to see more details.</p>
@@ -91,27 +114,55 @@ export default function Archive() {
         return (
           <div className="tab-content achievement-archive">
             <div className="locked-badge-container">
-              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+              <img
+                className="locked-badge"
+                src="./images/locked-badge.png"
+                alt="Locked Badge"
+              />
             </div>
             <div className="locked-badge-container">
-              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+              <img
+                className="locked-badge"
+                src="./images/locked-badge.png"
+                alt="Locked Badge"
+              />
             </div>
             <div className="locked-badge-container">
-              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+              <img
+                className="locked-badge"
+                src="./images/locked-badge.png"
+                alt="Locked Badge"
+              />
             </div>
             <div title="Queen Bee" className="tooltip-wrapper">
               <div className="unlocked-badge-container">
-                <img className="unlocked-badge" src="./images/unlocked-badge.png" alt="Unlocked Badge" />
+                <img
+                  className="unlocked-badge"
+                  src="./images/unlocked-badge.png"
+                  alt="Unlocked Badge"
+                />
               </div>
             </div>
             <div className="locked-badge-container">
-              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+              <img
+                className="locked-badge"
+                src="./images/locked-badge.png"
+                alt="Locked Badge"
+              />
             </div>
             <div className="locked-badge-container">
-              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+              <img
+                className="locked-badge"
+                src="./images/locked-badge.png"
+                alt="Locked Badge"
+              />
             </div>
             <div className="locked-badge-container">
-              <img className="locked-badge" src="./images/locked-badge.png" alt="Locked Badge" />
+              <img
+                className="locked-badge"
+                src="./images/locked-badge.png"
+                alt="Locked Badge"
+              />
             </div>
           </div>
         );
