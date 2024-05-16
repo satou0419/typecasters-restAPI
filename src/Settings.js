@@ -27,6 +27,7 @@ export default function Settings() {
           setFirstName(userDetailsFromSessionStorage.firstname || "");
           setLastName(userDetailsFromSessionStorage.lastname || "");
           setUserName(userDetailsFromSessionStorage.username || "");
+          setPassword(userDetailsFromSessionStorage.password || "");
         } else {
           // Handle case where user details are not available
         }
@@ -42,7 +43,8 @@ export default function Settings() {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  console.log(firstname);
+  // console.log(firstname);
+  
 
   const handleSaveChanges = async () => {
     try {
@@ -51,11 +53,13 @@ export default function Settings() {
           username: storedUserDetails.username,
           firstname: firstname,
           lastname: lastname,
-          password: userData.password,
+          password: password
         };
 
         const updatedFirstName = document.getElementById("firstname").value;
         const updatedLastName = document.getElementById("lastname").value;
+        const updatedPassword = password;
+        console.log(password);
 
         if (updatedFirstName.trim() !== "") {
           updatedUserData.firstname = updatedFirstName;
@@ -64,6 +68,7 @@ export default function Settings() {
         if (updatedLastName.trim() !== "") {
           updatedUserData.lastname = updatedLastName;
         }
+        updatedUserData.password = updatedPassword;
 
         const updateUserURL = `${UPDATE_USER_ENDPOINT}${storedUserDetails.userID}`;
 
@@ -86,6 +91,7 @@ export default function Settings() {
           ...storedUserDetails,
           firstname: updatedUserData.firstname,
           lastname: updatedUserData.lastname,
+          password: updatedUserData.password
         };
         sessionStorage.setItem("userDetails", JSON.stringify(newStoredDetails));
 
@@ -93,6 +99,7 @@ export default function Settings() {
         setStoredUserDetails(newStoredDetails);
         setFirstName(updatedUserData.firstname);
         setLastName(updatedUserData.lastname);
+        setPassword(updatedUserData.password);
       } else {
         console.error("Stored user details not available.");
       }
@@ -100,7 +107,66 @@ export default function Settings() {
       console.error("Error updating user details:", error);
     }
   };
+  //handle to check the change password
+  console.log(firstname, lastname, password);
+  const handleChangePassword = async () => {
+    try {
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const getfirstname = firstname;
+      const getlastname = lastname;
+      const getusername = username;
+  
+      // error if textfields are blank
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        console.error("Please fill in all fields");
+        return;
+      }
+      //error for matching new passwords
+      if (newPassword !== confirmPassword) {
+        console.error("New password and confirm password do not match");
+        return;
+      }
+      //error for checking current password
+      if(password !== currentPassword){
+        console.error("Current password is invalid");
+        return;
+      }
+  
+      // Update password
+      const updateUserURL = `${UPDATE_USER_ENDPOINT}${storedUserDetails.userID}`;
+  
+      const response = await fetch(updateUserURL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: getusername,
+          firstname: getfirstname,
+          lastname: getlastname,
+          password: newPassword
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to update password");
+      }
+  
+      console.log("Password updated successfully!");
+  
+      // Reset password fields
+      document.getElementById("currentPassword").value = "";
+      document.getElementById("newPassword").value = "";
+      document.getElementById("confirmPassword").value = "";
+    } catch (error) {
+      console.error("Error updating password:", error);
+    }
+  };
 
+
+  
   const renderContent = () => {
     switch (activeTab) {
       case "Account Information":
@@ -134,6 +200,7 @@ export default function Settings() {
                     type="password"
                     className="input input-line input-line--light textfield"
                     placeholder="Enter New password"
+                    value={password}
                     id="password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -158,19 +225,22 @@ export default function Settings() {
                   type="password"
                   className="input input-line input-line--light textfield"
                   placeholder="Current Password"
+                  id="currentPassword"
                 />
                 <input
                   type="password"
                   className="input input-line input-line--light textfield"
                   placeholder="New Password"
+                  id="newPassword"
                 />
                 <input
                   type="password"
                   className="input input-line input-line--light textfield"
                   placeholder="Confirm New Password"
+                  id="confirmPassword"
                 />
               </div>
-              <button className="btn btn--medium btn--primary btn-save">
+              <button className="btn btn--medium btn--primary btn-save" onClick={handleChangePassword}>
                 Save Changes
               </button>
             </div>
