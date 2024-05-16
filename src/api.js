@@ -16,6 +16,7 @@ export const UPDATE_USER_PROGRESS_ENDPOINT = `${BASE_URL}/tower_progress/update_
 export const BUY_ITEM_ENDPOINT = `${BASE_URL}/user_item/buy_item_single`;
 export const GET_ALL_ITEMS = `${BASE_URL}/item/get_all_items`;
 export const GET_ARCHIVE_WORD_ENDPOINT = `${BASE_URL}/archive_words/view_by_id/`;
+export const CREATE_ROOM = `${BASE_URL}/room/insert`;
 
 // Function to fetch user details
 export const fetchUserData = async (userID) => {
