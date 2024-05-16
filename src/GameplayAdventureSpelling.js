@@ -54,15 +54,16 @@ export default function GameplayAdventureSpelling() {
 
   console.log("Current Floor", storedCurrentFloor);
   console.log("Enter floor ", storedFloor);
+  console.log("Next floor ", storedNextFloor);
 
   const [isComplete, setIsComplete] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isConquered = enteredFloor <= currentFloor;
+    const isConquered = currentFloor < storedNextFloor;
     console.log("Conquered", isConquered);
 
-    if (flag === 5 && isConquered) {
+    if (!isComplete && !isConquered) {
       fetch(`${UPDATE_USER_PROGRESS_ENDPOINT}${storedProgressID}`, {
         method: "PUT",
         headers: {
@@ -99,7 +100,7 @@ export default function GameplayAdventureSpelling() {
     } else {
       console.log("Floor already conquered!!!");
     }
-  }, [flag]);
+  }, [isComplete]);
 
   const [animateShake, setAnimateShake] = useState("");
   const [autoFocusValue, setAutoFocusValue] = useState(true);
@@ -131,17 +132,21 @@ export default function GameplayAdventureSpelling() {
   const [userID, setUserID] = useState();
 
   useEffect(() => {
+    console.log("INSERT WORD", insertWord);
+  }, [insertWord]);
+  useEffect(() => {
     if (insertWord === true) {
+      console.log("UserID", userID);
+      console.log("Inserted Word", currentWord);
+
       fetch(INSERT_WORD_ARCHIVE, {
-        method: "POST",
+        method: " POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userID: userID,
+          userID: 6,
           word: currentWord,
-          check: true,
-          deleted: false,
         }),
       })
         .then((response) => {
@@ -423,6 +428,7 @@ export default function GameplayAdventureSpelling() {
             console.log("All enemies are defeated!");
             // Add logic for completing the game if needed
             setIsComplete(true);
+
             console.log(isComplete);
           }
         }
