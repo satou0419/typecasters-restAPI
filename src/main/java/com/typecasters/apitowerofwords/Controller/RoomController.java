@@ -23,14 +23,14 @@ public class RoomController {
 
     //CREATE
     @PostMapping("/insert")
-    public ResponseEntity<String> insertRoom(@RequestBody RoomEntity room) {
+    public ResponseEntity<RoomEntity> insertRoom(@RequestBody RoomEntity room) {
         try {
-            roomService.insertRoom(room);
-            return ResponseEntity.ok("Room Created!");
+            RoomEntity insertRoom = roomService.insertRoom(room);
+            return new ResponseEntity<>(insertRoom, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (NoSuchElementException ex){
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -41,8 +41,8 @@ public class RoomController {
             return ResponseEntity.ok("Student Added!");
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (NoSuchElementException ex){
-            return ResponseEntity.notFound().build();
+        } catch (NoSuchElementException | NullPointerException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
@@ -54,65 +54,83 @@ public class RoomController {
             return ResponseEntity.ok("Welcome to " + room.getRoomName() + "!");
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (NoSuchElementException ex){
-            return ResponseEntity.notFound().build();
+        } catch (NoSuchElementException | NullPointerException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
     //READ
     @GetMapping("/view_created_room/{creatorID}")
     public ResponseEntity<List<RoomEntity>> viewCreatedRooms(@PathVariable int creatorID) {
-        List<RoomEntity> createdRooms = roomService.viewCreatedRooms(creatorID);
-        return new ResponseEntity<>(createdRooms, HttpStatus.OK);
+        try{
+            List<RoomEntity> createdRooms = roomService.viewCreatedRooms(creatorID);
+            return new ResponseEntity<>(createdRooms, HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-
 
     @GetMapping("/view_room_by_code/{code}")
     public ResponseEntity<RoomEntity> viewRoomByCode(@PathVariable String code) {
-        RoomEntity room = roomService.viewRoomByCode(code);
-        if (room != null) {
+        try{
+            RoomEntity room = roomService.viewRoomByCode(code);
             return new ResponseEntity<>(room, HttpStatus.OK);
-        } else {
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/view_room_by_id/{roomID}")
     public ResponseEntity<RoomEntity> viewRoomByID(@PathVariable int roomID) {
-        Optional<RoomEntity> roomOptional = roomService.viewRoomByID(roomID);
-        return roomOptional.map(room -> new ResponseEntity<>(room, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try{
+            Optional<RoomEntity> roomOptional = roomService.viewRoomByID(roomID);
+            return roomOptional.map(room -> new ResponseEntity<>(room, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/view_room_by_member/{userID}")
     public ResponseEntity<List<RoomEntity>> viewRoomByMember(@PathVariable int userID) {
-        List<RoomEntity> memberRooms = roomService.viewRoomByMember(userID);
-        return new ResponseEntity<>(memberRooms, HttpStatus.OK);
+        try{
+            List<RoomEntity> memberRooms = roomService.viewRoomByMember(userID);
+            return new ResponseEntity<>(memberRooms, HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     //UPDATE
     @PutMapping("/edit")
-    public ResponseEntity<String> editRoom(@RequestBody RoomEntity room) {
+    public ResponseEntity<RoomEntity> editRoom(@RequestBody RoomEntity room) {
         try {
             RoomEntity updatedRoom = roomService.editRoom(room);
-            return ResponseEntity.ok("Room Updated!");
+            return new ResponseEntity<>(updatedRoom, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (NoSuchElementException ex){
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     //DELETE
     @PutMapping("/remove/{roomID}")
     public ResponseEntity<String> removeRoom(@PathVariable int roomID) {
         try {
             RoomEntity removedRoom = roomService.removeRoom(roomID);
-            return ResponseEntity.ok("Room Removed!");
+            return new ResponseEntity<>("Room Removed!", HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (NoSuchElementException ex){
-            return ResponseEntity.notFound().build();
+        } catch (NoSuchElementException | NullPointerException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 }
