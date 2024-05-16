@@ -10,7 +10,6 @@ import Login from "./Login";
 import Navigation from "./components/Navigation";
 import Dashboard from "./Dashboard";
 import Registration from "./Registration";
-import StudentRoom from "./StudentRoom";
 import Archive from "./Archive";
 import InventoryShop from "./InventoryShop";
 import GameplayAdventureSpelling from "./GameplayAdventureSpelling";
@@ -27,6 +26,8 @@ import TeacherRoomSettings from "./TeacherRoomSettings";
 import TeacherRoomInfo from "./TeacherRoomInfo";
 import Settings from "./Settings";
 import { CreditProvider } from "./CreditContext";
+import SimulationModeTeacher from "./SimulationMode-Teacher";
+import SimulationRoomTeacher from "./SimulationRoom-Teacher";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -118,28 +119,46 @@ function App() {
                 path="/dashboard"
                 element={<Dashboard userDetails={userDetails} />}
               />
-              <Route path="/student_room" element={<StudentRoom />} />
               <Route path="/archive" element={<Archive />} />
               <Route path="/inventory_shop" element={<InventoryShop />} />
-              <Route path="/create_room" element={<CreateRoom />} />
               <Route path="/adventure_mode" element={<AdventureMode />} />
-              <Route path="/simulation_mode" element={<SimulationMode />} />
-              <Route path="/simulation_room" element={<SimulationRoom />} />
-              <Route path="/create_game" element={<CreateGame />} />
+
+              {/* Student Simulation */}
               <Route
-                path="/simulation_mode_student"
+                path="student/simulation_mode"
                 element={<SimulationModeStudent />}
               />
               <Route
-                path="/simulation_room_student"
+                path="student/simulation_room"
                 element={<SimulationRoomStudent />}
               />
-              <Route path="/join_room" element={<JoinRoom />} />
+
+              <Route path="student/join_room" element={<JoinRoom />} />
+              {/* End of Student Simulation */}
+
+              {/* Teacher Simulation */}
+
               <Route
-                path="/teacher_room_settings"
+                path="teacher/simulation_mode"
+                element={<SimulationModeTeacher />}
+              />
+
+              <Route path="teacher/create_room" element={<CreateRoom />} />
+
+              <Route
+                path="teacher/simulation_room"
+                element={<SimulationRoomTeacher />}
+              />
+
+              <Route path="teacher/create_game" element={<CreateGame />} />
+
+              <Route
+                path="teacher/room_settings"
                 element={<TeacherRoomSettings />}
               />
-              <Route path="/teacher_room_info" element={<TeacherRoomInfo />} />
+              <Route path="teacher/room_info" element={<TeacherRoomInfo />} />
+
+              {/* End of Teacher Simulation */}
               <Route path="/Settings" element={<Settings />} />
             </>
           )}

@@ -4,11 +4,13 @@ import { CardGame, CardArchive } from "./components/Card";
 import "./components/card.css";
 import "./dashboard.css";
 import { fetchUserData } from "./api";
-
+import { USER_TYPE } from "./Login";
 export default function Dashboard() {
   const [userData, setUserData] = useState(null);
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails")); // Define storedUserDetails
+  const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
 
+  console.log(userType);
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("isLoggedIn");
     if (!isLoggedIn) {
@@ -37,7 +39,7 @@ export default function Dashboard() {
             imageSrc="./assets/banner/banner_adventure.webp"
           />
         </Link>
-        <Link to="/simulation_mode">
+        <Link to={`/${userType}/simulation_mode`}>
           <CardGame
             title="Room"
             content="Lorem ipsum dolor sit amet, consectetur adipiscing"

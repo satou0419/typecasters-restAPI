@@ -4,15 +4,20 @@ import "./components/input.css";
 import "./login.css";
 import "./components/animation.css";
 import { LOGIN_ENDPOINT } from "./api";
+import Loader from "./Loader"; // Import Loader component
+
+export const USER_TYPE = "userType";
 
 export default function Login({ setIsLoggedIn, setUserDetails }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true); // Show loader while request is being processed
 
     try {
       const response = await fetch(LOGIN_ENDPOINT, {
@@ -29,13 +34,11 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
       if (!response.ok) {
         const errorMessage = await response.text();
         if (response.status === 404) {
-          // Username not found
           setError("Username not found");
           document
             .querySelector(".input-box-form")
             .classList.add("animate-error");
         } else {
-          // Password incorrect
           setError("Incorrect password");
           document
             .querySelectorAll(".input-box-form")[1]
@@ -45,6 +48,9 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
       }
 
       const userData = await response.json();
+      console.log("UserType:", userData.userType);
+
+      sessionStorage.setItem(USER_TYPE, userData.userType);
 
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("userDetails", JSON.stringify(userData));
@@ -54,15 +60,17 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
 
       navigate("/dashboard");
     } catch (error) {
-      setTimeout(() => setError(null), 5000); // Clear the error after 5 seconds
+      setTimeout(() => setError(null), 5000);
+    } finally {
+      setIsLoading(false); // Hide loader after request processing
     }
   };
 
   return (
     <main className="login-container">
+      {isLoading && <Loader />} {/* Show loader conditionally */}
       {error && (
         <div className="toast-box">
-          {/* Display error message */}
           <p>{error}</p>
         </div>
       )}

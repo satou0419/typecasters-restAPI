@@ -10,12 +10,12 @@ export default function CreateRoom() {
           className="input input-line input-line--dark"
           placeholder="Enter Room Name"
         />
-        <Link to="/simulation_mode">
-        <button className="btn btn--large btn--primary">CREATE</button>
+        <Link to="/teacher/simulation_mode">
+          <button className="btn btn--large btn--primary">CREATE</button>
         </Link>
-        <Link to="/simulation_mode">
-        <button className=">btn btn--large btn--danger--large">CANCEL</button>
-         </Link>
+        <Link to="/teacher/simulation_mode">
+          <button className=">btn btn--large btn--danger--large">CANCEL</button>
+        </Link>
       </section>
     </main>
   );

@@ -11,12 +11,16 @@ export default function CreateRoom() {
           className="input input-line input-line--dark join-input"
           placeholder="Enter Room Name"
         />
-        <Link to="/simulation_mode_Student">
-        <button className="btn btn--large btn--primary join-btn">JOIN NOW</button>
+        <Link to="/student/simulation_mode">
+          <button className="btn btn--large btn--primary join-btn">
+            JOIN NOW
+          </button>
         </Link>
-        <Link to="/simulation_mode_Student">
-        <button className=">btn btn--large btn--danger--large cancel-btn">CANCEL</button>
-         </Link>
+        <Link to="/student/simulation_mode">
+          <button className=">btn btn--large btn--danger--large cancel-btn">
+            CANCEL
+          </button>
+        </Link>
       </section>
     </main>
   );

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./navigation.css";
 import { fetchUserData } from "../api";
 import { useCredit } from "../CreditContext"; // Import useCredit hook to access credit
+import { USER_TYPE } from "../Login";
 
 export default function Navigation({ onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,6 +12,9 @@ export default function Navigation({ onLogout }) {
   const navigate = useNavigate();
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const { credit } = useCredit(); // Access credit from the context
+  const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
+
+  console.log(userType);
 
   useEffect(() => {
     const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -35,7 +39,7 @@ export default function Navigation({ onLogout }) {
     <section>
       <nav className={`nav-bar ${menuOpen ? "menu-open" : ""}`}>
         <div className="nav-bar__logo">
-          <img src="./assets/logo/logo_simple.webp" alt="Logo" />
+          <img src="/assets/logo/logo_simple.webp" alt="Logo" />
         </div>
         <div
           className={`menu-icon ${menuOpen ? "active" : ""}`}
@@ -47,8 +51,7 @@ export default function Navigation({ onLogout }) {
         </div>
         <div className={`menu ${menuOpen ? "open" : ""}`}>
           <Link to="/adventure_mode">Adventure Mode</Link>
-          <Link to="/simulation_mode">Simulation Mode</Link>
-          <Link to="/archive">Archive</Link>
+          <Link to={`${userType}/simulation_mode`}>Simulation Mode</Link>
           <Link to="/archive">Archive</Link>
           <Link to="/about">About</Link>
           <Link to="/inventory_shop">Inventory</Link>

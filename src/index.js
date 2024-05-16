@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { CreditProvider } from "./CreditContext";
 import App from "./App";
 import { UserProvider } from "./UserContext";
+import Loader from "./Loader";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
