@@ -45,7 +45,7 @@ public class AdventureEnemyController {
         return ae_serv.updateEnemy(enemy_id, newEnemyDetails);
     }
 
-    @PutMapping("/delete_enemy")
+    @DeleteMapping("/delete_enemy")
     public String deleteEnemy(@RequestParam int enemy_id){
         return ae_serv.deleteEnemy(enemy_id);
     }
