@@ -21,7 +21,8 @@ public class ArchiveWordsController {
     @PostMapping("/insert")
     public ResponseEntity<String> insertArchiveWords(@RequestBody ArchiveWordsEntity word) {
         ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(word.getUserID(), word);
-        return ResponseEntity.ok("Word Added!");
+        return new ResponseEntity<>("{ \"message\": \"Word Added!\" }", HttpStatus.OK);
+
     }
 
     // Read
