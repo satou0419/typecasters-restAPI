@@ -75,7 +75,9 @@ export default function Archive() {
                   {selectedWord ? (
                     <div className="word-details">
                       <h2>{selectedWord}</h2>
-                      <p>More information about {selectedWord}...</p>
+                      <p>"[Ha-PE]"...<button className="btn btn--small btn--primary">AUDIO</button></p>
+                      <h1>ADJECTIVE</h1>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     </div>
                   ) : (
                     <p>Select a word to see more details.</p>
