@@ -4,6 +4,7 @@ com\typecasters\apitowerofwords\Controller\ItemController.class
 com\typecasters\apitowerofwords\DataPopulator\StudentDataPopulator.class
 com\typecasters\apitowerofwords\Service\UserItemService.class
 com\typecasters\apitowerofwords\Repository\SimulationParticipantsRepository.class
+com\typecasters\apitowerofwords\Entity\AdventureRewardEntity.class
 com\typecasters\apitowerofwords\Entity\UserEntity.class
 com\typecasters\apitowerofwords\LoginRequest.class
 com\typecasters\apitowerofwords\Config\WebMvcConfig.class
@@ -16,6 +17,8 @@ com\typecasters\apitowerofwords\Controller\UserItemController.class
 com\typecasters\apitowerofwords\Controller\StudentController.class
 com\typecasters\apitowerofwords\Service\SimulationParticipantsService.class
 com\typecasters\apitowerofwords\ApiTowerOfWordsApplication.class
+com\typecasters\apitowerofwords\Controller\AdventureRewardController.class
+com\typecasters\apitowerofwords\Repository\AdventureRewardRepository.class
 com\typecasters\apitowerofwords\Repository\CharacterRepository.class
 com\typecasters\apitowerofwords\Controller\ArchiveAchievementController.class
 com\typecasters\apitowerofwords\Repository\ArchiveWordsRepository.class
@@ -27,10 +30,12 @@ com\typecasters\apitowerofwords\Repository\ArchiveAchievementRepository.class
 com\typecasters\apitowerofwords\HelloController.class
 com\typecasters\apitowerofwords\Entity\UserCharacterEntity.class
 com\typecasters\apitowerofwords\Controller\CharacterController.class
+com\typecasters\apitowerofwords\RewardItem.class
 com\typecasters\apitowerofwords\Entity\SimulationParticipantsEntity.class
 com\typecasters\apitowerofwords\Entity\ArchiveAchievementEntity.class
 com\typecasters\apitowerofwords\Config\WebSocketConfig.class
 com\typecasters\apitowerofwords\Service\CharacterService.class
+com\typecasters\apitowerofwords\Service\AdventureRewardService.class
 com\typecasters\apitowerofwords\Service\ArchiveAchievementService.class
 com\typecasters\apitowerofwords\Service\ArchiveWordsService.class
 com\typecasters\apitowerofwords\Entity\ArchiveWordsEntity.class
