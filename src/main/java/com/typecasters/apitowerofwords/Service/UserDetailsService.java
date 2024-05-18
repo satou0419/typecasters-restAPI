@@ -6,6 +6,8 @@ import com.typecasters.apitowerofwords.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserDetailsService {
 
@@ -67,5 +69,10 @@ public class UserDetailsService {
         ud_repo.save(userDetails);
 
         return "achievement count incremented";
+    }
+
+    public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {
+
+        return ud_repo.findCreditAmountByUserDetailId(userDetailId);
     }
 }

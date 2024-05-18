@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("user_details")
 public class UserDetailscController {
@@ -39,6 +41,17 @@ public class UserDetailscController {
             return ResponseEntity.status(HttpStatus.OK).body(userDetails);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/get_credit_amount")
+    public ResponseEntity<Integer> getCreditAmountByUserDetailsId(@RequestParam int userDetailId){
+        Optional<Integer> creditAmount = ud_serv.getCreditAmountByUserDetailId(userDetailId);
+
+        if(creditAmount.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(creditAmount.get());
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 }
