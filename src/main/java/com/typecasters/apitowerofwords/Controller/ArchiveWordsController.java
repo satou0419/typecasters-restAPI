@@ -20,7 +20,7 @@ public class ArchiveWordsController {
 
     // Create
     @PostMapping("/insert/{userID}/{word}")
-    public ResponseEntity<String> insertArchiveWords(@PathVariable int userID ,@PathVariable String word) {
+    public ResponseEntity<?> insertArchiveWords(@PathVariable int userID ,@PathVariable String word) {
         try{
             ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(userID, word);
             return new ResponseEntity<>("Word Archived!", HttpStatus.OK);
