@@ -4,6 +4,7 @@ import "./inventory_shop.css";
 import { CardItem } from "./components/Card";
 import { GET_ALL_ITEMS_ENDPOINT, BUY_ITEM_ENDPOINT } from "./api";
 import { useCredit } from "./CreditContext"; // Import useCredit hook to update credit
+import { Modal } from './components/Modal';
 
 export default function InventoryShop() {
   const [activeTab, setActiveTab] = useState("inventory");
@@ -12,6 +13,18 @@ export default function InventoryShop() {
   const [userID, setUserID] = useState();
   const [isBuying, setIsBuying] = useState(false);
   const { updateCredit } = useCredit(); // Access updateCredit function from the context
+  const [isConfirmingPurchase, setIsConfirmingPurchase] = useState(false);
+  const [showMessage, setShowMessage] = useState();
+
+
+
+  const showModal = () =>{
+    setIsConfirmingPurchase(true);
+
+    console.log("Clickeddddd")
+    console.log(selectedItem.item_price)
+
+  }
 
   useEffect(() => {
     const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -41,7 +54,7 @@ export default function InventoryShop() {
     setSelectedItem(item);
   };
 
-  const buyItem = async (itemName) => {
+  const handleBuyItem = async (itemName) => {
     if (isBuying) return;
 
     setIsBuying(true);
@@ -74,7 +87,9 @@ export default function InventoryShop() {
     } finally {
       setIsBuying(false);
     }
+    setIsConfirmingPurchase(true);
   };
+
 
   return (
     <main className="tab-container">
@@ -107,12 +122,22 @@ export default function InventoryShop() {
                 <CardItem
                   key={item.item_id}
                   bannerSrc={`./assets/items/${item.image_path}`}
-                  itemName={item.item_name}
+                  itemName={item.item_name} 
                   itemBtnPrice={item.item_price}
-                  onClick={() => buyItem(item.item_name)}
+                  onClick={() => showModal()}
                   disabled={isBuying}
                 />
               ))}
+               {isConfirmingPurchase && (
+                <Modal
+                  cancelButtonLabel="Cancel"
+                  confirmButtonLabel="Confirm"
+                  modalTitle="Confirm Purchase"
+                  modalContent={`${showMessage} ${selectedItem.item_name}?`}
+                  confirmClick={() =>handleBuyItem(selectedItem.item_name)             
+                  }
+                />
+              )}
             </section>
           </div>
         )}
