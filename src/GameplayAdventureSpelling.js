@@ -4,7 +4,6 @@ import {
   GET_USER_ITEMS_ENDPOINT,
   INSERT_WORD_ARCHIVE,
   UPDATE_USER_PROGRESS_ENDPOINT,
-  fetchUserData,
 } from "./api";
 import "./gameplay.css";
 import "./components/animation.css";
@@ -21,6 +20,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export default function GameplayAdventureSpelling() {
+  const [isConquered, setIsConquered] = useState();
   const [storedFloor, setStoredFloor] = useState(
     sessionStorage.getItem(FLOOR_ID)
   );
@@ -52,18 +52,18 @@ export default function GameplayAdventureSpelling() {
     sessionStorage.getItem(CURRENT_SECTION)
   );
 
-  console.log("Current Floor", storedCurrentFloor);
-  console.log("Enter floor ", storedFloor);
-  console.log("Next floor ", storedNextFloor);
-
-  const [isComplete, setIsComplete] = useState(false);
+  const isCleared = enteredFloor < storedCurrentFloor;
+  console.log("Tower Cleared: ", isCleared);
+  console.log("Enter Floor: ", enteredFloor);
+  console.log("Current Floor: ", storedCurrentFloor);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isConquered = currentFloor < storedNextFloor;
-    console.log("Conquered", isConquered);
+    console.log("Conquered Value::", isConquered);
+  }, []);
 
-    if (!isComplete && !isConquered) {
+  useEffect(() => {
+    if (isConquered === true) {
       fetch(`${UPDATE_USER_PROGRESS_ENDPOINT}${storedProgressID}`, {
         method: "PUT",
         headers: {
@@ -84,7 +84,6 @@ export default function GameplayAdventureSpelling() {
           console.log("Response:", data); // Log the response received from the server
           if (data === "User Progress Updated!") {
             console.log("Updated Progress: Updated Successful");
-            setIsComplete(false);
             // Navigate after 3 seconds
             setTimeout(() => {
               navigate("/adventure_mode");
@@ -97,10 +96,10 @@ export default function GameplayAdventureSpelling() {
           }
         })
         .catch((error) => console.error("Error updating progress:", error));
-    } else {
+    } else if (isCleared === true) {
       console.log("Floor already conquered!!!");
     }
-  }, [isComplete]);
+  }, [isConquered]);
 
   const [animateShake, setAnimateShake] = useState("");
   const [autoFocusValue, setAutoFocusValue] = useState(true);
@@ -131,16 +130,17 @@ export default function GameplayAdventureSpelling() {
   const [insertWord, setInsertWord] = useState(false);
   const [userID, setUserID] = useState();
 
-  useEffect(() => {
-    console.log("INSERT WORD", insertWord);
-  }, [insertWord]);
+  // useEffect(() => {
+  //   console.log("INSERT WORD", insertWord);
+  // }, [insertWord]);
+
   useEffect(() => {
     if (insertWord === true) {
       console.log("UserID", userID);
       console.log("Inserted Word", currentWord);
 
       fetch(INSERT_WORD_ARCHIVE, {
-        method: " POST",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -171,9 +171,9 @@ export default function GameplayAdventureSpelling() {
   }, [insertWord]);
   const [currentWord, setCurrentWord] = useState();
 
-  useEffect(() => {
-    console.log("This is the Current Word ::::::::::>", currentWord);
-  }, [currentWord]);
+  // useEffect(() => {
+  //   console.log("This is the Current Word ::::::::::>", currentWord);
+  // }, [currentWord]);
 
   const handleStartClick = () => {
     setFlag(1);
@@ -288,6 +288,10 @@ export default function GameplayAdventureSpelling() {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("Conquered: ", isConquered);
+  }, []);
+
   // Function to fetch enemies
   const fetchEnemies = (floorId) => {
     const endpoint = `${GET_ENEMIES_BY_FLOOR_ID_ENDPOINT}?floor_id=${floorId}`;
@@ -376,7 +380,7 @@ export default function GameplayAdventureSpelling() {
 
     if (userInput.trim().toLowerCase() === currentWord.toLowerCase()) {
       // Correct word handling
-      setInsertWord(true);
+      // setInsertWord(true);
       setFlag(0);
       console.log(0);
       setMainState({
@@ -427,9 +431,7 @@ export default function GameplayAdventureSpelling() {
           } else {
             console.log("All enemies are defeated!");
             // Add logic for completing the game if needed
-            setIsComplete(true);
-
-            console.log(isComplete);
+            setIsConquered(true);
           }
         }
       }, 1500);
