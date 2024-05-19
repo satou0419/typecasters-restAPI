@@ -10,6 +10,7 @@ public class ArchiveWordsEntity {
     private int archiveWordsID;
 
     private int userID;
+    @Column(unique = true)
     private String word;
     @Column(name = "check_column")
     private boolean check = false;

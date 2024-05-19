@@ -12,4 +12,5 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
 
     @Query("SELECT i.item_name FROM ItemEntity i WHERE i.itemId = ?1")
     String findItemNameByItemId(Integer itemId);
+
 }

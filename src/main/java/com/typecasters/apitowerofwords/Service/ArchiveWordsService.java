@@ -16,29 +16,31 @@ public class ArchiveWordsService {
     @Autowired
     UserDetailsService userDetailsService;
 
-    public ArchiveWordsEntity insertArchiveWords(int userID, ArchiveWordsEntity word) {
+    public ArchiveWordsEntity insertArchiveWords(int userID, String word) {
         boolean wordExists = false;
 
         try {
             List<ArchiveWordsEntity> insert = archiveWordsRepository.findAllByUserID(userID);
 
             for (ArchiveWordsEntity i : insert) {
-                if (i.getWord().equals(word.getWord())) {
+                if (i.getWord().equals(word)) {
                     wordExists = true;
                     break;
                 }
             }
 
         } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("Word " + word.getArchiveWordsID() + " does not exist");
+            throw new NoSuchElementException("User " + userID + " does not exist");
         }
 
         if (!wordExists) {
+            ArchiveWordsEntity archive = new ArchiveWordsEntity();
+            archive.setUserID(userID);
+            archive.setWord(word);
             userDetailsService.incrementUserDetailWords(userID);
-            return archiveWordsRepository.save(word);
+            return archiveWordsRepository.save(archive);
         } else {
-            System.out.print("Word Already Exist!");
-            return word;
+            throw new IllegalArgumentException("Word Already Exist!");
         }
     }
 

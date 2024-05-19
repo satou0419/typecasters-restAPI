@@ -20,4 +20,8 @@ public class StudentService {
     public List<StudentEntity> getAllStudents() {
         return studentRepository.findAll();
     }
+
+    public String helloWorld(){
+        return "Hello World!";
+    }
 }

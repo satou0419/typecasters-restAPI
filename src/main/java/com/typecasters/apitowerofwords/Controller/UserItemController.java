@@ -1,6 +1,8 @@
 package com.typecasters.apitowerofwords.Controller;
 
 import com.typecasters.apitowerofwords.Entity.UserItemEntity;
+import com.typecasters.apitowerofwords.Exception.InsufficientCreditException;
+import com.typecasters.apitowerofwords.Exception.InvalidItemQuantityException;
 import com.typecasters.apitowerofwords.Service.UserDetailsService;
 import com.typecasters.apitowerofwords.Service.UserItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -41,18 +44,42 @@ public class UserItemController {
     }
 
 
-    //Buy Item
-    @PostMapping("/buy_item/{userId}/{itemId}/{itemQuantity}")
-    public ResponseEntity<String> buyItem(@PathVariable int userId, @PathVariable int itemId, @PathVariable int itemQuantity) {
-        String buyResult = userItemService.buyItem(userId, itemId, itemQuantity);
-        HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-        return ResponseEntity.status(status).body(buyResult);
+    //Buy Item at Any Amount
+    @PostMapping("/buy_item_any_amount/{userId}/{itemId}/{itemQuantity}")
+    public ResponseEntity<String> buyItemAnyAmount(@PathVariable int userId, @PathVariable int itemId, @PathVariable int itemQuantity) {
+        try {
+            String buyResult = userItemService.butItemAnyAmount(userId, itemId, itemQuantity);
+            HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(status).body(buyResult);
+        } catch (InvalidItemQuantityException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (InsufficientCreditException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    //Buy Item one at a time
+    @PostMapping("/buy_item_single/{userId}/{itemId}")
+    public ResponseEntity<String> buyItemSingle(@PathVariable int userId, @PathVariable int itemId) {
+        try {
+            String buyResult = userItemService.buyItemSingle(userId, itemId);
+            HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(status).body(buyResult);
+        } catch (InsufficientCreditException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
     }
 
     @PutMapping("/use_item/{userId}/{itemId}")
     public ResponseEntity<String> useUserItem(@PathVariable int userId, @PathVariable int itemId) {
-        String msg = userItemService.useUserItem(userId, itemId);
-        return ResponseEntity.status(HttpStatus.OK).body(msg);
+        try {
+            String msg = userItemService.useUserItem(userId, itemId);
+            return ResponseEntity.status(HttpStatus.OK).body(msg);
+        } catch (InvalidItemQuantityException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping("/get_user_item_id_by/{userId}/{itemId}")

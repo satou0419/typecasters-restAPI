@@ -1,12 +1,15 @@
 package com.typecasters.apitowerofwords.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.typecasters.apitowerofwords.Entity.ArchiveAchievementEntity;
 import com.typecasters.apitowerofwords.Service.ArchiveAchievementService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -15,32 +18,67 @@ public class ArchiveAchievementController {
     @Autowired
     ArchiveAchievementService archiveAchievementService;
 
-    //Create
+    // Create
     @PostMapping("/insert")
-    public ArchiveAchievementEntity insertArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
-        return archiveAchievementService.insertArchiveAchievement(achievement.getUserID(), achievement);
+    public ResponseEntity<ArchiveAchievementEntity> insertArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+        try{
+            ArchiveAchievementEntity insertedAchievement = archiveAchievementService.insertArchiveAchievement(achievement.getUserID(), achievement);
+            return new ResponseEntity<>(insertedAchievement, HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    //Read
+    // Read
     @GetMapping("/view/{userID}")
-    public List<ArchiveAchievementEntity> viewAllArchiveAchievement(@PathVariable int userID) {
-        return archiveAchievementService.viewAllArchiveAchievement(userID);
+    public ResponseEntity<List<ArchiveAchievementEntity>> viewAllArchiveAchievement(@PathVariable int userID) {
+        try{
+            List<ArchiveAchievementEntity> achievements = archiveAchievementService.viewAllArchiveAchievement(userID);
+            return new ResponseEntity<>(achievements, HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/view_by_id/{archiveAchievementID}")
-    public Optional<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int archiveAchievementID) {
-        return archiveAchievementService.viewArchiveAchievementByID(archiveAchievementID);
+    public ResponseEntity<ArchiveAchievementEntity> viewArchiveAchievementByID(@PathVariable int archiveAchievementID) {
+        try{
+            Optional<ArchiveAchievementEntity> achievement = archiveAchievementService.viewArchiveAchievementByID(archiveAchievementID);
+            return achievement.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    //Update
+    // Update
     @PutMapping("/edit")
-    public ArchiveAchievementEntity editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
-        return archiveAchievementService.editArchiveAchievement(achievement);
+    public ResponseEntity<ArchiveAchievementEntity> editArchiveAchievement(@RequestBody ArchiveAchievementEntity achievement) {
+        try{
+            ArchiveAchievementEntity updatedAchievement = archiveAchievementService.editArchiveAchievement(achievement);
+            return new ResponseEntity<>(updatedAchievement, HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    //Delete
+    // Delete
     @PutMapping("/remove/{archiveAchievementID}")
-    public ArchiveAchievementEntity removeArchiveAchievement(@PathVariable int archiveAchievementID) {
-        return archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
+    public ResponseEntity<String> removeArchiveAchievement(@PathVariable int archiveAchievementID) {
+        try{
+            ArchiveAchievementEntity removedAchievement = archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
+            return new ResponseEntity<>("Achievement Removed!", HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }
