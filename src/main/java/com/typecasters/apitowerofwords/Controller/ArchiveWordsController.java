@@ -25,7 +25,7 @@ public class ArchiveWordsController {
             ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(userID, word);
             return new ResponseEntity<>("Word Archived!", HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
         } catch (NoSuchElementException | NullPointerException ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
