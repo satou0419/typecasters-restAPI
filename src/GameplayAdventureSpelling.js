@@ -24,6 +24,19 @@ export default function GameplayAdventureSpelling() {
   const [storedFloor, setStoredFloor] = useState(
     sessionStorage.getItem(FLOOR_ID)
   );
+
+  const disableInputs = () => {
+    setGoButtonDisabled(true);
+    setAudioButtonDisabled(true);
+    setInputDisabled(true);
+  };
+
+  const enableInputs = () => {
+    setGoButtonDisabled(false);
+    setAudioButtonDisabled(false);
+    setInputDisabled(false);
+  };
+
   const [flag, setFlag] = useState(0);
 
   const [storedProgressID, setProgressID] = useState(
@@ -53,14 +66,14 @@ export default function GameplayAdventureSpelling() {
   );
 
   const isCleared = enteredFloor < storedCurrentFloor;
-  console.log("Tower Cleared: ", isCleared);
-  console.log("Enter Floor: ", enteredFloor);
-  console.log("Current Floor: ", storedCurrentFloor);
+  // console.log("Tower Cleared: ", isCleared);
+  // console.log("Enter Floor: ", enteredFloor);
+  // console.log("Current Floor: ", storedCurrentFloor);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("Conquered Value::", isConquered);
-  }, []);
+  // useEffect(() => {
+  //   // console.log("Conquered Value::", isConquered);
+  // }, []);
 
   useEffect(() => {
     if (isConquered === true) {
@@ -135,25 +148,25 @@ export default function GameplayAdventureSpelling() {
   // }, [insertWord]);
 
   useEffect(() => {
+    console.log("Insert Word Status: ", insertWord);
     if (insertWord === true) {
-      console.log("UserID", userID);
-      console.log("Inserted Word", currentWord);
+      console.log("UserID Type", typeof userID);
+      console.log("Current Word", currentWord);
 
-      fetch(INSERT_WORD_ARCHIVE, {
+      // Assuming INSERT_WORD_ARCHIVE is the base URL for the endpoint
+      const url = `${INSERT_WORD_ARCHIVE}/insert/${userID}/${currentWord}`;
+
+      fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          userID: 6,
-          word: currentWord,
-        }),
       })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
-          return response.json(); // Parse the JSON from the response
+          return response.json(); // Parsing the response as JSON
         })
         .then((data) => {
           // Handle the response data here
@@ -169,7 +182,10 @@ export default function GameplayAdventureSpelling() {
         });
     }
   }, [insertWord]);
+
   const [currentWord, setCurrentWord] = useState();
+
+  //#endregion
 
   // useEffect(() => {
   //   console.log("This is the Current Word ::::::::::>", currentWord);
@@ -178,9 +194,9 @@ export default function GameplayAdventureSpelling() {
   const handleStartClick = () => {
     setFlag(1);
   };
-  useEffect(() => {
-    console.log("Flag value:", flag);
-  }, [flag]);
+  // useEffect(() => {
+  //   console.log("Flag value:", flag);
+  // }, [flag]);
 
   // Effect for beforeunload event
   useEffect(() => {
@@ -226,8 +242,7 @@ export default function GameplayAdventureSpelling() {
   // Effect to fetch enemies when storedFloor changes
   useEffect(() => {
     if (flag === 1 && storedFloor) {
-      setGoButtonDisabled(true); // Disable GO! button
-      setAudioButtonDisabled(true); // Disable audio button
+      disableInputs();
       fetchEnemies(storedFloor);
     }
   }, [storedFloor, flag]);
@@ -269,8 +284,7 @@ export default function GameplayAdventureSpelling() {
         setInputDisabled(false);
         inputRef.current.focus();
 
-        setGoButtonDisabled(false);
-        setAudioButtonDisabled(false);
+        enableInputs();
         setUserInput("");
 
         setAutoFocusValue(true);
@@ -288,9 +302,9 @@ export default function GameplayAdventureSpelling() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("Conquered: ", isConquered);
-  }, []);
+  // useEffect(() => {
+  //   console.log("Conquered: ", isConquered);
+  // }, []);
 
   // Function to fetch enemies
   const fetchEnemies = (floorId) => {
@@ -299,13 +313,11 @@ export default function GameplayAdventureSpelling() {
       .then((response) => response.json())
       .then((data) => {
         setEnemies(data);
-        setGoButtonDisabled(false); // Enable GO! button
-        setAudioButtonDisabled(false); // Enable audio button
+        enableInputs();
       })
       .catch((error) => {
         console.error("Error fetching enemies:", error);
-        setGoButtonDisabled(false); // Enable GO! button in case of error
-        setAudioButtonDisabled(false); // Enable audio button in case of error
+        enableInputs();
       });
   };
 
@@ -368,7 +380,7 @@ export default function GameplayAdventureSpelling() {
         setAnimateShake("");
       }, 500);
       setTimeout(() => {
-        setInputDisabled(false);
+        enableInputs();
         inputRef.current.focus(); // Focus on the input
       }, 500);
 
@@ -380,7 +392,8 @@ export default function GameplayAdventureSpelling() {
 
     if (userInput.trim().toLowerCase() === currentWord.toLowerCase()) {
       // Correct word handling
-      // setInsertWord(true);
+      setInsertWord(true);
+
       setFlag(0);
       console.log(0);
       setMainState({
@@ -442,16 +455,12 @@ export default function GameplayAdventureSpelling() {
       }
 
       // Disable input, GO! button, and audio button
-      setInputDisabled(true);
-      setGoButtonDisabled(true);
-      setAudioButtonDisabled(true);
+      disableInputs();
     } else {
       // Incorrect word handling
 
       // Disable inputs and buttons during the animation
-      setInputDisabled(true);
-      setGoButtonDisabled(true);
-      setAudioButtonDisabled(true);
+      disableInputs();
 
       setEnemyState({
         className: "attack",
@@ -476,14 +485,13 @@ export default function GameplayAdventureSpelling() {
           console.log("Incorrect Word:", userInput);
 
           // Enable input and refocus after animation completes
-          setInputDisabled(false);
+          enableInputs();
           setTimeout(() => {
             inputRef.current && inputRef.current.focus(); // Focus on the input if it exists
           }, 100); // Adjust the delay as needed
 
           // Enable buttons after animation completes
-          setGoButtonDisabled(false);
-          setAudioButtonDisabled(false);
+          enableInputs();
 
           if (hearts === 1) {
             setGameOver(true);
