@@ -4,7 +4,7 @@ import "./inventory_shop.css";
 import { CardItem } from "./components/Card";
 import { GET_ALL_ITEMS_ENDPOINT, BUY_ITEM_ENDPOINT } from "./api";
 import { useCredit } from "./CreditContext"; // Import useCredit hook to update credit
-import { Modal } from './components/Modal';
+import { Modal, Message } from './components/Modal';
 
 export default function InventoryShop() {
   const [activeTab, setActiveTab] = useState("inventory");
@@ -14,16 +14,26 @@ export default function InventoryShop() {
   const [isBuying, setIsBuying] = useState(false);
   const { updateCredit } = useCredit(); // Access updateCredit function from the context
   const [isConfirmingPurchase, setIsConfirmingPurchase] = useState(false);
-  const [showMessage, setShowMessage] = useState();
+  const [showMessage, setShowMessage] = useState("");
+  const [isEnoughCred, setIsEnoughCred] = useState(false);
+
+  const { credit } = useCredit(); // Access credit from the context
+  
 
 
-
-  const showModal = () =>{
-    setIsConfirmingPurchase(true);
-
-    console.log("Clickeddddd")
-    console.log(selectedItem.item_price)
-
+  const showModal = (item) =>{
+    // setIsConfirmingPurchase(true);
+    setShowMessage("Are you sure you want to purchase ");
+    // console.log("Clickeddddd")
+    // console.log(selectedItem.item_price)
+    // console.log("Credit: ", credit)
+    if (credit >= item.item_price) {
+      setSelectedItem(item);
+      setIsConfirmingPurchase(true);
+    } else {
+      console.log("Insufficient credit. You cannot purchase this item.");
+      setIsEnoughCred(true);
+    }
   }
 
   useEffect(() => {
@@ -63,6 +73,9 @@ export default function InventoryShop() {
       const selectedItem = items.find((item) => item.item_name === itemName);
 
       if (selectedItem) {
+         // Fetch user's credit from wherever it's stored
+      // Check if user's credit is sufficient for purchase
+      if (credit >= selectedItem.item_price) {
         const response = await fetch(
           `${BUY_ITEM_ENDPOINT}/${userID}/${selectedItem.itemId}`,
           {
@@ -75,10 +88,14 @@ export default function InventoryShop() {
 
         if (response.ok) {
           console.log("Item bought successfully!");
-          updateCredit(selectedItem.item_price); // Update credit after successful purchase
+          updateCredit(-selectedItem.item_price); // Update credit after successful purchase
         } else {
           console.error("Failed to buy item");
         }
+      } else {
+        // setShowMessage("Insufficient credit. You cannot purchase this item.");
+        console.log("Not enough credit")
+      }
       } else {
         console.error("Item not found");
       }
@@ -87,9 +104,12 @@ export default function InventoryShop() {
     } finally {
       setIsBuying(false);
     }
-    setIsConfirmingPurchase(true);
+    setIsConfirmingPurchase(false);
   };
 
+  const cancelPurchase = () =>{
+    setIsConfirmingPurchase(false);
+  }
 
   return (
     <main className="tab-container">
@@ -124,7 +144,7 @@ export default function InventoryShop() {
                   bannerSrc={`./assets/items/${item.image_path}`}
                   itemName={item.item_name} 
                   itemBtnPrice={item.item_price}
-                  onClick={() => showModal()}
+                  onClick={() => showModal(item)}
                   disabled={isBuying}
                 />
               ))}
@@ -134,8 +154,16 @@ export default function InventoryShop() {
                   confirmButtonLabel="Confirm"
                   modalTitle="Confirm Purchase"
                   modalContent={`${showMessage} ${selectedItem.item_name}?`}
-                  confirmClick={() =>handleBuyItem(selectedItem.item_name)             
-                  }
+                  confirmClick={() =>handleBuyItem(selectedItem.item_name)}
+                  cancelClick={() => cancelPurchase()}         
+                />
+              )}
+              {isEnoughCred && (
+                <Message
+                confirmButtonLabel="Okay"
+                modalTitle="Insufficient Credit"
+                modalContent="You do not have enough credit to purchase this item."
+                confirmClick={() => setIsEnoughCred(false)}         
                 />
               )}
             </section>
