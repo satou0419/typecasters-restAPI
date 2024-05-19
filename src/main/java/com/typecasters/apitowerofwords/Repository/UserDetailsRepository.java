@@ -14,4 +14,7 @@ public interface UserDetailsRepository extends JpaRepository<UserDetailsEntity, 
 
     @Query("SELECT ud.credit_amount FROM UserDetailsEntity ud WHERE ud.user_detail_id = ?1")
     Optional<Integer> findCreditAmountByUserDetailId(int userDetailId);
+
+    @Query("SELECT ud.user_detail_id FROM UserDetailsEntity ud WHERE ud.userId = ?1")
+    Optional<Integer> findUserDetailIdByUserId(int userId);
 }

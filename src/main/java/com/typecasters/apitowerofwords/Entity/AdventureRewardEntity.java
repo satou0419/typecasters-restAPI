@@ -1,6 +1,5 @@
 package com.typecasters.apitowerofwords.Entity;
 
-
 import com.typecasters.apitowerofwords.RewardItem;
 
 import javax.persistence.*;
@@ -20,24 +19,23 @@ public class AdventureRewardEntity {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "rewardItemId", column = @Column(name = "reward_item_one_id")),
             @AttributeOverride(name = "rewardItemQuantity", column = @Column(name = "reward_item_one_quantity"))
     })
+    @AssociationOverride(name = "rewardItem", joinColumns = @JoinColumn(name = "reward_item_one_id"))
     private RewardItem rewardItemOne;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "rewardItemId", column = @Column(name = "reward_item_two_id")),
             @AttributeOverride(name = "rewardItemQuantity", column = @Column(name = "reward_item_two_quantity"))
     })
+    @AssociationOverride(name = "rewardItem", joinColumns = @JoinColumn(name = "reward_item_two_id"))
     private RewardItem rewardItemTwo;
 
-    public AdventureRewardEntity() {
-    }
+    public AdventureRewardEntity() {}
 
-    public AdventureRewardEntity(RewardItem rewardItemTwo, RewardItem rewardItemOne, int towerFloorId, int advRewardCredit, int advRewardId) {
-        this.rewardItemTwo = rewardItemTwo;
+    public AdventureRewardEntity(RewardItem rewardItemOne, RewardItem rewardItemTwo, int towerFloorId, int advRewardCredit, int advRewardId) {
         this.rewardItemOne = rewardItemOne;
+        this.rewardItemTwo = rewardItemTwo;
         this.towerFloorId = towerFloorId;
         this.advRewardCredit = advRewardCredit;
         this.advRewardId = advRewardId;
