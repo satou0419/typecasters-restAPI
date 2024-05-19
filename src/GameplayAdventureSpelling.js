@@ -20,6 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export default function GameplayAdventureSpelling() {
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [isEnemyCounter, setIsEnemyCounter] = useState(false);
   const [isConquered, setIsConquered] = useState();
   const [storedFloor, setStoredFloor] = useState(
     sessionStorage.getItem(FLOOR_ID)
@@ -66,14 +68,7 @@ export default function GameplayAdventureSpelling() {
   );
 
   const isCleared = enteredFloor < storedCurrentFloor;
-  // console.log("Tower Cleared: ", isCleared);
-  // console.log("Enter Floor: ", enteredFloor);
-  // console.log("Current Floor: ", storedCurrentFloor);
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   // console.log("Conquered Value::", isConquered);
-  // }, []);
 
   useEffect(() => {
     if (isConquered === true) {
@@ -143,9 +138,11 @@ export default function GameplayAdventureSpelling() {
   const [insertWord, setInsertWord] = useState(false);
   const [userID, setUserID] = useState();
 
-  // useEffect(() => {
-  //   console.log("INSERT WORD", insertWord);
-  // }, [insertWord]);
+  useEffect(() => {
+    if (flag === 0) {
+      disableInputs();
+    }
+  }, [flag]);
 
   useEffect(() => {
     console.log("Insert Word Status: ", insertWord);
@@ -153,32 +150,23 @@ export default function GameplayAdventureSpelling() {
       console.log("UserID Type", typeof userID);
       console.log("Current Word", currentWord);
 
-      // Assuming INSERT_WORD_ARCHIVE is the base URL for the endpoint
-      const url = `${INSERT_WORD_ARCHIVE}/insert/${userID}/${currentWord}`;
-
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      fetch(`${INSERT_WORD_ARCHIVE}/${userID}/sireka?`, {
+        method: "POST", // Use POST method for inserting data
       })
         .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json(); // Parsing the response as JSON
+          console.log("Response status:", response.status);
+          return response.text(); // or response.json() if the response is expected to be JSON
         })
         .then((data) => {
-          // Handle the response data here
-          console.log(data);
-          setInsertWord(false);
+          console.log("Response data:", data);
+          // Handle the response data
         })
         .catch((error) => {
-          // Handle errors here
-          console.error(
-            "There was a problem with your fetch operation:",
-            error
-          );
+          if (error instanceof TypeError) {
+            console.error("Network error:", error.message);
+          } else {
+            console.error("Error fetching data:", error.message);
+          }
         });
     }
   }, [insertWord]);
@@ -187,16 +175,9 @@ export default function GameplayAdventureSpelling() {
 
   //#endregion
 
-  // useEffect(() => {
-  //   console.log("This is the Current Word ::::::::::>", currentWord);
-  // }, [currentWord]);
-
   const handleStartClick = () => {
     setFlag(1);
   };
-  // useEffect(() => {
-  //   console.log("Flag value:", flag);
-  // }, [flag]);
 
   // Effect for beforeunload event
   useEffect(() => {
@@ -277,20 +258,30 @@ export default function GameplayAdventureSpelling() {
 
   // Effect to handle audioUrl changes
   useEffect(() => {
+    const handleAudioEnded = () => {
+      console.log("Audio playback ended");
+      enableInputs();
+    };
+
     if (audioUrl && audioElement) {
-      setTimeout(() => {
-        audioElement.src = audioUrl;
-        audioElement.play();
-        setInputDisabled(false);
-        inputRef.current.focus();
+      console.log("Audio playback started"); // Log when audio playback starts
+      audioElement.src = audioUrl;
+      audioElement.play();
+      setInputDisabled(false);
+      inputRef.current.focus();
+      setAutoFocusValue(true);
 
-        enableInputs();
-        setUserInput("");
-
-        setAutoFocusValue(true);
-      }, 1500);
+      // Add event listener for 'ended' event
+      audioElement.addEventListener("ended", handleAudioEnded);
     }
-  }, [audioUrl]);
+
+    // Cleanup function to remove the event listener
+    return () => {
+      if (audioElement) {
+        audioElement.removeEventListener("ended", handleAudioEnded);
+      }
+    };
+  }, [audioUrl, audioElement]); // Include audioElement as a dependency
 
   // Effect to create audio element
   useEffect(() => {
@@ -302,10 +293,6 @@ export default function GameplayAdventureSpelling() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("Conquered: ", isConquered);
-  // }, []);
-
   // Function to fetch enemies
   const fetchEnemies = (floorId) => {
     const endpoint = `${GET_ENEMIES_BY_FLOOR_ID_ENDPOINT}?floor_id=${floorId}`;
@@ -313,15 +300,79 @@ export default function GameplayAdventureSpelling() {
       .then((response) => response.json())
       .then((data) => {
         setEnemies(data);
-        enableInputs();
       })
       .catch((error) => {
         console.error("Error fetching enemies:", error);
-        enableInputs();
       });
   };
 
-  // Function to fetch word definition
+  const mainAttackAnimation = () => {
+    setMainState({
+      className: "attack-main",
+      style: {
+        transform: "translateX(550px)",
+        height: "369px",
+        width: "calc(7004px/21)",
+      },
+    });
+
+    if (isCorrect === true) {
+      setTimeout(() => {
+        setEnemyIsHit("hit");
+        setTimeout(() => {
+          setEnemyIsHit("");
+        }, 500);
+      }, 1300);
+
+      setIsEnemyCounter(true);
+    }
+
+    setTimeout(() => {
+      setMainState({
+        className: "idle-main",
+        style: { transform: "translateX(0px)" },
+      });
+    }, 1750);
+  };
+
+  const springEnemyAttackAnimation = () => {
+    setEnemyState({
+      className: "attack",
+      style: { transform: "translateX(-550px)" },
+    });
+
+    setTimeout(() => {
+      setMainIsHit("hit");
+      setTimeout(() => {
+        setMainIsHit("");
+      }, 500);
+    }, 1300);
+
+    setTimeout(() => {
+      setEnemyState({
+        className: "idle-spring",
+        style: { transform: "translateX(0px)" },
+      });
+
+      setTimeout(() => {
+        setHearts((prevHearts) => prevHearts - 1);
+        console.log("Incorrect Word:", userInput);
+
+        // Enable input and refocus after animation completes
+        setTimeout(() => {
+          inputRef.current && inputRef.current.focus(); // Focus on the input if it exists
+        }, 100); // Adjust the delay as needed
+
+        // Enable buttons after animation completes
+
+        if (hearts === 1) {
+          setGameOver(true);
+        }
+      }, 500);
+    }, 1500);
+  };
+
+  //#region Merriam Integration
   const fetchWordDefinition = async (word) => {
     try {
       const apiKey = "95454221-2935-4778-b4e6-be2ca5ede0cb";
@@ -371,7 +422,11 @@ export default function GameplayAdventureSpelling() {
     }
   };
 
+  //#endregion
+
+  //#region Handling Answer
   const handleGoClick = () => {
+    //#region Empty Answer
     if (userInput.trim() === "") {
       // Alert the user or handle the empty input case
       console.log("Please enter a word before submitting.");
@@ -380,44 +435,31 @@ export default function GameplayAdventureSpelling() {
         setAnimateShake("");
       }, 500);
       setTimeout(() => {
-        enableInputs();
+        inputRef.current && inputRef.current.focus(); // Focus on the input if it exists
+
         inputRef.current.focus(); // Focus on the input
       }, 500);
 
       return;
     }
 
+    //#endregion
+
     const words = enemies[currentEnemyIndex].words;
     const currentWord = words[currentWordIndex];
+
+    //#region Correct Answer
 
     if (userInput.trim().toLowerCase() === currentWord.toLowerCase()) {
       // Correct word handling
       setInsertWord(true);
-
+      mainAttackAnimation();
+      setIsCorrect(true);
       setFlag(0);
-      console.log(0);
-      setMainState({
-        className: "attack-main",
-        style: {
-          transform: "translateX(550px)",
-          height: "369px",
-          width: "calc(7004px/21)",
-        },
-      });
+      setInsertWord(true);
+      console.log("Insert Status: ", insertWord);
 
       setTimeout(() => {
-        setEnemyIsHit("hit");
-        setTimeout(() => {
-          setEnemyIsHit("");
-        }, 500);
-      }, 1300);
-
-      setTimeout(() => {
-        setMainState({
-          className: "idle-main",
-          style: { transform: "translateX(0px)" },
-        });
-
         // Enable input, set focus after animation completes
         setTimeout(() => {
           setInputDisabled(false);
@@ -426,6 +468,8 @@ export default function GameplayAdventureSpelling() {
 
         // Check if all words of the enemy are defeated
         if (currentWordIndex === words.length - 1) {
+          setInsertWord(true);
+
           console.log(
             `Enemy ${enemies[currentEnemyIndex].enemyId} defeated! Total words: ${words.length}`
           );
@@ -456,50 +500,28 @@ export default function GameplayAdventureSpelling() {
 
       // Disable input, GO! button, and audio button
       disableInputs();
-    } else {
-      // Incorrect word handling
+    }
+    //#endregion
+
+    //#region Wrong Answer
+    else {
+      setIsCorrect(false);
+      if (isCorrect === false) {
+        mainAttackAnimation(); // Start mainAttackAnimation
+
+        // Wait for mainAttackAnimation to complete before starting springEnemyAttackAnimation
+        setTimeout(() => {
+          springEnemyAttackAnimation(); // Start springEnemyAttackAnimation after a delay
+        }, 2300 /* duration of mainAttackAnimation */);
+      }
 
       // Disable inputs and buttons during the animation
       disableInputs();
-
-      setEnemyState({
-        className: "attack",
-        style: { transform: "translateX(-550px)" },
-      });
-
-      setTimeout(() => {
-        setMainIsHit("hit");
-        setTimeout(() => {
-          setMainIsHit("");
-        }, 500);
-      }, 1300);
-
-      setTimeout(() => {
-        setEnemyState({
-          className: "idle-spring",
-          style: { transform: "translateX(0px)" },
-        });
-
-        setTimeout(() => {
-          setHearts((prevHearts) => prevHearts - 1);
-          console.log("Incorrect Word:", userInput);
-
-          // Enable input and refocus after animation completes
-          enableInputs();
-          setTimeout(() => {
-            inputRef.current && inputRef.current.focus(); // Focus on the input if it exists
-          }, 100); // Adjust the delay as needed
-
-          // Enable buttons after animation completes
-          enableInputs();
-
-          if (hearts === 1) {
-            setGameOver(true);
-          }
-        }, 500);
-      }, 1500);
     }
+
+    //#endregion
   };
+  //#endregion
 
   const handleAudioClick = () => {
     if (audioUrl && audioElement) {
@@ -512,6 +534,7 @@ export default function GameplayAdventureSpelling() {
     }
   };
 
+  //#region JSX
   // Render game over message if game over
   if (gameOver) {
     return <div className="game-over">Game Over</div>;
@@ -628,4 +651,5 @@ export default function GameplayAdventureSpelling() {
       </section>
     </main>
   );
+  //#endregion
 }
