@@ -14,8 +14,6 @@ export default function Navigation({ onLogout }) {
   const { credit } = useCredit(); // Access credit from the context
   const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
 
-  console.log(userType);
-
   useEffect(() => {
     const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     if (storedUserDetails) {

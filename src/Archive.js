@@ -1,45 +1,90 @@
 import React, { useEffect, useState } from "react";
 import "./components/tab.css";
 import "./archive.css";
-import { GET_ARCHIVE_WORD_ENDPOINT } from "./api";
-
+import {
+  API_KEY,
+  AUDIO_PATH,
+  GET_ARCHIVE_WORD_ENDPOINT,
+  MERRIAM_API,
+  VIEW_WORD_ARCHIVE,
+} from "./api";
 import { USER_ID } from "./Login";
-
-const wordList = [
-  "Happy",
-  "Jump",
-  "Run",
-  "House",
-  "Water",
-  "Sad",
-  "Walk",
-  "Skip",
-  "Native",
-  "Fire",
-];
 
 export default function Archive() {
   const [activeTab, setActiveTab] = useState("word");
   const [selectedWord, setSelectedWord] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [userID, setUserID] = useState(sessionStorage.getItem(USER_ID));
-  console.log("THIS IS ID: ", userID);
+  const [wordArchive, setWordArchive] = useState([]);
+  const [currentWordData, setCurrentWordData] = useState({
+    pronunciation: "",
+    definition: "",
+  });
+  const [audioUrl, setAudioUrl] = useState("");
 
   useEffect(() => {
-    fetch(`${GET_ARCHIVE_WORD_ENDPOINT}${userID}`)
+    fetch(`${VIEW_WORD_ARCHIVE}${userID}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        const words = data.map((item) => item.word);
+        setWordArchive(words);
       })
       .catch((error) => console.error("Error fetching archive word:", error));
-  }, []);
+  }, [userID]);
+
+  const fetchWordDefinition = async (word) => {
+    try {
+      const url = `${MERRIAM_API}${word}?key=${API_KEY}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const firstResult = data[0];
+        const pronunciation = firstResult.hwi?.prs[0]?.mw || "";
+        const definition =
+          firstResult.def?.[0]?.sseq?.[0]?.[0]?.[1]?.dt?.[0]?.[1] ||
+          "No definition found";
+        const audio = firstResult.hwi?.prs[0]?.sound?.audio;
+
+        const subdirectory = audio?.startsWith("bix")
+          ? "bix"
+          : audio?.startsWith("gg")
+          ? "gg"
+          : audio?.match(/^[^a-zA-Z]/)
+          ? "number"
+          : audio?.charAt(0);
+
+        const audioUrl = audio
+          ? `${AUDIO_PATH}${subdirectory}/${audio}.mp3`
+          : "";
+
+        setCurrentWordData({ pronunciation, definition });
+        setAudioUrl(audioUrl);
+      } else {
+        setCurrentWordData({
+          pronunciation: "",
+          definition: "Word is not available.",
+        });
+        setAudioUrl("");
+      }
+    } catch (error) {
+      console.error("Error fetching definition:", error);
+      setCurrentWordData({
+        pronunciation: "",
+        definition: "Error fetching the definition.",
+      });
+      setAudioUrl("");
+    }
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleWordClick = (word) => {
+  const handleWordClick = async (word) => {
     setSelectedWord(word);
+    await fetchWordDefinition(word);
   };
 
   const handleSearchChange = (event) => {
@@ -47,7 +92,7 @@ export default function Archive() {
   };
 
   const renderWordList = () => {
-    const filteredWords = wordList.filter((word) =>
+    const filteredWords = wordArchive.filter((word) =>
       word.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return filteredWords.map((word) => (
@@ -90,17 +135,19 @@ export default function Archive() {
                     <div className="word-details">
                       <h2>{selectedWord}</h2>
                       <p>
-                        "[Ha-PE]"...
-                        <button className="btn btn--small btn--primary">
-                          AUDIO
-                        </button>
+                        {currentWordData.pronunciation &&
+                          `[${currentWordData.pronunciation}]`}
+                        {audioUrl && (
+                          <button
+                            className="btn btn--small btn--primary"
+                            onClick={() => new Audio(audioUrl).play()}
+                          >
+                            AUDIO
+                          </button>
+                        )}
                       </p>
-                      <h1>ADJECTIVE</h1>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                      </p>
+                      <h1>DEFINITION</h1>
+                      <p>{currentWordData.definition}</p>
                     </div>
                   ) : (
                     <p>Select a word to see more details.</p>

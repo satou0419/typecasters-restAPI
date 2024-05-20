@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
+  API_KEY,
+  AUDIO_PATH,
   GET_ENEMIES_BY_FLOOR_ID_ENDPOINT,
   GET_USER_ITEMS_ENDPOINT,
   INSERT_WORD_ARCHIVE,
+  ITEM_USED,
+  MERRIAM_API,
   UPDATE_USER_PROGRESS_ENDPOINT,
 } from "./api";
 import "./gameplay.css";
@@ -11,75 +15,50 @@ import "./components/animation.css";
 import {
   FLOOR_ID,
   PROGRESS_ID,
-  SECTION_PROGRESS,
   NEXT_FLOOR,
   NEXT_SECTION,
   CURRENT_FLOOR,
-  CURRENT_SECTION,
 } from "./AdventureMode";
+
 import { useNavigate } from "react-router-dom";
 
 export default function GameplayAdventureSpelling() {
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [isEnemyCounter, setIsEnemyCounter] = useState(false);
-  const [isConquered, setIsConquered] = useState();
-  const [storedFloor, setStoredFloor] = useState(
-    sessionStorage.getItem(FLOOR_ID)
-  );
-
-  const disableInputs = () => {
-    setGoButtonDisabled(true);
-    setAudioButtonDisabled(true);
-    setInputDisabled(true);
-  };
-
-  const enableInputs = () => {
-    setGoButtonDisabled(false);
-    setAudioButtonDisabled(false);
-    setInputDisabled(false);
-  };
-
+  //Flag as an initiator....
+  //If flag is 0, don't render the data
+  //If it is 1, fetch the data
   const [flag, setFlag] = useState(0);
+  const navigate = useNavigate(); //use to navigate to other pages
 
-  const [storedProgressID, setProgressID] = useState(
-    sessionStorage.getItem(PROGRESS_ID)
-  );
+  //#region Floor and Progress Tracking
 
-  const [storedSectionProgress, setSectionProgress] = useState(
-    sessionStorage.getItem(SECTION_PROGRESS)
-  );
+  const progressID = parseInt(sessionStorage.getItem(PROGRESS_ID), 10); // Gets the current progress ID
 
-  const storedNextFloor = parseInt(sessionStorage.getItem(NEXT_FLOOR), 10);
+  const nextFloor = parseInt(sessionStorage.getItem(NEXT_FLOOR), 10); // Gets the next floor to conquer
+  const nextSection = parseInt(sessionStorage.getItem(NEXT_SECTION), 10);
 
-  const currentFloor = parseInt(sessionStorage.getItem(CURRENT_FLOOR), 10);
-
-  const enteredFloor = parseInt(sessionStorage.getItem(FLOOR_ID), 10);
-
-  const [storedNextSection, setStoredNextSection] = useState(
-    sessionStorage.getItem(NEXT_SECTION)
-  );
-
-  const [storedCurrentFloor, setCurrentFloor] = useState(
-    sessionStorage.getItem(CURRENT_FLOOR)
-  );
-
-  const [storedCurrentSection, setCurrentSection] = useState(
-    sessionStorage.getItem(CURRENT_SECTION)
-  );
-
-  const isCleared = enteredFloor < storedCurrentFloor;
-  const navigate = useNavigate();
+  const enteredFloor = parseInt(sessionStorage.getItem(FLOOR_ID), 10); // Gets the entered floor
+  const currentFloor = parseInt(sessionStorage.getItem(CURRENT_FLOOR), 10); // Gets the current floor
+  const isCleared = enteredFloor < currentFloor; // Checks if the it is a cleared floor
+  const [isConquered, setIsConquered] = useState(false); // Checks if the floor has been conquered
 
   useEffect(() => {
+    console.log("Enter: ", enteredFloor);
+    console.log("Current: ", currentFloor);
+  }, [enteredFloor]);
+
+  // Handling Conquered conditions
+  // If it is conquered but and not yet cleared, then save the progress
+  // If conquered but has been already cleared, redirect to AdventureSpelling component
+  useEffect(() => {
     if (isConquered === true) {
-      fetch(`${UPDATE_USER_PROGRESS_ENDPOINT}${storedProgressID}`, {
+      fetch(`${UPDATE_USER_PROGRESS_ENDPOINT}${progressID}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          towerSecProg: storedNextSection,
-          floorId: storedNextFloor,
+          towerSecProg: nextSection,
+          floorId: nextFloor,
         }),
       })
         .then((response) => {
@@ -104,14 +83,45 @@ export default function GameplayAdventureSpelling() {
           }
         })
         .catch((error) => console.error("Error updating progress:", error));
-    } else if (isCleared === true) {
+    } else if (isConquered === true && isCleared === true) {
       console.log("Floor already conquered!!!");
+      setTimeout(() => {
+        navigate("/adventure_mode");
+      }, 3000);
     }
   }, [isConquered]);
 
-  const [animateShake, setAnimateShake] = useState("");
+  //#endregion
+
+  //#region Input Management
+  const [inputDisabled, setInputDisabled] = useState(false); // State to disable the input
+  const [goButtonDisabled, setGoButtonDisabled] = useState(false); // State to disable the GO! button
+  const [audioButtonDisabled, setAudioButtonDisabled] = useState(false); // State to disable the audio button
+  const [userInput, setUserInput] = useState(""); // State to store user input
   const [autoFocusValue, setAutoFocusValue] = useState(true);
-  const [userItems, setUserItems] = useState([]);
+  const inputRef = useRef(null); // Create a ref for the input element
+
+  const disableInputs = () => {
+    setGoButtonDisabled(true);
+    setAudioButtonDisabled(true);
+    setInputDisabled(true);
+  };
+
+  const enableInputs = () => {
+    setGoButtonDisabled(false);
+    setAudioButtonDisabled(false);
+    setInputDisabled(false);
+
+    inputRef.current && inputRef.current.focus(); // Focus on the input if it exists
+    inputRef.current.focus(); // Focus on the input
+  };
+
+  //#endregion
+
+  //#region Animation Management
+  const [animateShake, setAnimateShake] = useState("");
+  const [isEnemyHit, setEnemyIsHit] = useState(""); // State to manage if character is hit
+  const [isMainHit, setMainIsHit] = useState(false); // State to manage if character is hit
   const [enemyState, setEnemyState] = useState({
     className: "idle-spring",
     style: {},
@@ -120,84 +130,74 @@ export default function GameplayAdventureSpelling() {
     className: "idle-main",
     style: {},
   });
-  const [isEnemyHit, setEnemyIsHit] = useState(""); // State to manage if character is hit
-  const [isMainHit, setMainIsHit] = useState(false); // State to manage if character is hit
-  const [userInput, setUserInput] = useState(""); // State to store user input
-  const [hearts, setHearts] = useState(6); // State to store remaining heart count
-  const [gameOver, setGameOver] = useState(false); // State to track game over
-  const [enemies, setEnemies] = useState([]);
-  const [currentEnemyIndex, setCurrentEnemyIndex] = useState(0);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentWordData, setCurrentWordData] = useState(null);
-  const [audioUrl, setAudioUrl] = useState("");
-  const [audioElement, setAudioElement] = useState(null);
-  const [inputDisabled, setInputDisabled] = useState(false); // State to disable the input
-  const [goButtonDisabled, setGoButtonDisabled] = useState(false); // State to disable the GO! button
-  const [audioButtonDisabled, setAudioButtonDisabled] = useState(false); // State to disable the audio button
-  const inputRef = useRef(null); // Create a ref for the input element
-  const [insertWord, setInsertWord] = useState(false);
-  const [userID, setUserID] = useState();
 
-  useEffect(() => {
-    if (flag === 0) {
-      disableInputs();
+  const mainAttackAnimation = () => {
+    setMainState({
+      className: "attack-main",
+      style: {
+        transform: "translateX(550px)",
+        height: "369px",
+        width: "calc(7004px/21)",
+      },
+    });
+
+    if (isCorrect === true) {
+      setTimeout(() => {
+        setEnemyIsHit("hit");
+        setTimeout(() => {
+          setEnemyIsHit("");
+        }, 500);
+      }, 1300);
     }
-  }, [flag]);
 
-  useEffect(() => {
-    console.log("Insert Word Status: ", insertWord);
-    if (insertWord === true) {
-      console.log("UserID Type", typeof userID);
-      console.log("Current Word", currentWord);
-
-      fetch(`${INSERT_WORD_ARCHIVE}/${userID}/sireka?`, {
-        method: "POST", // Use POST method for inserting data
-      })
-        .then((response) => {
-          console.log("Response status:", response.status);
-          return response.text(); // or response.json() if the response is expected to be JSON
-        })
-        .then((data) => {
-          console.log("Response data:", data);
-          // Handle the response data
-        })
-        .catch((error) => {
-          if (error instanceof TypeError) {
-            console.error("Network error:", error.message);
-          } else {
-            console.error("Error fetching data:", error.message);
-          }
-        });
-    }
-  }, [insertWord]);
-
-  const [currentWord, setCurrentWord] = useState();
-
-  //#endregion
-
-  const handleStartClick = () => {
-    setFlag(1);
+    setTimeout(() => {
+      setMainState({
+        className: "idle-main",
+        style: { transform: "translateX(0px)" },
+      });
+    }, 1750);
   };
 
-  // Effect for beforeunload event
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault(); // Prevent the default browser unload behavior
-      event.returnValue = ""; // A standard way to trigger the browser's built-in navigation confirmation dialog
-      // You can try setting a custom message like "You have unsaved changes!" but modern browsers might not display it.
-      return "You have unsaved changes!"; // This may not work in all browsers but is still recommended
-    };
+  const springEnemyAttackAnimation = () => {
+    setEnemyState({
+      className: "attack",
+      style: { transform: "translateX(-550px)" },
+    });
 
-    // Adding the event listener
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    setTimeout(() => {
+      setMainIsHit("hit");
+      setTimeout(() => {
+        setMainIsHit("");
+      }, 500);
+    }, 1300);
 
-    // Cleanup the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []); // Empty dependency array ensures this effect is only run on mount and unmount
+    setTimeout(() => {
+      setEnemyState({
+        className: "idle-spring",
+        style: { transform: "translateX(0px)" },
+      });
 
-  // Effect to fetch user items
+      setTimeout(() => {
+        setHearts((prevHearts) => prevHearts - 1);
+        console.log("Incorrect Word:", userInput);
+
+        // Enable input and refocus after animation completes
+        setTimeout(() => {
+          inputRef.current && inputRef.current.focus(); // Focus on the input if it exists
+        }, 100); // Adjust the delay as needed
+
+        // Enable buttons after animation completes
+
+        if (hearts === 1) {
+          setGameOver(true);
+        }
+      }, 500);
+    }, 1500);
+  };
+  //#endregion
+
+  //#region User Items Management
+  const [userItems, setUserItems] = useState([]);
   useEffect(() => {
     if (flag === 1) {
       const storedUserDetails = JSON.parse(
@@ -219,14 +219,144 @@ export default function GameplayAdventureSpelling() {
       }
     }
   }, [flag]);
+  //#endregion
 
-  // Effect to fetch enemies when storedFloor changes
+  const [hearts, setHearts] = useState(6); // State to store remaining heart count
+  const [gameOver, setGameOver] = useState(false); // State to track game over
+  const [enemies, setEnemies] = useState([]);
+
+  //#region Archive Management
+  const [userID, setUserID] = useState();
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [insertWord, setInsertWord] = useState(false);
+  const [currentWord, setCurrentWord] = useState();
+
   useEffect(() => {
-    if (flag === 1 && storedFloor) {
-      disableInputs();
-      fetchEnemies(storedFloor);
+    console.log("Insert Word Status: ", insertWord);
+    console.log("IS CLEARED: ", isCleared);
+
+    if (insertWord === true && isCleared == false) {
+      console.log("UserID Type", typeof userID);
+      console.log("Current Word", currentWord);
+
+      fetch(`${INSERT_WORD_ARCHIVE}/${userID}/${currentWord}`, {
+        method: "POST", // Use POST method for inserting data
+      })
+        .then((response) => {
+          console.log("Response status:", response.status);
+          return response.text(); // or response.json() if the response is expected to be JSON
+        })
+        .then((data) => {
+          console.log("Response data:", data);
+          // Handle the response data
+        })
+        .catch((error) => {
+          if (error instanceof TypeError) {
+            console.error("Network error:", error.message);
+          } else {
+            console.error("Error fetching data:", error.message);
+          }
+        });
+    } else {
+      console.log("No words added, tower has been cleared already!");
     }
-  }, [storedFloor, flag]);
+  }, [insertWord]);
+
+  useEffect(() => {
+    if (flag === 0) {
+      disableInputs();
+    }
+  }, [flag]);
+
+  //#endregion
+
+  const handleStartClick = () => {
+    setFlag(1);
+  };
+
+  //#region Reload Management
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault(); // Prevent the default browser unload behavior
+      event.returnValue = ""; // A standard way to trigger the browser's built-in navigation confirmation dialog
+      // You can try setting a custom message like "You have unsaved changes!" but modern browsers might not display it.
+      return "You have unsaved changes!"; // This may not work in all browsers but is still recommended
+    };
+
+    // Adding the event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []); // Empty dependency array ensures this effect is only run on mount and unmount
+  //#endregion
+  //#region Merriam Management
+
+  const [currentEnemyIndex, setCurrentEnemyIndex] = useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentWordData, setCurrentWordData] = useState(null);
+  const [audioUrl, setAudioUrl] = useState("");
+  const [audioElement, setAudioElement] = useState(null);
+
+  const fetchWordDefinition = async (word) => {
+    try {
+      const url = `${MERRIAM_API}${word}?key=${API_KEY}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const firstResult = data[0];
+        const pronunciation = firstResult.hwi?.prs[0]?.mw || "";
+        const definition =
+          firstResult.def?.[0]?.sseq?.[0]?.[0]?.[1]?.dt?.[0]?.[1] ||
+          "No definition found";
+        const audio = firstResult.hwi?.prs[0]?.sound?.audio;
+
+        const subdirectory = audio?.startsWith("bix")
+          ? "bix"
+          : audio?.startsWith("gg")
+          ? "gg"
+          : audio?.match(/^[^a-zA-Z]/)
+          ? "number"
+          : audio?.charAt(0);
+
+        const audioUrl = audio
+          ? `${AUDIO_PATH}${subdirectory}/${audio}.mp3`
+          : "";
+
+        setCurrentWordData({ pronunciation, definition });
+        setAudioUrl(audioUrl);
+      } else {
+        setCurrentWordData({
+          pronunciation: "",
+          definition: "Word is not available.",
+        });
+        setAudioUrl("");
+        console.log(`Current Word: ${word} is not available`);
+      }
+    } catch (error) {
+      console.error("Error fetching definition:", error);
+      setCurrentWordData({
+        pronunciation: "",
+        definition: "Error fetching the definition.",
+      });
+      setAudioUrl("");
+      console.error("Fetch word definition error:", error);
+    }
+  };
+
+  //#endregion
+
+  // Effect to fetch enemies when enteredFloor changes
+  useEffect(() => {
+    if (flag === 1 && enteredFloor) {
+      disableInputs();
+      fetchEnemies(enteredFloor);
+    }
+  }, [enteredFloor, flag]);
 
   // Effect to fetch word definition when enemies or currentEnemyIndex changes
   useEffect(() => {
@@ -250,11 +380,6 @@ export default function GameplayAdventureSpelling() {
       });
     }
   }, [enemies, currentEnemyIndex, flag]);
-
-  // Effect to update storedFloor when FLOOR_ID changes
-  useEffect(() => {
-    setStoredFloor(sessionStorage.getItem(FLOOR_ID));
-  }, [sessionStorage.getItem(FLOOR_ID)]);
 
   // Effect to handle audioUrl changes
   useEffect(() => {
@@ -306,124 +431,6 @@ export default function GameplayAdventureSpelling() {
       });
   };
 
-  const mainAttackAnimation = () => {
-    setMainState({
-      className: "attack-main",
-      style: {
-        transform: "translateX(550px)",
-        height: "369px",
-        width: "calc(7004px/21)",
-      },
-    });
-
-    if (isCorrect === true) {
-      setTimeout(() => {
-        setEnemyIsHit("hit");
-        setTimeout(() => {
-          setEnemyIsHit("");
-        }, 500);
-      }, 1300);
-
-      setIsEnemyCounter(true);
-    }
-
-    setTimeout(() => {
-      setMainState({
-        className: "idle-main",
-        style: { transform: "translateX(0px)" },
-      });
-    }, 1750);
-  };
-
-  const springEnemyAttackAnimation = () => {
-    setEnemyState({
-      className: "attack",
-      style: { transform: "translateX(-550px)" },
-    });
-
-    setTimeout(() => {
-      setMainIsHit("hit");
-      setTimeout(() => {
-        setMainIsHit("");
-      }, 500);
-    }, 1300);
-
-    setTimeout(() => {
-      setEnemyState({
-        className: "idle-spring",
-        style: { transform: "translateX(0px)" },
-      });
-
-      setTimeout(() => {
-        setHearts((prevHearts) => prevHearts - 1);
-        console.log("Incorrect Word:", userInput);
-
-        // Enable input and refocus after animation completes
-        setTimeout(() => {
-          inputRef.current && inputRef.current.focus(); // Focus on the input if it exists
-        }, 100); // Adjust the delay as needed
-
-        // Enable buttons after animation completes
-
-        if (hearts === 1) {
-          setGameOver(true);
-        }
-      }, 500);
-    }, 1500);
-  };
-
-  //#region Merriam Integration
-  const fetchWordDefinition = async (word) => {
-    try {
-      const apiKey = "95454221-2935-4778-b4e6-be2ca5ede0cb";
-      const url = `https://www.dictionaryapi.com/api/v3/references/sd2/json/${word}?key=${apiKey}`;
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data && data.length > 0) {
-        const firstResult = data[0];
-        const pronunciation = firstResult.hwi?.prs[0]?.mw || "";
-        const definition =
-          firstResult.def?.[0]?.sseq?.[0]?.[0]?.[1]?.dt?.[0]?.[1] ||
-          "No definition found";
-        const audio = firstResult.hwi?.prs[0]?.sound?.audio;
-
-        const subdirectory = audio?.startsWith("bix")
-          ? "bix"
-          : audio?.startsWith("gg")
-          ? "gg"
-          : audio?.match(/^[^a-zA-Z]/)
-          ? "number"
-          : audio?.charAt(0);
-
-        const audioUrl = audio
-          ? `https://media.merriam-webster.com/audio/prons/en/us/mp3/${subdirectory}/${audio}.mp3`
-          : "";
-
-        setCurrentWordData({ pronunciation, definition });
-        setAudioUrl(audioUrl);
-      } else {
-        setCurrentWordData({
-          pronunciation: "",
-          definition: "Word is not available.",
-        });
-        setAudioUrl("");
-        console.log(`Current Word: ${word} is not available`);
-      }
-    } catch (error) {
-      console.error("Error fetching definition:", error);
-      setCurrentWordData({
-        pronunciation: "",
-        definition: "Error fetching the definition.",
-      });
-      setAudioUrl("");
-      console.error("Fetch word definition error:", error);
-    }
-  };
-
-  //#endregion
-
   //#region Handling Answer
   const handleGoClick = () => {
     //#region Empty Answer
@@ -443,12 +450,8 @@ export default function GameplayAdventureSpelling() {
       return;
     }
 
-    //#endregion
-
     const words = enemies[currentEnemyIndex].words;
     const currentWord = words[currentWordIndex];
-
-    //#region Correct Answer
 
     if (userInput.trim().toLowerCase() === currentWord.toLowerCase()) {
       // Correct word handling
@@ -458,6 +461,9 @@ export default function GameplayAdventureSpelling() {
       setFlag(0);
       setInsertWord(true);
       console.log("Insert Status: ", insertWord);
+      setPronunciationStatus({
+        className: "text-pronunciation-lock",
+      });
 
       setTimeout(() => {
         // Enable input, set focus after animation completes
@@ -469,6 +475,7 @@ export default function GameplayAdventureSpelling() {
         // Check if all words of the enemy are defeated
         if (currentWordIndex === words.length - 1) {
           setInsertWord(true);
+          setFlag(0);
 
           console.log(
             `Enemy ${enemies[currentEnemyIndex].enemyId} defeated! Total words: ${words.length}`
@@ -500,11 +507,7 @@ export default function GameplayAdventureSpelling() {
 
       // Disable input, GO! button, and audio button
       disableInputs();
-    }
-    //#endregion
-
-    //#region Wrong Answer
-    else {
+    } else {
       setIsCorrect(false);
       if (isCorrect === false) {
         mainAttackAnimation(); // Start mainAttackAnimation
@@ -516,10 +519,8 @@ export default function GameplayAdventureSpelling() {
       }
 
       // Disable inputs and buttons during the animation
-      disableInputs();
+      // disableInputs();
     }
-
-    //#endregion
   };
   //#endregion
 
@@ -534,6 +535,71 @@ export default function GameplayAdventureSpelling() {
     }
   };
 
+  const [pronunciationStatus, setPronunciationStatus] = useState({
+    className: "text-pronunciation-lock",
+    style: {},
+  });
+
+  const handleItemClick = (itemId) => {
+    console.log("Item clicked:", itemId);
+    const id = itemId.itemId;
+    console.log("id", id);
+    // Assuming you have the userID available
+
+    // Define the data to send in the POST request
+    const postData = {
+      userID: userID,
+      itemID: itemId.itemId, // Assuming itemId is an object with an itemId property
+    };
+
+    // Make the POST request
+    fetch(`${ITEM_USED}/${userID}/${itemId.itemId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to use item");
+        }
+        console.log("Item used successfully");
+        // Update the quantity of the used item in the userItems state
+        const updatedUserItems = userItems.map((item) => {
+          if (item.itemId === itemId.itemId) {
+            return {
+              ...item,
+              item: item.quantity - 1, // Decrease the quantity by 1 after using the item
+            };
+          }
+          return item;
+        });
+        setUserItems(updatedUserItems); // Update the userItems state with the updated quantity
+      })
+      .catch((error) => {
+        console.error("Error using item:", error);
+        // Handle error
+      });
+
+    // Handle item effects locally
+    if (itemId.itemId === 1) {
+      setHearts((prevHearts) => Math.min(prevHearts + 1, 6)); // Ensure hearts don't exceed the maximum value
+      console.log("Heart added!");
+    }
+
+    if (itemId.itemId === 2) {
+      setHearts((prevHearts) => Math.min(prevHearts + 3, 6)); // Ensure hearts don't exceed the maximum value
+      console.log("Heart added!");
+    }
+
+    if (itemId.itemId === 3) {
+      setPronunciationStatus({
+        className: "",
+      });
+    }
+  };
+
   //#region JSX
   // Render game over message if game over
   if (gameOver) {
@@ -543,7 +609,7 @@ export default function GameplayAdventureSpelling() {
   return (
     <main className="gameplay-container">
       <div className="floor_indicator">
-        <span>FLOOR {storedFloor}</span>
+        <span>FLOOR {enteredFloor}</span>
       </div>
 
       <section className="gameplay-platform">
@@ -569,7 +635,11 @@ export default function GameplayAdventureSpelling() {
           <div className="control-item-container">
             <div className="item-wrapper">
               {userItems.map((item) => (
-                <div key={item.userItemId} className="item-container">
+                <div
+                  key={item.userItemId}
+                  className="item-container"
+                  onClick={() => handleItemClick(item.itemId)} // Add onClick handler
+                >
                   <img
                     src={`./assets/items/${item.itemId.image_path}`}
                     alt={item.item_name}
@@ -637,9 +707,12 @@ export default function GameplayAdventureSpelling() {
           <div className="control-clue-container">
             <div className="clue-wrapper">
               <h3>Word Info's</h3>
+
               <span className="lbl_pronunciation">Pronunciation</span>
-              <div className="text-pronunciation">
-                {currentWordData?.pronunciation.toString()}
+              <div
+                className={`text-pronunciation ${pronunciationStatus.className} `}
+              >
+                <span> {currentWordData?.pronunciation.toString()}</span>
               </div>
               <span className="lbl_definition">Definition</span>
               <div className="text-definition">
