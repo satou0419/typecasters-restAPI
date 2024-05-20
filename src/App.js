@@ -16,8 +16,8 @@ import GameplayAdventureSpelling from "./GameplayAdventureSpelling";
 import { LOGOUT_ENDPOINT } from "./api";
 import CreateRoom from "./CreateRoom";
 import AdventureMode from "./AdventureMode";
-import SimulationMode from "./SimulationMode-Teacher";
-import SimulationRoom from "./SimulationRoom-Teacher";
+import SimulationModeTeacher from "./SimulationMode-Teacher";
+import SimulationRoomTeacher from "./SimulationRoom-Teacher";
 import CreateGame from "./CreateGame";
 import SimulationModeStudent from "./SimulationMode-Student";
 import SimulationRoomStudent from "./SimulationRoom-Student";
@@ -26,25 +26,24 @@ import TeacherRoomSettings from "./TeacherRoomSettings";
 import TeacherRoomInfo from "./TeacherRoomInfo";
 import Settings from "./Settings";
 import { CreditProvider } from "./CreditContext";
-import SimulationModeTeacher from "./SimulationMode-Teacher";
-import SimulationRoomTeacher from "./SimulationRoom-Teacher";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userDetails, setUserDetails] = useState(null); // State to store user details
+  const [userDetails, setUserDetails] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedIsLoggedIn = sessionStorage.getItem("isLoggedIn");
-    if (storedIsLoggedIn === "true") {
+    const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+
+    if (storedIsLoggedIn === "true" && storedUserDetails) {
       setIsLoggedIn(true);
+      setUserDetails(storedUserDetails);
     }
   }, []);
 
   const handleLogout = async () => {
-    console.log("LOOOOGOUT");
-    // sessionStorage.clear();
     try {
       const response = await fetch(LOGOUT_ENDPOINT, {
         method: "POST",
@@ -53,7 +52,7 @@ function App() {
 
       if (response.ok) {
         setIsLoggedIn(false);
-        setUserDetails(null); // Clear user details on logout
+        setUserDetails(null);
         sessionStorage.removeItem("isLoggedIn");
         navigate("/login");
       } else {
@@ -139,7 +138,6 @@ function App() {
               {/* End of Student Simulation */}
 
               {/* Teacher Simulation */}
-
               <Route
                 path="teacher/simulation_mode"
                 element={<SimulationModeTeacher />}
