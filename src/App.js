@@ -43,6 +43,8 @@ function App() {
   }, []);
 
   const handleLogout = async () => {
+    console.log("LOOOOGOUT");
+    // sessionStorage.clear();
     try {
       const response = await fetch(LOGOUT_ENDPOINT, {
         method: "POST",

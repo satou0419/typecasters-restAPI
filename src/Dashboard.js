@@ -5,6 +5,8 @@ import "./components/card.css";
 import "./dashboard.css";
 import { fetchUserData } from "./api";
 import { USER_TYPE } from "./Login";
+
+export const USER_DETAILS_ID = "userDetailsID";
 export default function Dashboard() {
   const [userData, setUserData] = useState(null);
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails")); // Define storedUserDetails

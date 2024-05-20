@@ -17,8 +17,6 @@ export default function Navigation() {
   const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  console.log(userType);
-
   useEffect(() => {
     const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     if (storedUserDetails) {

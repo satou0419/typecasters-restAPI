@@ -107,7 +107,7 @@ a {
   text-decoration: none;
 }
 
-.achievement-archive{
+.achievement-archive {
   height: 100%;
   width: 100%;
   /* border: solid red; */
@@ -117,7 +117,7 @@ a {
   justify-content: center;
 }
 
-.locked-badge-container{
+.locked-badge-container {
   height: 150px;
   width: 150px;
   /* border: solid blue; */
@@ -126,12 +126,12 @@ a {
   margin-left: 30px;
 }
 
-.locked-badge{
+.locked-badge {
   height: 140px;
   width: 140px;
 }
 
-.unlocked-badge-container{
+.unlocked-badge-container {
   height: 380px;
   width: 250px;
   /* border: solid orange; */
@@ -140,10 +140,10 @@ a {
   align-items: center;
   margin-left: 30px;
   justify-content: center;
-  background: linear-gradient(to bottom, #9A6DEA 0%, #573D84 100%);
+  background: linear-gradient(to bottom, #9a6dea 0%, #573d84 100%);
 }
 
-.unlocked-badge{
+.unlocked-badge {
   height: 230px;
   width: 230px;
 }
@@ -180,6 +180,23 @@ a {
   border-style: solid;
   border-color: #333 transparent transparent transparent;
 }
-.word-details{
-  margin-top: 1px;
+.word-details {
+  margin-bottom: 50%;
+  overflow: hidden;
+  color: white;
+  font-family: "Lilita One";
+}
+.word-details p {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Lilita One";
+  font-family: "Lilita One";
+}
+.word-details h2 {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 80px;
+  font-family: "Lilita One";
 }
