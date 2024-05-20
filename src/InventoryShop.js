@@ -20,22 +20,6 @@ export default function InventoryShop() {
   const { credit } = useCredit(); // Access credit from the context
   
 
-
-  const showModal = (item) =>{
-    // setIsConfirmingPurchase(true);
-    setShowMessage("Are you sure you want to purchase ");
-    // console.log("Clickeddddd")
-    // console.log(selectedItem.item_price)
-    // console.log("Credit: ", credit)
-    if (credit >= item.item_price) {
-      setSelectedItem(item);
-      setIsConfirmingPurchase(true);
-    } else {
-      console.log("Insufficient credit. You cannot purchase this item.");
-      setIsEnoughCred(true);
-    }
-  }
-
   useEffect(() => {
     const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     setUserID(storedUserDetails.userID);
@@ -64,6 +48,21 @@ export default function InventoryShop() {
     setSelectedItem(item);
   };
 
+  const showModal = (item) =>{
+    // setIsConfirmingPurchase(true);
+    setShowMessage("Are you sure you want to purchase ");
+    // console.log("Clickeddddd")
+    // console.log(selectedItem.item_price)
+    // console.log("Credit: ", credit)
+    if (credit >= item.item_price) {
+      setSelectedItem(item);
+      setIsConfirmingPurchase(true);
+    } else {
+      console.log("Insufficient credit. You cannot purchase this item.");
+      setIsEnoughCred(true);
+    }
+  }
+
   const handleBuyItem = async (itemName) => {
     if (isBuying) return;
 
@@ -87,8 +86,10 @@ export default function InventoryShop() {
         );
 
         if (response.ok) {
-          console.log("Item bought successfully!");
-          updateCredit(-selectedItem.item_price); // Update credit after successful purchase
+            console.log("Item bought successfully!");
+            console.log("Before updating credit:", credit);
+            updateCredit(-selectedItem.item_price); // Deduct item price from credit
+            console.log("After updating credit:", credit - selectedItem.item_price);
         } else {
           console.error("Failed to buy item");
         }
@@ -161,7 +162,7 @@ export default function InventoryShop() {
               {isEnoughCred && (
                 <Message
                 confirmButtonLabel="Okay"
-                modalTitle="Insufficient Credit"
+                messageTitle="Insufficient Credit"
                 modalContent="You do not have enough credit to purchase this item."
                 confirmClick={() => setIsEnoughCred(false)}         
                 />

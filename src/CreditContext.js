@@ -22,7 +22,7 @@ export const CreditProvider = ({ children }) => {
   }, []);
 
   const updateCredit = (amount) => {
-    setCredit((prevCredit) => prevCredit - amount);
+    setCredit((prevCredit) => prevCredit + amount);
   };
 
   return (
