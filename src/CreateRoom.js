@@ -11,6 +11,8 @@ export default function CreateRoom() {
   const [userID, setUserID] = useState(sessionStorage.getItem(USER_ID));
   const [isRoomCreated, setIsRoomCreated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   console.log(userID);
   
@@ -20,6 +22,8 @@ export default function CreateRoom() {
       const roomName = document.getElementById("roomName").value;
 
       if(!roomName){
+        setIsEmpty(true);
+        setTimeout(() => setIsEmpty(false), 500); 
         console.error("Please fill all fields");
         return;
       }else{
@@ -55,11 +59,12 @@ export default function CreateRoom() {
         console.log("Cancelled Room Creation")
       };
 
-      const handleCreate = () => {
-        setIsModalOpen(true); // Show the modal
-      };
+      // const handleCreate = () => {
+      //   setIsModalOpen(true); // Show the modal
+      // };
 
       const handleConfirmCreate = () => {
+        navigate('/teacher/simulation_mode');
         setIsModalOpen(false); // Hide the modal
         console.log("Room Created!") // Navigate to the specified route
       };
@@ -70,13 +75,11 @@ export default function CreateRoom() {
         <h1 className="createroom-card__heading">Create Room</h1>
         <input
           type="text"
-          className="input input-line input-line--dark"
+          className={`input input-line input-line--dark ${isEmpty ? "animate-shake" : ""}`}
           placeholder="Enter Room Name"
           id="roomName"
         />
-          <Link to="/teacher/simulation_mode">
           <button className="btn btn--large btn--primary" onClick={handleCreateRoom}>CREATE</button>
-          </Link>
           <button className=">btn btn--large btn--danger--large">CANCEL</button>
       </section>
       {isModalOpen && (
