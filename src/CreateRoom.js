@@ -1,43 +1,17 @@
-import React, { useState } from "react";
 import "./createroom.css";
-<<<<<<< HEAD
-// import { Link } from "react-router-dom";
-import { Modal } from './components/Modal';
-import "./components/animation.css";
-
-
-  export default function CreateRoom() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isRoomNameEmpty, setIsRoomNameEmpty] = useState(true);
-
-    const handleRoomNameEmpty = () => {
-      if(setIsRoomNameEmpty(true)){
-        
-      }
-    };
-  
-    const handleCancelCreate = () => {
-      setIsModalOpen(false);
-      console.log("Cancelled Room Creation")
-    };
-  
-    const handleCreate = () => {
-      setIsModalOpen(true); // Show the modal
-    };
-  
-    const handleConfirmCreate = () => {
-      setIsModalOpen(false); // Hide the modal
-      console.log("Room Created!") // Navigate to the specified route
-    };
-=======
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { USER_ID } from "./Login";
 import {CREATE_ROOM} from "./api";
 import { useState } from "react";
+import { Modal } from './components/Modal';
+import "./components/animation.css";
+
 
 export default function CreateRoom() {
   const [userID, setUserID] = useState(sessionStorage.getItem(USER_ID));
   const [isRoomCreated, setIsRoomCreated] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   console.log(userID);
   
   const handleCreateRoom = async () =>{
@@ -48,6 +22,8 @@ export default function CreateRoom() {
       if(!roomName){
         console.error("Please fill all fields");
         return;
+      }else{
+        setIsModalOpen(true); // Show the modal
       }
 
       const updateUserURL = `${CREATE_ROOM}`;
@@ -73,7 +49,20 @@ export default function CreateRoom() {
       console.error("Error creating room!");
     }
   };
->>>>>>> main
+
+      const handleCancelCreate = () => {
+        setIsModalOpen(false);
+        console.log("Cancelled Room Creation")
+      };
+
+      const handleCreate = () => {
+        setIsModalOpen(true); // Show the modal
+      };
+
+      const handleConfirmCreate = () => {
+        setIsModalOpen(false); // Hide the modal
+        console.log("Room Created!") // Navigate to the specified route
+      };
 
   return (
     <main className="createroom-container">
@@ -81,29 +70,14 @@ export default function CreateRoom() {
         <h1 className="createroom-card__heading">Create Room</h1>
         <input
           type="text"
-          className="input input-line input-line--dark animate-shake"
+          className="input input-line input-line--dark"
           placeholder="Enter Room Name"
           id="roomName"
         />
-<<<<<<< HEAD
-        {/* <Link to="/teacher/simulation_mode"> */}
-          <button 
-          onClick={handleCreate}
-          className="btn btn--large btn--primary">
-            CREATE
-          </button>
-        {/* </Link>
-        <Link to="/teacher/simulation_mode"> */}
-          <button className=">btn btn--large btn--danger--large">CANCEL</button>
-        {/* </Link> */}
-=======
           <Link to="/teacher/simulation_mode">
           <button className="btn btn--large btn--primary" onClick={handleCreateRoom}>CREATE</button>
           </Link>
           <button className=">btn btn--large btn--danger--large">CANCEL</button>
-        
-    
->>>>>>> main
       </section>
       {isModalOpen && (
         <Modal
@@ -117,5 +91,4 @@ export default function CreateRoom() {
       )}
     </main>
   );
-
 }
