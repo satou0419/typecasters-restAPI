@@ -1,0 +1,21 @@
+package typecasters.tower_of_words.Repository;
+
+import typecasters.tower_of_words.Entity.ItemEntity;
+import typecasters.tower_of_words.Entity.UserItemEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface UserItemRepository extends JpaRepository<UserItemEntity, Integer> {
+
+    List<UserItemEntity> findAllByUserId(int userId);
+
+    @Query("SELECT ui.userItemId FROM UserItemEntity ui WHERE ui.userId = ?1 AND ui.itemId = ?2")
+    Optional<Integer> findUserItemIdByUserIdAndItemId(int userId, ItemEntity itemId);
+
+    Optional<UserItemEntity> findOneByUserIdAndItemId(int userId, ItemEntity itemId);
+}
