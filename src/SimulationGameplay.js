@@ -27,6 +27,24 @@ export default function SimulationGameplay() {
   //Flag as an initiator....
   //If flag is 0, don't render the data
   //If it is 1, fetch the data
+  const [getSimulation, setGetSimulation] = useState([]);
+
+  const fetchSimulation = () => {
+    fetch(
+      `https://api-tower-of-words.azurewebsites.net/simulation/view_by_id/1`
+    )
+      .then((response) => response.json())
+      .then((data) => setGetSimulation(data))
+      .catch((error) => console.error("Error fetching room data:", error));
+  };
+
+  useEffect(() => {
+    fetchSimulation();
+  });
+
+  useEffect(() => {
+    console.log(getSimulation);
+  }, []);
 
   const [nextPlay, setNextPlay] = useState(true);
   const [flag, setFlag] = useState(0);

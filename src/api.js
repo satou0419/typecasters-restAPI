@@ -24,6 +24,7 @@ export const VIEW_WORD_ARCHIVE = `${BASE_URL}/archive_words/view/`;
 export const VIEW_ROOM = `${BASE_URL}/room/view_created_room/`;
 export const JOIN_ROOM = `${BASE_URL}/room/insert_member_by_code/`;
 export const STUDENT_VIEW_ROOM = `${BASE_URL}/room/view_room_by_member/`;
+export const VIEW_SIMULATION = `${BASE_URL}/simulation/view_by_room/`;
 
 export const MERRIAM_API = `https://www.dictionaryapi.com/api/v3/references/sd2/json/`;
 export const API_KEY = `95454221-2935-4778-b4e6-be2ca5ede0cb`;
