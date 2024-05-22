@@ -3,6 +3,7 @@ import "./simulationmode.css";
 import { CardSimulation, CardCreate } from "./components/Card"; // Removed CardArchive since it's not used
 import { useState, useEffect } from "react";
 import { USER_ID } from "./Login";
+import { VIEW_ROOM } from "./api";
 
 export default function SimulationModeTeacher() {
   const [creatorID] = useState(sessionStorage.getItem(USER_ID));
@@ -11,7 +12,7 @@ export default function SimulationModeTeacher() {
   useEffect(() => {
     if (creatorID) {
       fetch(
-        `https://api-typecasters.azurewebsites.net/room/view_created_room/${creatorID}`
+        `${VIEW_ROOM}/${creatorID}`
       )
         .then((response) => response.json())
         .then((data) => setRooms(data))

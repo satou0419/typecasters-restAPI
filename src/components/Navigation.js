@@ -28,6 +28,7 @@ export default function Navigation({ onLogout }) {
   };
 
   const toggleProfile = () => {
+
     setProfileOpen(!profileOpen);
   };
 
@@ -50,22 +51,27 @@ export default function Navigation({ onLogout }) {
           <Link to={`${userType}/simulation_mode`}>Simulation Mode</Link>
           <Link to="/archive">Archive</Link>
           <Link to="/about">About</Link>
+
+        </div>
+        <div className= "profile-container">
+          <div className="profile-icon" onClick={toggleProfile}>
+            <span className={`circle ${profileOpen ? "open" : ""}`}></span>
+          </div>
+          <div className = {`profile ${profileOpen ? "open" : ""}`}>
           <Link to="/inventory_shop">Inventory</Link>
           <Link to="/Settings">Settings</Link>
           <Link onClick={onLogout}>Logout</Link>
-        </div>
-        <div className="profile-container">
-          <div className="profile-icon" onClick={toggleProfile}>
-            <span className="circle"></span>
+
           </div>
-          <div className={`profile ${profileOpen ? "open" : ""}`}></div>
         </div>
+        <div className= {`profile-side ${profileOpen ? "open" : ""}`}>
         {storedUserDetails && (
           <>
-            <p>Username: {storedUserDetails.username}</p>
-            <p>Credit: {credit}</p>
+            <p>{storedUserDetails.username}</p>
+            
           </>
         )}
+            </div>
       </nav>
     </section>
   );
