@@ -4,14 +4,16 @@ import "./navigation.css";
 import { fetchUserData } from "../api";
 import { useCredit } from "../CreditContext";
 import { USER_TYPE } from "../Login";
+import { Modal } from "./Modal";
 
-export default function Navigation({ onLogout }) {
+export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const { credit, setInitialCredit } = useCredit();
   const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (storedUserDetails) {
@@ -29,6 +31,23 @@ export default function Navigation({ onLogout }) {
 
   const toggleProfile = () => {
     setProfileOpen(!profileOpen);
+  };
+
+  const handleLogoutClick = () => {
+    setIsLoggingOut(true);
+    // document.body.classList.add('active-modal'); // Add class to body when modal is active
+  };
+
+  const handleConfirmLogout = () => {
+    setIsLoggingOut(false);
+    // document.body.classList.remove('active-modal'); // Remove class from body when modal is inactive
+    sessionStorage.clear();
+    navigate("/Login");
+  };
+
+  const handleCancelLogout = () => {
+    setIsLoggingOut(false);
+    // document.body.classList.remove('active-modal'); // Remove class from body when modal is inactive
   };
 
   return (
@@ -50,6 +69,9 @@ export default function Navigation({ onLogout }) {
           <Link to={`${userType}/simulation_mode`}>Simulation Mode</Link>
           <Link to="/archive">Archive</Link>
           <Link to="/about">About</Link>
+          <Link to="/inventory_shop">Inventory</Link>
+          <Link to="/Settings">Settings</Link>
+          <Link onClick={handleLogoutClick}>Logout</Link>
         </div>
         <div className="profile-container">
           <div className="profile-wrapper">
@@ -71,6 +93,16 @@ export default function Navigation({ onLogout }) {
           </div>
         </div>
       </nav>
+      {isLoggingOut && (
+        <Modal
+          cancelButtonLabel="Cancel"
+          confirmButtonLabel="Confirm"
+          modalTitle="Confirm Logout"
+          modalContent="Are you sure you want to logout?"
+          confirmClick={handleConfirmLogout}
+          cancelClick={handleCancelLogout}
+        />
+      )}
     </section>
   );
 }
