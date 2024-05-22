@@ -1,6 +1,34 @@
 import "./joinroom.css";
 import { Link } from "react-router-dom";
+import { USER_ID } from "./Login";
+import { useEffect, useState } from "react";
+import { JOIN_ROOM } from "./api";
 export default function CreateRoom() {
+  const [userID, setUserID] = useState(sessionStorage.getItem(USER_ID));
+  const [gameCode, setGameCode] = useState();
+
+  const handleInputChange = (event) => {
+    setGameCode(event.target.value); // Update gameCode state with the value entered in the text field
+  };
+  const handleJoinClick = () => {
+    fetch(`${JOIN_ROOM}${userID}/code/${gameCode}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text(); // Read response as text
+      })
+      .then((data) => {
+        console.log("Response:", data); // Log the response received from the server
+      })
+      .catch((error) => console.error("Error updating progress:", error));
+  };
+
   return (
     <main className="joinroom-container">
       <section className="card createroom-card joinroom-card">
@@ -8,11 +36,16 @@ export default function CreateRoom() {
         <h1 className="createroom-card__heading">Join Room</h1>
         <input
           type="text"
+          value={gameCode}
+          onChange={handleInputChange} // Update this line
           className="input input-line input-line--dark join-input"
           placeholder="Enter Room Name"
         />
         <Link to="/student/simulation_mode">
-          <button className="btn btn--large btn--primary join-btn">
+          <button
+            className="btn btn--large btn--primary join-btn"
+            onClick={handleJoinClick}
+          >
             JOIN NOW
           </button>
         </Link>

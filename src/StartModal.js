@@ -1,7 +1,7 @@
 import React from "react";
 import "./modal.css"; // Add styles for the modal
 
-const Modal = ({ isVisible, onConfirm }) => {
+const StartModal = ({ isVisible, onConfirm }) => {
   if (!isVisible) return null;
 
   return (
@@ -16,4 +16,4 @@ const Modal = ({ isVisible, onConfirm }) => {
   );
 };
 
-export default Modal;
+export default StartModal;

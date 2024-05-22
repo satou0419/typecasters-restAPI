@@ -11,15 +11,18 @@ export default function SimulationModeTeacher() {
 
   useEffect(() => {
     if (creatorID) {
-      fetch(
-        `${VIEW_ROOM}/${creatorID}`
-      )
+      fetch(`${VIEW_ROOM}/${creatorID}`)
         .then((response) => response.json())
         .then((data) => setRooms(data))
         .catch((error) => console.error("Error fetching room data:", error));
     }
   }, [creatorID]); // Fixed the dependency array
 
+  const handleClickRoom = () => {};
+
+  useEffect(() => {
+    console.log(rooms);
+  });
   return (
     <main className="simulation-wrapper">
       <div className="txt-Rooms">Rooms</div>

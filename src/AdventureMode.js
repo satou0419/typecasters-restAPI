@@ -185,13 +185,13 @@ export default function AdventureMode() {
       }
 
       return (
-        <div
+        <span
           key={section}
           className={`section ${sectionStatusClass}`}
           onClick={() => handleSectionClick(section)}
         >
           Section {section}
-        </div>
+        </span>
       );
     });
   };
