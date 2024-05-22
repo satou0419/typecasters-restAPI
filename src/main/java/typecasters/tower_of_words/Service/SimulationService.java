@@ -25,8 +25,9 @@ public class SimulationService {
     public SimulationEntity insertSimulation(SimulationEntity simulation) {
         Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID());
         if (room.isPresent()) {
+            SimulationParticipantsEntity user = new SimulationParticipantsEntity();
             for(Integer i : room.get().getMembers()){
-                SimulationParticipantsEntity user = new SimulationParticipantsEntity();
+
                 user.setUserID(i.intValue());
                 simulation.addParticipants(user);
             }
