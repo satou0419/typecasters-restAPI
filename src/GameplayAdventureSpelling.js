@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Modal } from "./components/Modal"; // Import the Modal component
+
 import {
   API_KEY,
   AUDIO_PATH,
@@ -40,6 +42,8 @@ export default function GameplayAdventureSpelling() {
   const currentFloor = parseInt(sessionStorage.getItem(CURRENT_FLOOR), 10); // Gets the current floor
   const isCleared = enteredFloor < currentFloor; // Checks if the it is a cleared floor
   const [isConquered, setIsConquered] = useState(false); // Checks if the floor has been conquered
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     console.log("Enter: ", enteredFloor);
@@ -540,20 +544,26 @@ export default function GameplayAdventureSpelling() {
     style: {},
   });
 
-  const handleItemClick = (itemId) => {
-    console.log("Item clicked:", itemId);
-    const id = itemId.itemId;
-    console.log("id", id);
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    setIsModalVisible(true);
+    // console.log("Item clicked:", itemId);
+    // const id = itemId.itemId;
+    // console.log("id", id);
+  };
     // Assuming you have the userID available
 
     // Define the data to send in the POST request
-    const postData = {
-      userID: userID,
-      itemID: itemId.itemId, // Assuming itemId is an object with an itemId property
-    };
+    const confirmItemUse = () => {
+      if (selectedItem) {
+        const id = selectedItem.itemId;
+        const postData = {
+          userID: userID,
+          itemID: selectedItem.itemId,
+        };
 
     // Make the POST request
-    fetch(`${ITEM_USED}/${userID}/${itemId.itemId}`, {
+    fetch(`${ITEM_USED}/${userID}/${selectedItem.itemId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -567,7 +577,7 @@ export default function GameplayAdventureSpelling() {
         console.log("Item used successfully");
         // Update the quantity of the used item in the userItems state
         const updatedUserItems = userItems.map((item) => {
-          if (item.itemId === itemId.itemId) {
+          if (item.itemId === selectedItem.itemId) {
             return {
               ...item,
               item: item.quantity - 1, // Decrease the quantity by 1 after using the item
@@ -576,28 +586,33 @@ export default function GameplayAdventureSpelling() {
           return item;
         });
         setUserItems(updatedUserItems); // Update the userItems state with the updated quantity
+
+        // Handle item effects locally
+        if (selectedItem.itemId === 1) {
+          setHearts((prevHearts) => Math.min(prevHearts + 1, 6));
+          console.log("Heart added!");
+        } else if (selectedItem.itemId === 2) {
+          setHearts((prevHearts) => Math.min(prevHearts + 3, 6));
+          console.log("Hearts added!");
+        } else if (selectedItem.itemId === 3) {
+          setPronunciationStatus({
+            className: "",
+          });
+        }
       })
       .catch((error) => {
         console.error("Error using item:", error);
-        // Handle error
-      });
-
-    // Handle item effects locally
-    if (itemId.itemId === 1) {
-      setHearts((prevHearts) => Math.min(prevHearts + 1, 6)); // Ensure hearts don't exceed the maximum value
-      console.log("Heart added!");
-    }
-
-    if (itemId.itemId === 2) {
-      setHearts((prevHearts) => Math.min(prevHearts + 3, 6)); // Ensure hearts don't exceed the maximum value
-      console.log("Heart added!");
-    }
-
-    if (itemId.itemId === 3) {
-      setPronunciationStatus({
-        className: "",
+      })
+      .finally(() => {
+        setIsModalVisible(false);
+        setSelectedItem(null);
       });
     }
+  };
+
+  const cancelItemUse = () => {
+    setIsModalVisible(false);
+    setSelectedItem(null);
   };
 
   //#region JSX
@@ -638,7 +653,7 @@ export default function GameplayAdventureSpelling() {
                 <div
                   key={item.userItemId}
                   className="item-container"
-                  onClick={() => handleItemClick(item.itemId)} // Add onClick handler
+                  onClick={() => handleItemClick(item)} // Add onClick handler
                 >
                   <img
                     src={`./assets/items/${item.itemId.image_path}`}
@@ -722,6 +737,16 @@ export default function GameplayAdventureSpelling() {
           </div>
         </div>
       </section>
+      {isModalVisible && (
+        <Modal
+          modalTitle="Confirm Item Use"
+          modalContent="Do you want to use this item?"
+          cancelButtonLabel="Cancel"
+          confirmButtonLabel="Confirm"
+          cancelClick={cancelItemUse}
+          confirmClick={confirmItemUse}
+        />
+      )}
     </main>
   );
   //#endregion
