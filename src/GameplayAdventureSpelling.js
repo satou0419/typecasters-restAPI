@@ -21,7 +21,7 @@ import {
 } from "./AdventureMode";
 
 import { useNavigate } from "react-router-dom";
-import Modal from "./Modal";
+import Modal from "./StartModal";
 
 export default function GameplayAdventureSpelling() {
   //Flag as an initiator....
