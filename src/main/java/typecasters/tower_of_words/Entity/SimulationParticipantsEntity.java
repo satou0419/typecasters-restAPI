@@ -9,7 +9,6 @@ public class SimulationParticipantsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int simulationParticipantsID;
 
-    @Column(unique = true)
     private int userID;
     private int score;
     private int time;
