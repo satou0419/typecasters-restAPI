@@ -23,7 +23,7 @@ import {
 } from "./AdventureMode";
 
 import { useNavigate } from "react-router-dom";
-import Modal from "./StartModal";
+import StartModal from "./StartModal";
 
 export default function GameplayAdventureSpelling() {
   //Flag as an initiator....
@@ -654,7 +654,7 @@ export default function GameplayAdventureSpelling() {
 
   return (
     <main className="gameplay-container">
-      <Modal isVisible={isModalVisible} onConfirm={handleStartClick} />
+      <StartModal isVisible={isModalVisible} onConfirm={handleStartClick} />
       {/* Rest of your component */}
       <div className="floor_indicator">
         <span>FLOOR {enteredFloor}</span>
