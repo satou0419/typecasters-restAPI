@@ -162,7 +162,7 @@
   border-radius: 50%;
   display: inline-block;
   margin-top: 1.5rem;
-  transform: translateX(600%) translateY(-25%);
+  transform: translateX(13rem) translateY(-25%);
   transition: transform 0.3s ease;
   cursor: pointer;
 }
@@ -249,7 +249,7 @@ body {
   right: 0;
   padding-left: 0px;
   z-index: 10;
-  width: 14%;
+  width: 202px;
   height: 10rem;
   transform: scaleX(100%) scaleY(100%);
   display: flex;
@@ -265,19 +265,4 @@ body {
   font-family: "lilita one";
   text-align: center;
   color: #fff;
-}
-.inventory-shop{
-  margin-top: 1%;
-  position: absolute;
-  display: flex;
-  gap: 20px;
-  transform: translateX(90%) translateY(0%);
-  transition: transform 0.3s ease;
-}
-.inventory-shop .open{
-  transform: translateX(0%) translateY(0%);
-}
-.icon{
-  width: 20%;
-  height: auto;
 }
