@@ -18,6 +18,11 @@ export default function SimulationModeTeacher() {
     }
   }, [creatorID]); // Fixed the dependency array
 
+  const handleClickRoom = () => {};
+
+  useEffect(() => {
+    console.log(rooms);
+  });
   return (
     <main className="simulation-wrapper">
       <div className="txt-Rooms">Rooms</div>
