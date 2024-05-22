@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navigation.css";
 import { fetchUserData } from "../api";
-import { useCredit } from "../CreditContext"; // Import useCredit hook to access credit
+import { useCredit } from "../CreditContext";
 import { USER_TYPE } from "../Login";
 import { Modal } from './Modal';
 
@@ -10,23 +10,21 @@ import { Modal } from './Modal';
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-  const { credit } = useCredit(); // Access credit from the context
+  const { credit, setInitialCredit } = useCredit();
   const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
-    const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     if (storedUserDetails) {
       fetchUserData(storedUserDetails.userID)
         .then((data) => {
-          setUserData(data);
+          setInitialCredit(data.credit_amount);
         })
         .catch((error) => console.error("Error fetching user data:", error));
     }
-  }, []);
+  }, [setInitialCredit, storedUserDetails]);
 
   const toggleMenu = () => {
     setMenuOpen((prevMenuOpen) => !prevMenuOpen);
@@ -84,10 +82,10 @@ export default function Navigation() {
           </div>
           <div className={`profile ${profileOpen ? "open" : ""}`}></div>
         </div>
-        {userData && (
+        {storedUserDetails && (
           <>
             <p>Username: {storedUserDetails.username}</p>
-            <p>Credit: {credit}</p> {/* Display credit from the context */}
+            <p>Credit: {credit}</p>
           </>
         )}
       </nav>

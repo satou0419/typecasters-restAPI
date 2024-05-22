@@ -1,6 +1,7 @@
 // Define your base URL
 // const BASE_URL = "http://localhost:8080";
-const BASE_URL = "https://api-typecasters.azurewebsites.net";
+// const BASE_URL = "https://api-typecasters.azurewebsites.net"; //EXPIRED
+const BASE_URL = "https://api-tower-of-words.azurewebsites.net/";
 // Define your API endpoints
 export const LOGIN_ENDPOINT = `${BASE_URL}/user/login`;
 export const REGISTER_ENDPOINT = `${BASE_URL}/user/register`;
@@ -21,7 +22,7 @@ export const GET_USER_CREDIT = `${BASE_URL}/user_details/get_credit_amount?userD
 export const ITEM_USED = `${BASE_URL}/user_item/use_item`;
 export const VIEW_WORD_ARCHIVE = `${BASE_URL}/archive_words/view/`;
 export const VIEW_ROOM = `${BASE_URL}/room/view_created_room/`;
-
+export const JOIN_ROOM = `${BASE_URL}/room/insert_member/`;
 export const MERRIAM_API = `https://www.dictionaryapi.com/api/v3/references/sd2/json/`;
 export const API_KEY = `95454221-2935-4778-b4e6-be2ca5ede0cb`;
 export const AUDIO_PATH = `https://media.merriam-webster.com/audio/prons/en/us/mp3/`;

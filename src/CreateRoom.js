@@ -1,7 +1,7 @@
 import "./createroom.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { USER_ID } from "./Login";
-import {CREATE_ROOM} from "./api";
+import { CREATE_ROOM } from "./api";
 import { useState } from "react";
 import { Modal } from './components/Modal';
 import "./components/animation.css";
@@ -15,13 +15,13 @@ export default function CreateRoom() {
   const navigate = useNavigate(); // Initialize useNavigate
 
   console.log(userID);
-  
-  const handleCreateRoom = async () =>{
-    try{
+
+  const handleCreateRoom = async () => {
+    try {
       const creatorID = userID;
       const roomName = document.getElementById("roomName").value;
 
-      if(!roomName){
+      if (!roomName) {
         setIsEmpty(true);
         setTimeout(() => setIsEmpty(false), 500); 
         console.error("Please fill all fields");
@@ -31,25 +31,25 @@ export default function CreateRoom() {
       }
 
       const updateUserURL = `${CREATE_ROOM}`;
-  
+
       const response = await fetch(updateUserURL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          creatorID:creatorID,
-          roomName: roomName
+          creatorID: creatorID,
+          roomName: roomName,
         }),
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to create room");
       }
-  
+
       console.log("Room Created Successfully");
       // Navigate('/teacher/simulation_mode');
-    }catch(error){
+    } catch (error) {
       console.error("Error creating room!");
     }
   };
@@ -79,8 +79,15 @@ export default function CreateRoom() {
           placeholder="Enter Room Name"
           id="roomName"
         />
-          <button className="btn btn--large btn--primary" onClick={handleCreateRoom}>CREATE</button>
-          <button className=">btn btn--large btn--danger--large">CANCEL</button>
+        <Link to="/teacher/simulation_mode">
+          <button
+            className="btn btn--large btn--primary"
+            onClick={handleCreateRoom}
+          >
+            CREATE
+          </button>
+        </Link>
+        <button className=">btn btn--large btn--danger--large">CANCEL</button>
       </section>
       {isModalOpen && (
         <Modal
