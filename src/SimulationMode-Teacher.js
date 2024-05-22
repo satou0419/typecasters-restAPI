@@ -4,6 +4,7 @@ import { CardSimulation, CardCreate } from "./components/Card"; // Removed CardA
 import { useState, useEffect } from "react";
 import { USER_ID } from "./Login";
 import { VIEW_ROOM } from "./api";
+import { VIEW_ROOM } from "./api";
 
 export default function SimulationModeTeacher() {
   const [creatorID] = useState(sessionStorage.getItem(USER_ID));
