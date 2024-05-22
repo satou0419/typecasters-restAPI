@@ -21,12 +21,16 @@ import {
 } from "./AdventureMode";
 
 import { useNavigate } from "react-router-dom";
+import Modal from "./Modal";
 
 export default function GameplayAdventureSpelling() {
   //Flag as an initiator....
   //If flag is 0, don't render the data
   //If it is 1, fetch the data
+
+  const [nextPlay, setNextPlay] = useState(true);
   const [flag, setFlag] = useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(true);
   const navigate = useNavigate(); //use to navigate to other pages
 
   //#region Floor and Progress Tracking
@@ -50,7 +54,7 @@ export default function GameplayAdventureSpelling() {
   // If it is conquered but and not yet cleared, then save the progress
   // If conquered but has been already cleared, redirect to AdventureSpelling component
   useEffect(() => {
-    if (isConquered === true) {
+    if (isConquered === true && isCleared === false) {
       fetch(`${UPDATE_USER_PROGRESS_ENDPOINT}${progressID}`, {
         method: "PUT",
         headers: {
@@ -148,14 +152,30 @@ export default function GameplayAdventureSpelling() {
           setEnemyIsHit("");
         }, 500);
       }, 1300);
-    }
+      setTimeout(() => {
+        setMainState({
+          className: "idle-main",
+          style: { transform: "translateX(0px)" },
+        });
+        console.log("Main attack ends");
 
-    setTimeout(() => {
-      setMainState({
-        className: "idle-main",
-        style: { transform: "translateX(0px)" },
-      });
-    }, 1750);
+        setTimeout(() => {
+          setNextPlay(true);
+        }, 1500);
+      }, 1750);
+    } else {
+      setTimeout(() => {
+        setMainState({
+          className: "idle-main",
+          style: { transform: "translateX(0px)" },
+        });
+        console.log("Main attack ends");
+
+        setTimeout(() => {
+          setNextPlay(true);
+        }, 1500);
+      }, 1750);
+    }
   };
 
   const springEnemyAttackAnimation = () => {
@@ -179,6 +199,10 @@ export default function GameplayAdventureSpelling() {
 
       setTimeout(() => {
         setHearts((prevHearts) => prevHearts - 1);
+        console.log("Enemy attack ends");
+        // setTimeout(() => {
+        //   setNextPlay(true);
+        // }, 1500);
         console.log("Incorrect Word:", userInput);
 
         // Enable input and refocus after animation completes
@@ -272,6 +296,7 @@ export default function GameplayAdventureSpelling() {
 
   const handleStartClick = () => {
     setFlag(1);
+    setIsModalVisible(false);
   };
 
   //#region Reload Management
@@ -385,19 +410,25 @@ export default function GameplayAdventureSpelling() {
   useEffect(() => {
     const handleAudioEnded = () => {
       console.log("Audio playback ended");
+      setNextPlay(false);
       enableInputs();
     };
 
-    if (audioUrl && audioElement) {
-      console.log("Audio playback started"); // Log when audio playback starts
-      audioElement.src = audioUrl;
-      audioElement.play();
-      setInputDisabled(false);
-      inputRef.current.focus();
-      setAutoFocusValue(true);
+    if (nextPlay === true) {
+      if (audioUrl && audioElement) {
+        if (isCorrect === true) {
+          setUserInput("");
+        }
+        console.log("Audio playback started"); // Log when audio playback starts
+        audioElement.src = audioUrl;
+        audioElement.play();
+        setInputDisabled(false);
+        inputRef.current.focus();
+        setAutoFocusValue(true);
 
-      // Add event listener for 'ended' event
-      audioElement.addEventListener("ended", handleAudioEnded);
+        // Add event listener for 'ended' event
+        audioElement.addEventListener("ended", handleAudioEnded);
+      }
     }
 
     // Cleanup function to remove the event listener
@@ -406,7 +437,7 @@ export default function GameplayAdventureSpelling() {
         audioElement.removeEventListener("ended", handleAudioEnded);
       }
     };
-  }, [audioUrl, audioElement]); // Include audioElement as a dependency
+  }, [audioUrl, audioElement, nextPlay]); // Include audioElement as a dependency
 
   // Effect to create audio element
   useEffect(() => {
@@ -458,7 +489,7 @@ export default function GameplayAdventureSpelling() {
       setInsertWord(true);
       mainAttackAnimation();
       setIsCorrect(true);
-      setFlag(0);
+      // setFlag(0);
       setInsertWord(true);
       console.log("Insert Status: ", insertWord);
       setPronunciationStatus({
@@ -475,7 +506,7 @@ export default function GameplayAdventureSpelling() {
         // Check if all words of the enemy are defeated
         if (currentWordIndex === words.length - 1) {
           setInsertWord(true);
-          setFlag(0);
+          // setFlag(0);
 
           console.log(
             `Enemy ${enemies[currentEnemyIndex].enemyId} defeated! Total words: ${words.length}`
@@ -608,6 +639,8 @@ export default function GameplayAdventureSpelling() {
 
   return (
     <main className="gameplay-container">
+      <Modal isVisible={isModalVisible} onConfirm={handleStartClick} />
+      {/* Rest of your component */}
       <div className="floor_indicator">
         <span>FLOOR {enteredFloor}</span>
       </div>
@@ -617,7 +650,6 @@ export default function GameplayAdventureSpelling() {
           className={`${mainState.className} ${isMainHit} character character-main`}
           style={mainState.style}
         ></div>
-
         <div
           className={`${enemyState.className} ${isEnemyHit} character  character-enemy`}
           style={enemyState.style}
@@ -638,7 +670,7 @@ export default function GameplayAdventureSpelling() {
                 <div
                   key={item.userItemId}
                   className="item-container"
-                  onClick={() => handleItemClick(item.itemId)} // Add onClick handler
+                  onClick={() => handleItemClick(item.itemId)}
                 >
                   <img
                     src={`./assets/items/${item.itemId.image_path}`}
@@ -658,12 +690,6 @@ export default function GameplayAdventureSpelling() {
           <div className="input-wrapper">
             <button
               className="btn btn--small btn--primary btn-audio"
-              onClick={handleStartClick}
-            >
-              Start
-            </button>
-            <button
-              className="btn btn--small btn--primary btn-audio"
               onClick={handleAudioClick}
               disabled={audioButtonDisabled}
             >
@@ -673,10 +699,10 @@ export default function GameplayAdventureSpelling() {
               type="text"
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
-              autoFocus={autoFocusValue} // Use the variable as the value of autoFocus
+              autoFocus={autoFocusValue}
               disabled={inputDisabled}
               className={`input-answer ${animateShake}`}
-              ref={inputRef} // Assign the ref to the input element
+              ref={inputRef}
             />
             <button
               className="btn btn--medium btn--primary btn-go"
@@ -707,12 +733,11 @@ export default function GameplayAdventureSpelling() {
           <div className="control-clue-container">
             <div className="clue-wrapper">
               <h3>Word Info's</h3>
-
               <span className="lbl_pronunciation">Pronunciation</span>
               <div
-                className={`text-pronunciation ${pronunciationStatus.className} `}
+                className={`text-pronunciation ${pronunciationStatus.className}`}
               >
-                <span> {currentWordData?.pronunciation.toString()}</span>
+                <span>{currentWordData?.pronunciation.toString()}</span>
               </div>
               <span className="lbl_definition">Definition</span>
               <div className="text-definition">
@@ -724,5 +749,4 @@ export default function GameplayAdventureSpelling() {
       </section>
     </main>
   );
-  //#endregion
 }
