@@ -54,6 +54,10 @@ export default function Navigation({ onLogout }) {
 
         </div>
         <div className= "profile-container">
+          <div className={`inventory-shop ${profileOpen ? "open" : ""}`}>
+            <img className="icon" src="/assets/icon/ic_shop.webp"></img>
+            <img className="icon" src="/assets/icon/ic_inventory.webp"></img>
+          </div>
           <div className="profile-icon" onClick={toggleProfile}>
             <span className={`circle ${profileOpen ? "open" : ""}`}></span>
           </div>

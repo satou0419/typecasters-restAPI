@@ -162,7 +162,7 @@
   border-radius: 50%;
   display: inline-block;
   margin-top: 1.5rem;
-  transform: translateX(13rem) translateY(-25%);
+  transform: translateX(600%) translateY(-25%);
   transition: transform 0.3s ease;
   cursor: pointer;
 }
@@ -187,7 +187,7 @@
   padding-left: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   /* transform: translateY(-10%) translateX(50%); */
-  margin-left: 68.5rem;
+  margin-left: 82%;
   transform: scaleX(100%) scaleY(0);
   transform-origin: top;
   transition: transform 0.1s ease;
@@ -196,11 +196,11 @@
   z-index: 10;
 }
 .profile.open{
-  transform: translateY(-10%) translateX(550%);
+  /* transform: translateY(-10%) translateX(550%); */
   right: 0;
   padding-left: 0px;
   z-index: 10;
-  width: 202px;
+  width: 14%;
   height: 10rem;
   transform: scaleX(100%) scaleY(100%);
   display: flex;
@@ -214,7 +214,7 @@
   /* overflow: hidden; */
 }
 body{
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 .profile-side{
   transform: translateY(0%) translateX(105%);
@@ -238,4 +238,19 @@ body{
   font-family: 'lilita one';
   text-align: center;
   color: #fff;
+}
+.inventory-shop{
+  margin-top: 1%;
+  position: absolute;
+  display: flex;
+  gap: 20px;
+  transform: translateX(90%) translateY(0%);
+  transition: transform 0.3s ease;
+}
+.inventory-shop .open{
+  transform: translateX(0%) translateY(0%);
+}
+.icon{
+  width: 20%;
+  height: auto;
 }
