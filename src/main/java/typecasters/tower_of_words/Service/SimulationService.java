@@ -24,15 +24,15 @@ public class SimulationService {
 
     public SimulationEntity insertSimulation(SimulationEntity simulation) {
         Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID());
-        if (room.isPresent()) {
-            SimulationParticipantsEntity user = new SimulationParticipantsEntity();
-            for(Integer i : room.get().getMembers()){
-
-                user.setUserID(i.intValue());
-                simulation.addParticipants(user);
-            }
-//            simulationRepository.save(simulation);
-        }
+//        if (room.isPresent()) {
+//            SimulationParticipantsEntity user = new SimulationParticipantsEntity();
+//            for(Integer i : room.get().getMembers()){
+//
+//                user.setUserID(i.intValue());
+//                simulation.addParticipants(user);
+//            }
+////            simulationRepository.save(simulation);
+//        }
 //        if (simulation.getWords().size() != 10) {
 //            throw new IllegalArgumentException("The number of words must be 10.");
 //        }
