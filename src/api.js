@@ -1,7 +1,7 @@
 // Define your base URL
 // const BASE_URL = "http://localhost:8080";
 // const BASE_URL = "https://api-typecasters.azurewebsites.net"; //EXPIRED
-const BASE_URL = "https://api-tower-of-words.azurewebsites.net/";
+const BASE_URL = "https://api-tower-of-words.azurewebsites.net";
 // Define your API endpoints
 export const LOGIN_ENDPOINT = `${BASE_URL}/user/login`;
 export const REGISTER_ENDPOINT = `${BASE_URL}/user/register`;
@@ -25,10 +25,15 @@ export const VIEW_ROOM = `${BASE_URL}/room/view_created_room/`;
 export const JOIN_ROOM = `${BASE_URL}/room/insert_member_by_code/`;
 export const STUDENT_VIEW_ROOM = `${BASE_URL}/room/view_room_by_member/`;
 export const VIEW_SIMULATION = `${BASE_URL}/simulation/view_by_room/`;
+export const CREATE_GAME = `${BASE_URL}/simulation/insert`;
+export const GET_REWARD_BY_FLOOR = `${BASE_URL}/adventure_reward/get_reward_by_floor_id`;
+export const VIEW_GAME_BY_ROOM = `${BASE_URL}/simulation/view_by_room/`;
+export const SIMULATION_GAMEPLAY = `${BASE_URL}/simulation/view_by_id/`;
 
 export const MERRIAM_API = `https://www.dictionaryapi.com/api/v3/references/sd2/json/`;
 export const API_KEY = `95454221-2935-4778-b4e6-be2ca5ede0cb`;
 export const AUDIO_PATH = `https://media.merriam-webster.com/audio/prons/en/us/mp3/`;
+export const VIEW_STUDENT_ROOM = `${BASE_URL}/room/view_room_by_member/`;
 // Function to fetch user details
 export const fetchUserData = async (userID) => {
   try {

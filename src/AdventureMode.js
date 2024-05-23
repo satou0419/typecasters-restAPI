@@ -243,7 +243,8 @@ export default function AdventureMode() {
                 </p>
                 <p className="txt-rewards">Rewards:</p>
                 <div className="items-container">
-                  <div className="reward-item">
+                  <span className="txt-floor">COMING SOON</span>
+                  {/* <div className="reward-item">
                     <div className="reward-item-container"></div>
                   </div>
                   <div className="reward-item">
@@ -251,7 +252,7 @@ export default function AdventureMode() {
                   </div>
                   <div className="reward-item">
                     <div className="reward-item-container"></div>
-                  </div>
+                  </div> */}
                 </div>
                 <button
                   className="btn btn--small btn--primary btn-enter"

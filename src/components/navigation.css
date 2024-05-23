@@ -165,6 +165,13 @@
   transform: translateX(13rem) translateY(-25%);
   transition: transform 0.3s ease;
   cursor: pointer;
+
+  display: flex;
+  font-family: "Lilita One";
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #fff;
 }
 
 .profile {
@@ -201,8 +208,7 @@
 .profile-container {
   /* overflow: hidden; */
 
-  outline: 2px solid green;
-  width: 250px;
+  width: 20%;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -265,4 +271,19 @@ body {
   font-family: "lilita one";
   text-align: center;
   color: #fff;
+}
+
+.credit-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Lilita One";
+  color: #fff;
+  gap: 0.5rem;
+  position: absolute;
+  left: 80px;
+}
+
+.credit-holder img {
+  height: 20px;
 }

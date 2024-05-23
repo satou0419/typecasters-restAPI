@@ -6,9 +6,10 @@ import { useCredit } from "../CreditContext";
 import { USER_TYPE } from "../Login";
 import { Modal } from "./Modal";
 
-export default function Navigation() {
+export default function Navigation({ onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [initialUsername, setInitialUsername] = useState(""); // State to store the initial
   const navigate = useNavigate();
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const { credit, setInitialCredit } = useCredit();
@@ -20,6 +21,9 @@ export default function Navigation() {
       fetchUserData(storedUserDetails.userID)
         .then((data) => {
           setInitialCredit(data.credit_amount);
+          setInitialUsername(
+            storedUserDetails.username.charAt(0).toUpperCase()
+          ); // Set initial letter of username
         })
         .catch((error) => console.error("Error fetching user data:", error));
     }
@@ -35,19 +39,16 @@ export default function Navigation() {
 
   const handleLogoutClick = () => {
     setIsLoggingOut(true);
-    // document.body.classList.add('active-modal'); // Add class to body when modal is active
   };
 
   const handleConfirmLogout = () => {
     setIsLoggingOut(false);
-    // document.body.classList.remove('active-modal'); // Remove class from body when modal is inactive
     sessionStorage.clear();
     navigate("/Login");
   };
 
   const handleCancelLogout = () => {
     setIsLoggingOut(false);
-    // document.body.classList.remove('active-modal'); // Remove class from body when modal is inactive
   };
 
   return (
@@ -56,6 +57,7 @@ export default function Navigation() {
         <div className="nav-bar__logo">
           <img src="/assets/logo/logo_simple.webp" alt="Logo" />
         </div>
+
         <div
           className={`menu-icon ${menuOpen ? "active" : ""}`}
           onClick={toggleMenu}
@@ -64,23 +66,37 @@ export default function Navigation() {
           <span className="bar"></span>
           <span className="bar"></span>
         </div>
+
+        <div className="credit-holder">
+          <img src="/assets/icon/ic_currency.webp" alt="Credit Icon" />
+          <span>{credit}</span>
+        </div>
+
         <div className={`menu ${menuOpen ? "open" : ""}`}>
           <Link to="/adventure_mode">Adventure Mode</Link>
           <Link to={`${userType}/simulation_mode`}>Simulation Mode</Link>
           <Link to="/archive">Archive</Link>
-          <Link to="/about">About</Link>
-          <Link to="/inventory_shop">Inventory</Link>
-          <Link to="/Settings">Settings</Link>
-          <Link onClick={handleLogoutClick}>Logout</Link>
+          <Link to="/dashboard">About</Link>
         </div>
+
         <div className="profile-container">
           <div className="profile-wrapper">
             <div className="profile-icon" onClick={toggleProfile}>
-              <span className={`circle ${profileOpen ? "open" : ""}`}></span>
+              <span className={`circle ${profileOpen ? "open" : ""}`}>
+                {initialUsername}
+              </span>
               <div className={`profile ${profileOpen ? "open" : ""}`}>
                 <Link to="/inventory_shop">Inventory</Link>
                 <Link to="/Settings">Settings</Link>
-                <Link onClick={onLogout}>Logout</Link>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogoutClick();
+                  }}
+                >
+                  Logout
+                </a>
               </div>
             </div>
             <div className={`profile-side ${profileOpen ? "open" : ""}`}>

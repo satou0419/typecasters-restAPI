@@ -70,11 +70,10 @@ export default function Registration() {
       if (!response.ok) {
         // If response status is not ok, parse the error message as text
         const errorMessage = await response.text();
-        alert(errorMessage); // Display the error message to the user
         setError(errorMessage);
       } else {
         // Registration successful
-        alert("Registration successful!");
+        setError("Registration successful!");
         navigate("/login");
       }
     } catch (error) {
@@ -86,11 +85,11 @@ export default function Registration() {
 
   return (
     <main className="registration-container">
-      <div className="toast-box">
-        {/* Display error message */}
-        <p>{error}</p>
-      </div>
-
+      {error && (
+        <div className="toast-box">
+          <p>{error}</p>
+        </div>
+      )}
       <section className="card card-form">
         {/* Banner section */}
         <aside className="form-registration-banner">

@@ -54,6 +54,11 @@ export default function GameplayAdventureSpelling() {
     console.log("Current: ", currentFloor);
   }, [enteredFloor]);
 
+  useEffect(() => {
+    console.log("CLEAR:::", isCleared);
+    console.log("INSERT:::", insertWord);
+  });
+
   // Handling Conquered conditions
   // If it is conquered but and not yet cleared, then save the progress
   // If conquered but has been already cleared, redirect to AdventureSpelling component
@@ -144,8 +149,8 @@ export default function GameplayAdventureSpelling() {
       className: "attack-main",
       style: {
         transform: "translateX(550px)",
-        height: "369px",
-        width: "calc(7004px/21)",
+        height: "408px",
+        width: "calc(8568px/21)",
       },
     });
 
@@ -275,6 +280,7 @@ export default function GameplayAdventureSpelling() {
           return response.text(); // or response.json() if the response is expected to be JSON
         })
         .then((data) => {
+          setInsertWord(false);
           console.log("Response data:", data);
           // Handle the response data
         })
@@ -285,8 +291,6 @@ export default function GameplayAdventureSpelling() {
             console.error("Error fetching data:", error.message);
           }
         });
-    } else {
-      console.log("No words added, tower has been cleared already!");
     }
   }, [insertWord]);
 
@@ -570,6 +574,7 @@ export default function GameplayAdventureSpelling() {
     }
   };
 
+  const [itemID, setItemID] = useState();
   const [pronunciationStatus, setPronunciationStatus] = useState({
     className: "text-pronunciation-lock",
     style: {},
@@ -580,64 +585,68 @@ export default function GameplayAdventureSpelling() {
     setIsItemModalVisible(true);
     // console.log("Item clicked:", itemId);
     // const id = itemId.itemId;
+    setItemID(item.itemId.itemId);
     // console.log("id", id);
   };
-    // Assuming you have the userID available
+  // Assuming you have the userID available
 
-    // Define the data to send in the POST request
-    const confirmItemUse = () => {
-      if (selectedItem) {
-        const id = selectedItem.itemId;
-        const postData = {
-          userID: userID,
-          itemID: selectedItem.itemId,
-        };
+  // useEffect(() => {
+  //   console.log(itemID);
+  // });
+  // Define the data to send in the POST request
+  const confirmItemUse = () => {
+    if (selectedItem) {
+      const id = selectedItem.itemId;
+      const postData = {
+        userID: userID,
+        itemID: selectedItem.itemId,
+      };
 
-    // Make the POST request
-    fetch(`${ITEM_USED}/${userID}/${selectedItem.itemId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to use item");
-        }
-        console.log("Item used successfully");
-        // Update the quantity of the used item in the userItems state
-        const updatedUserItems = userItems.map((item) => {
-          if (item.itemId === selectedItem.itemId) {
-            return {
-              ...item,
-              item: item.quantity - 1, // Decrease the quantity by 1 after using the item
-            };
+      // Make the POST request
+      fetch(`${ITEM_USED}/${userID}/${itemID}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to use item");
           }
-          return item;
-        });
-        setUserItems(updatedUserItems); // Update the userItems state with the updated quantity
-
-        // Handle item effects locally
-        if (selectedItem.itemId === 1) {
-          setHearts((prevHearts) => Math.min(prevHearts + 1, 6));
-          console.log("Heart added!");
-        } else if (selectedItem.itemId === 2) {
-          setHearts((prevHearts) => Math.min(prevHearts + 3, 6));
-          console.log("Hearts added!");
-        } else if (selectedItem.itemId === 3) {
-          setPronunciationStatus({
-            className: "",
+          console.log("Item used successfully");
+          // Update the quantity of the used item in the userItems state
+          const updatedUserItems = userItems.map((item) => {
+            if (item.itemId === selectedItem.itemId) {
+              return {
+                ...item,
+                item: item.quantity - 1, // Decrease the quantity by 1 after using the item
+              };
+            }
+            return item;
           });
-        }
-      })
-      .catch((error) => {
-        console.error("Error using item:", error);
-      })
-      .finally(() => {
-        setIsItemModalVisible(false);
-        setSelectedItem(null);
-      });
+          setUserItems(updatedUserItems); // Update the userItems state with the updated quantity
+
+          // Handle item effects locally
+          if (selectedItem.itemId === 1) {
+            setHearts((prevHearts) => Math.min(prevHearts + 1, 6));
+            console.log("Heart added!");
+          } else if (selectedItem.itemId === 2) {
+            setHearts((prevHearts) => Math.min(prevHearts + 3, 6));
+            console.log("Hearts added!");
+          } else if (selectedItem.itemId === 3) {
+            setPronunciationStatus({
+              className: "",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error using item:", error);
+        })
+        .finally(() => {
+          setIsItemModalVisible(false);
+          setSelectedItem(null);
+        });
     }
   };
 

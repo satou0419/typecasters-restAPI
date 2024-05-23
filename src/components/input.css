@@ -34,7 +34,8 @@
 }
 .input::placeholder,
 .input-select {
-  color: #c1c1c1;
+  background-color: #fff;
+  color: #000;
 }
 
 .input-line {
