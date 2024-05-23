@@ -8,6 +8,16 @@
   width: 80%;
 }
 
+.simulation-card-wrapper {
+  display: flex;
+  overflow-x: auto;
+  gap: 2rem;
+
+  margin-top: 2rem;
+
+  width: 80%;
+}
+
 .room-wrapper {
   height: 100%;
   width: 100%;
@@ -17,6 +27,14 @@
 
   justify-content: center;
   align-items: center;
+}
+
+.teacher-card-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
 }
 
 .room-card-wrapper {
