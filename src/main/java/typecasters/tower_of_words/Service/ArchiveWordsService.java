@@ -15,6 +15,8 @@ public class ArchiveWordsService {
     ArchiveWordsRepository archiveWordsRepository;
     @Autowired
     UserDetailsService userDetailsService;
+    @Autowired
+    UserService userService;
 
     public ArchiveWordsEntity insertArchiveWords(int userID, String word) {
         boolean wordExists = false;

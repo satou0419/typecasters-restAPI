@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import typecasters.tower_of_words.Entity.ArchiveWordsEntity;
+import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import typecasters.tower_of_words.Service.ArchiveWordsService;
 
 import java.util.List;
@@ -18,11 +19,15 @@ public class ArchiveWordsController {
     @Autowired
     ArchiveWordsService archiveWordsService;
 
+    @Autowired
+    UserDetailsRepository userDetailsRepository;
+
     // Create
     @PostMapping("/insert/{userID}/{word}")
     public ResponseEntity<?> insertArchiveWords(@PathVariable int userID ,@PathVariable String word) {
         try{
-            ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(userID, word);
+            int userDetailId = (userDetailsRepository.findUserDetailIdByUserId(userID)).get();
+            ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(userDetailId, word);
             return new ResponseEntity<>("Word Archived!", HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
