@@ -26,8 +26,8 @@ public class ArchiveWordsController {
     @PostMapping("/insert/{userID}/{word}")
     public ResponseEntity<?> insertArchiveWords(@PathVariable int userID ,@PathVariable String word) {
         try{
-            int userDetailId = (userDetailsRepository.findUserDetailIdByUserId(userID)).get();
-            ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(userDetailId, word);
+           // int userDetailId = (userDetailsRepository.findUserDetailIdByUserId(userID)).get();
+            ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(userID, word);
             return new ResponseEntity<>("Word Archived!", HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);

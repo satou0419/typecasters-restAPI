@@ -1,9 +1,11 @@
 package typecasters.tower_of_words.Service;
 
 import typecasters.tower_of_words.Entity.ArchiveWordsEntity;
+import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Repository.ArchiveWordsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import typecasters.tower_of_words.Repository.UserRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,7 +18,7 @@ public class ArchiveWordsService {
     @Autowired
     UserDetailsService userDetailsService;
     @Autowired
-    UserService userService;
+    UserRepository userRepository;
 
     public ArchiveWordsEntity insertArchiveWords(int userID, String word) {
         boolean wordExists = false;
@@ -35,11 +37,13 @@ public class ArchiveWordsService {
             throw new NoSuchElementException("User " + userID + " does not exist");
         }
 
+        UserEntity id = userRepository.findById(userID).get();
+
         if (!wordExists) {
             ArchiveWordsEntity archive = new ArchiveWordsEntity();
-            archive.setUserID(userID);
+            archive.setUserID(id.getUserID());
             archive.setWord(word);
-            userDetailsService.incrementUserDetailWords(userID);
+            userDetailsService.incrementUserDetailWords(id.getUserID());
             return archiveWordsRepository.save(archive);
         } else {
             throw new IllegalArgumentException("Word Already Exist!");
