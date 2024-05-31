@@ -41,7 +41,7 @@ public class ArchiveWordsService {
 
         if (!wordExists) {
             ArchiveWordsEntity archive = new ArchiveWordsEntity();
-            archive.setUserID(id.getUserID());
+            archive.setUserID(userID);
             archive.setWord(word);
             userDetailsService.incrementUserDetailWords(id.getUserID());
             return archiveWordsRepository.save(archive);
