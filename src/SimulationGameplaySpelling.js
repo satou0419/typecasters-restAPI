@@ -5,8 +5,12 @@ import GameOverModal from "./GameOverModal";
 import { SIMULATION_GAMEPLAY } from "./api";
 import { useNavigate } from "react-router-dom";
 import { SIMULATION_ID } from "./SimulationRoom-Student";
-
-export default function SimulationGameplay() {
+import { USER_ID } from "./Login";
+import { INSERT_WORD_ARCHIVE } from "./api";
+import { USER_DETAILS_ID } from "./Dashboard";
+export default function SimulationGameplaySpelling() {
+  const userDetailsID = sessionStorage.getItem(USER_DETAILS_ID);
+  const [currentWord, setCurrentWord] = useState();
   const [flag, setFlag] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [isGameOverModalVisible, setIsGameOverModalVisible] = useState(false);
@@ -15,7 +19,7 @@ export default function SimulationGameplay() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [getSimulation, setGetSimulation] = useState([]);
   const [simulationID] = useState(sessionStorage.getItem(SIMULATION_ID));
-
+  const [insertWord, setInsertWord] = useState(false);
   const [animateShake, setAnimateShake] = useState("");
   const [isEnemyHit, setEnemyIsHit] = useState("");
   const [isMainHit, setMainIsHit] = useState(false);
@@ -55,6 +59,8 @@ export default function SimulationGameplay() {
       if (getSimulation.words && getSimulation.words.length > 0) {
         const currentWord = getSimulation.words[currentWordIndex].word;
         fetchWordDefinition(currentWord);
+        setCurrentWord(currentWord);
+        setInsertWord(true);
       }
     };
 
@@ -66,7 +72,34 @@ export default function SimulationGameplay() {
     }
 
     fetchWordData();
-  }, [flag, getSimulation, currentWordIndex, hearts]);
+  }, [flag, getSimulation, currentWordIndex]);
+
+  useEffect(() => {
+    if (insertWord === true) {
+      console.log("UserID Type", typeof userID);
+      console.log("Current Word", currentWord);
+
+      fetch(`${INSERT_WORD_ARCHIVE}/${userDetailsID}/${currentWord}`, {
+        method: "POST", // Use POST method for inserting data
+      })
+        .then((response) => {
+          console.log("Response status:", response.status);
+          return response.text(); // or response.json() if the response is expected to be JSON
+        })
+        .then((data) => {
+          setInsertWord(false);
+          console.log("Response data:", data);
+          // Handle the response data
+        })
+        .catch((error) => {
+          if (error instanceof TypeError) {
+            console.error("Network error:", error.message);
+          } else {
+            console.error("Error fetching data:", error.message);
+          }
+        });
+    }
+  }, [flag]);
 
   useEffect(() => {
     playAudio(); // Call playAudio when component mounts

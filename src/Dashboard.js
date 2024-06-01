@@ -7,10 +7,12 @@ import { fetchUserData } from "./api";
 import { USER_TYPE } from "./Login";
 
 export const USER_DETAILS_ID = "userDetailsID";
+
 export default function Dashboard() {
   const [userData, setUserData] = useState(null);
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails")); // Define storedUserDetails
   const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
+  const [userDetailsID, setUserDetailsID] = useState();
 
   console.log(userType);
   useEffect(() => {
@@ -23,10 +25,23 @@ export default function Dashboard() {
         .then((data) => {
           console.log("Retrieved User Data:", data);
           setUserData(data);
+
+          sessionStorage.setItem(
+            USER_DETAILS_ID,
+            data.userProgress.userDetailsId
+          );
+          console.log("userIDDetais", data.userProgress.userDetailsId);
         })
         .catch((error) => console.error("Error fetching user data:", error));
     }
   }, []);
+
+  // Helper function to handle progress value
+  const getProgressValue = (value) => {
+    if (value === -1) return "";
+    if (value > 0) return value - 1;
+    return value;
+  };
 
   return (
     <main className="dashboard-wrapper">
@@ -37,7 +52,9 @@ export default function Dashboard() {
             title="Adventure"
             content="Lorem ipsum dolor sit amet, consectetur adipiscing"
             progressTitle="Floor Completed"
-            progressValue={userData && userData.userProgress.floorId}
+            progressValue={
+              userData ? getProgressValue(userData.userProgress.floorId) : ""
+            }
             imageSrc="./assets/banner/banner_adventure.webp"
           />
         </Link>

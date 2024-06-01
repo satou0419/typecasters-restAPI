@@ -26,8 +26,7 @@ import TeacherRoomSettings from "./TeacherRoomSettings";
 import TeacherRoomInfo from "./TeacherRoomInfo";
 import Settings from "./Settings";
 import { CreditProvider } from "./CreditContext";
-import SimulationGameplay from "./SimulationGameplay";
-
+import SimulationGameplaySpelling from "./SimulationGameplaySpelling";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
@@ -163,7 +162,7 @@ function App() {
               <Route path="/Settings" element={<Settings />} />
               <Route
                 path="/simulation_gameplay"
-                element={<SimulationGameplay />}
+                element={<SimulationGameplaySpelling />}
               />
             </>
           )}
