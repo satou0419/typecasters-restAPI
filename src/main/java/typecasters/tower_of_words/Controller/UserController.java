@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 
 
 @RestController
@@ -48,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/get_user_id/{username}")
-    public int getUserId(@PathVariable String username){
+    public Optional<Integer> getUserId(@PathVariable String username){
         return userv.findUserIdByUsername(username);
     }
 
