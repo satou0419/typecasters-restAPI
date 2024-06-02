@@ -47,6 +47,11 @@ public class UserController {
         return "testinnnngg";
     }
 
+    @GetMapping("/get_user_id/{username}")
+    public int getUserId(@PathVariable String username){
+        return userv.findUserIdByUsername(username);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@RequestBody LoginRequest logReq) {
         try {

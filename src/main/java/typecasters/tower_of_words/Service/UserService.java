@@ -104,6 +104,12 @@ public class UserService {
         }
     }
 
+    public int findUserIdByUsername(String username){
+        UserEntity user = urepo.findOneByUsername(username);
+
+        return user.getUserID();
+    }
+
     //findTest
     public UserEntity testFind(String username){
         return urepo.findOneByUsername(username);
