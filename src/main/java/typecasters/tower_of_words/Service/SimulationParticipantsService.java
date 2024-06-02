@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,18 @@ public class SimulationParticipantsService {
     }
 
     public SimulationParticipantsEntity updateParticipant(SimulationParticipantsEntity participant) {
+        SimulationParticipantsEntity edit = new SimulationParticipantsEntity();
+        try {
+            edit = simulationParticipantsRepository.findById(participant.getSimulationParticipantsID()).get();
+
+            edit.setTime(participant.getTime());
+            edit.setScore(participant.getScore());
+            edit.setDone(participant.isDone());
+
+        }catch(NoSuchElementException ex) {
+            throw new NoSuchElementException ("Simulation " + participant.getSimulationParticipantsID() + " does not exist");
+        }
+
         return simulationParticipantsRepository.save(participant);
     }
 

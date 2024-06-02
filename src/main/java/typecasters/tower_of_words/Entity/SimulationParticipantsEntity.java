@@ -11,13 +11,13 @@ public class SimulationParticipantsEntity {
 
     private int userID;
     private int score;
-    private int time;
+    private String time;
     private boolean isDone;
 
     public SimulationParticipantsEntity() {
     }
 
-    public SimulationParticipantsEntity(int simulationParticipantsID, int userID, int score, int time, boolean isDone) {
+    public SimulationParticipantsEntity(int simulationParticipantsID, int userID, int score, String time, boolean isDone) {
         this.simulationParticipantsID = simulationParticipantsID;
         this.userID = userID;
         this.score = score;
@@ -49,11 +49,11 @@ public class SimulationParticipantsEntity {
         this.score = score;
     }
 
-    public int getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
