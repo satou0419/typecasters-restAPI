@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import typecasters.tower_of_words.UserInfo;
 
 
 @RestController
@@ -50,6 +50,11 @@ public class UserController {
     @GetMapping("/get_user_id/{username}")
     public int getUserId(@PathVariable String username){
         return userv.findUserIdByUsername(username);
+    }
+
+    @GetMapping("/get_user_info/{user_id}")
+    public UserInfo getUserInfo(@PathVariable int user_id){
+        return userv.findUserInfoById(user_id);
     }
 
     @PostMapping("/login")
