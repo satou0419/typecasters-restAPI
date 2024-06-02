@@ -19,7 +19,7 @@ public class AdventureEnemyEntity {
 
     //    @OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL, orphanRemoval = true)
     @ElementCollection
-    @CollectionTable(name = "adventure_words", joinColumns = @JoinColumn(name = "enemyId"))
+    @CollectionTable(name = "tbl_adventure_words", joinColumns = @JoinColumn(name = "enemyId"))
     private List<String> words = new ArrayList<>();
 
     public AdventureEnemyEntity() {
