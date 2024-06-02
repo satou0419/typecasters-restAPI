@@ -55,16 +55,16 @@ public class UserDetailsService {
     }
 
     //Increment
-    public String incrementUserDetailWords(int user_detail_id){
-        UserDetailsEntity userDetails = ud_repo.findById(user_detail_id).get();
+    public String incrementUserDetailWords(int user_id){
+        UserDetailsEntity userDetails = ud_repo.findOneByUserId(user_id);
         userDetails.setWords_collected(userDetails.getWords_collected() + 1);
         ud_repo.save(userDetails);
 
         return "word count incremented";
     }
 
-    public String incrementUserAchievementCount(int user_detail_id){
-        UserDetailsEntity userDetails = ud_repo.findById(user_detail_id).get();
+    public String incrementUserAchievementCount(int user_id){
+        UserDetailsEntity userDetails = ud_repo.findOneByUserId(user_id);
         userDetails.setAchievement_count(userDetails.getAchievement_count() + 1);
         ud_repo.save(userDetails);
 
