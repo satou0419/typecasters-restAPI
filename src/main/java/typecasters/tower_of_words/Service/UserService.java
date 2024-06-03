@@ -1,7 +1,5 @@
 package typecasters.tower_of_words.Service;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Exception.IncorrectPasswordException;
 import typecasters.tower_of_words.Exception.UsernameNotFoundException;
@@ -10,8 +8,9 @@ import typecasters.tower_of_words.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import typecasters.tower_of_words.UserInfo;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -108,8 +107,24 @@ public class UserService {
         }
     }
 
-    public Optional<Integer> findUserIdByUsername(String username){
-        return urepo.findUserIdByUsername(username);
+    public UserInfo findUserInfoById(int user_id){
+        UserEntity user = new UserEntity();
+
+
+        try{
+            user = urepo.findById(user_id).get();
+
+            return new UserInfo(user.getUserID(), user.getUsername(), user.getFirstname(), user.getLastname());
+
+        }catch(NoSuchElementException e){
+            throw new NoSuchElementException(e);
+        }
+    }
+
+    public int findUserIdByUsername(String username){
+        UserEntity user = urepo.findOneByUsername(username);
+
+        return user.getUserID();
     }
 
     //findTest
