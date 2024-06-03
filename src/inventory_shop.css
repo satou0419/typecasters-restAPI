@@ -24,8 +24,6 @@
 
 .inventory-section {
   display: flex;
-  flex-direction: column;
-  margin-top: 2rem;
 }
 
 .inventory-item-selection-box {

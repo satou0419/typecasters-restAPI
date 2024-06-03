@@ -4,7 +4,7 @@ import "./inventory_shop.css";
 import { CardItem } from "./components/Card";
 import { GET_ALL_ITEMS_ENDPOINT, BUY_ITEM_ENDPOINT } from "./api";
 import { useCredit } from "./CreditContext"; // Import useCredit hook to update credit
-import { Modal, Message } from "./components/Modal";
+import { Modal, Message } from './components/Modal';
 
 export default function InventoryShop() {
   const [activeTab, setActiveTab] = useState("inventory");
@@ -18,6 +18,23 @@ export default function InventoryShop() {
   const [isEnoughCred, setIsEnoughCred] = useState(false);
 
   const { credit } = useCredit(); // Access credit from the context
+  
+
+
+  const showModal = (item) =>{
+    // setIsConfirmingPurchase(true);
+    setShowMessage("Are you sure you want to purchase ");
+    // console.log("Clickeddddd")
+    // console.log(selectedItem.item_price)
+    // console.log("Credit: ", credit)
+    if (credit >= item.item_price) {
+      setSelectedItem(item);
+      setIsConfirmingPurchase(true);
+    } else {
+      console.log("Insufficient credit. You cannot purchase this item.");
+      setIsEnoughCred(true);
+    }
+  }
 
   useEffect(() => {
     const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -47,21 +64,6 @@ export default function InventoryShop() {
     setSelectedItem(item);
   };
 
-  const showModal = (item) => {
-    // setIsConfirmingPurchase(true);
-    setShowMessage("Are you sure you want to purchase ");
-    // console.log("Clickeddddd")
-    // console.log(selectedItem.item_price)
-    // console.log("Credit: ", credit)
-    if (credit >= item.item_price) {
-      setSelectedItem(item);
-      setIsConfirmingPurchase(true);
-    } else {
-      console.log("Insufficient credit. You cannot purchase this item.");
-      setIsEnoughCred(true);
-    }
-  };
-
   const handleBuyItem = async (itemName) => {
     if (isBuying) return;
 
@@ -71,34 +73,29 @@ export default function InventoryShop() {
       const selectedItem = items.find((item) => item.item_name === itemName);
 
       if (selectedItem) {
-        // Fetch user's credit from wherever it's stored
-        // Check if user's credit is sufficient for purchase
-        if (credit >= selectedItem.item_price) {
-          const response = await fetch(
-            `${BUY_ITEM_ENDPOINT}/${userID}/${selectedItem.itemId}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (response.ok) {
-            console.log("Item bought successfully!");
-            console.log("Before updating credit:", credit);
-            updateCredit(-selectedItem.item_price); // Deduct item price from credit
-            console.log(
-              "After updating credit:",
-              credit - selectedItem.item_price
-            );
-          } else {
-            console.error("Failed to buy item");
+         // Fetch user's credit from wherever it's stored
+      // Check if user's credit is sufficient for purchase
+      if (credit >= selectedItem.item_price) {
+        const response = await fetch(
+          `${BUY_ITEM_ENDPOINT}/${userID}/${selectedItem.itemId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
+        );
+
+        if (response.ok) {
+          console.log("Item bought successfully!");
+          updateCredit(-selectedItem.item_price); // Update credit after successful purchase
         } else {
-          // setShowMessage("Insufficient credit. You cannot purchase this item.");
-          console.log("Not enough credit");
+          console.error("Failed to buy item");
         }
+      } else {
+        // setShowMessage("Insufficient credit. You cannot purchase this item.");
+        console.log("Not enough credit")
+      }
       } else {
         console.error("Item not found");
       }
@@ -110,9 +107,9 @@ export default function InventoryShop() {
     setIsConfirmingPurchase(false);
   };
 
-  const cancelPurchase = () => {
+  const cancelPurchase = () =>{
     setIsConfirmingPurchase(false);
-  };
+  }
 
   return (
     <main className="tab-container">
@@ -134,28 +131,7 @@ export default function InventoryShop() {
         {activeTab === "inventory" && (
           <div className="tab-content">
             <section className="inventory-section">
-              {items.map((item) => (
-                <div
-                  key={item.item_id}
-                  className={`inventory-item-box ${
-                    selectedItem === item ? "active" : ""
-                  }`}
-                  onClick={() => handleItemClick(item)}
-                >
-                  <div className="inventory-item-sub-box">
-                    <img
-                      src={`./assets/items/${item.image_path}`}
-                      alt={item.item_name}
-                    />
-                  </div>
-                  <div className="item-description-box">
-                    <div className="item-title">{item.item_name}</div>
-                    <div className="item-description">
-                      {item.item_description}
-                    </div>
-                  </div>
-                </div>
-              ))}
+              {/* Inventory content */}
             </section>
           </div>
         )}
@@ -166,28 +142,28 @@ export default function InventoryShop() {
                 <CardItem
                   key={item.item_id}
                   bannerSrc={`./assets/items/${item.image_path}`}
-                  itemName={item.item_name}
+                  itemName={item.item_name} 
                   itemBtnPrice={item.item_price}
                   onClick={() => showModal(item)}
                   disabled={isBuying}
                 />
               ))}
-              {isConfirmingPurchase && (
+               {isConfirmingPurchase && (
                 <Modal
                   cancelButtonLabel="Cancel"
                   confirmButtonLabel="Confirm"
                   modalTitle="Confirm Purchase"
                   modalContent={`${showMessage} ${selectedItem.item_name}?`}
-                  confirmClick={() => handleBuyItem(selectedItem.item_name)}
-                  cancelClick={() => cancelPurchase()}
+                  confirmClick={() =>handleBuyItem(selectedItem.item_name)}
+                  cancelClick={() => cancelPurchase()}         
                 />
               )}
               {isEnoughCred && (
                 <Message
-                  confirmButtonLabel="Okay"
-                  messageTitle="Insufficient Credit"
-                  modalContent="You do not have enough credit to purchase this item."
-                  confirmClick={() => setIsEnoughCred(false)}
+                confirmButtonLabel="Okay"
+                modalTitle="Insufficient Credit"
+                modalContent="You do not have enough credit to purchase this item."
+                confirmClick={() => setIsEnoughCred(false)}         
                 />
               )}
             </section>

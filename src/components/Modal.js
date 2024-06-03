@@ -13,18 +13,18 @@ export const Modal = ({
     <div className="modal">
       <div className="overlay"></div>
       <div className="modal-content">
-        <h1 className="modal-title">{modalTitle}</h1>
-        <p className="modal-message">{modalContent}</p>
+        <h1>{modalTitle}</h1>
+        <p>{modalContent}</p>
         <div className="btn-container">
           <button
             onClick={cancelClick}
-            className="btn btn--small btn--danger modal-btn"
+            className="btn btn--small btn--danger close-modal"
           >
             {cancelButtonLabel}
           </button>
           <button
             onClick={confirmClick}
-            className="btn btn--small btn--primary modal-btn"
+            className="btn btn--small btn--primary close-modal"
           >
             {confirmButtonLabel}
           </button>
@@ -36,7 +36,7 @@ export const Modal = ({
 
 export const Message = ({
   confirmButtonLabel,
-  messageTitle,
+  modalTitle,
   modalContent,
   confirmClick // Pass the toggleModal function as a prop
 }) => (
@@ -44,8 +44,8 @@ export const Message = ({
     <div className="modal">
       <div className="overlay"></div>
       <div className="modal-content">
-        <h1 className="message-title">{messageTitle}</h1>
-        <p className="modal-message">{modalContent}</p>
+        <h1>{modalTitle}</h1>
+        <p>{modalContent}</p>
         <div className="btn-container">
           <button
             onClick={confirmClick}
@@ -85,7 +85,7 @@ const App = () => {
       />
       <Message
         confirmButtonLabel="Confirm"
-        messageTitle="Hello Modal"
+        modalTitle="Hello Modal"
         modalContent="Lorem ipsum dolor sit amet"
         confirmClick={buttonClick}
       />

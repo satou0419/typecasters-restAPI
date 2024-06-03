@@ -69,6 +69,7 @@ export default function Login({ setIsLoggedIn, setUserDetails }) {
 
   return (
     <main className="login-container">
+      {isLoading && <Loader />} {/* Show loader conditionally */}
       {error && (
         <div className="toast-box">
           <p>{error}</p>

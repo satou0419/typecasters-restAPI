@@ -4,26 +4,20 @@ import "./navigation.css";
 import { fetchUserData } from "../api";
 import { useCredit } from "../CreditContext";
 import { USER_TYPE } from "../Login";
-import { Modal } from "./Modal";
 
 export default function Navigation({ onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [initialUsername, setInitialUsername] = useState(""); // State to store the initial
   const navigate = useNavigate();
   const storedUserDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const { credit, setInitialCredit } = useCredit();
   const [userType, setUserType] = useState(sessionStorage.getItem(USER_TYPE));
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (storedUserDetails) {
       fetchUserData(storedUserDetails.userID)
         .then((data) => {
           setInitialCredit(data.credit_amount);
-          setInitialUsername(
-            storedUserDetails.username.charAt(0).toUpperCase()
-          ); // Set initial letter of username
         })
         .catch((error) => console.error("Error fetching user data:", error));
     }
@@ -36,19 +30,9 @@ export default function Navigation({ onLogout }) {
   const toggleProfile = () => {
     setProfileOpen(!profileOpen);
   };
-
-  const handleLogoutClick = () => {
-    setIsLoggingOut(true);
-  };
-
-  const handleConfirmLogout = () => {
-    setIsLoggingOut(false);
-    sessionStorage.clear();
-    navigate("/Login");
-  };
-
-  const handleCancelLogout = () => {
-    setIsLoggingOut(false);
+  const handleInvShopClick = (e) => {
+    e.stopPropagation();
+    // Prevent the profile from toggling when inv-shop icons are clicked
   };
 
   return (
@@ -57,7 +41,6 @@ export default function Navigation({ onLogout }) {
         <div className="nav-bar__logo">
           <img src="/assets/logo/logo_simple.webp" alt="Logo" />
         </div>
-
         <div
           className={`menu-icon ${menuOpen ? "active" : ""}`}
           onClick={toggleMenu}
@@ -66,37 +49,28 @@ export default function Navigation({ onLogout }) {
           <span className="bar"></span>
           <span className="bar"></span>
         </div>
-
-        <div className="credit-holder">
-          <img src="/assets/icon/ic_currency.webp" alt="Credit Icon" />
-          <span>{credit}</span>
-        </div>
-
         <div className={`menu ${menuOpen ? "open" : ""}`}>
           <Link to="/adventure_mode">Adventure Mode</Link>
           <Link to={`${userType}/simulation_mode`}>Simulation Mode</Link>
           <Link to="/archive">Archive</Link>
-          <Link to="/dashboard">About</Link>
+          <Link to="/about">About</Link>
         </div>
-
         <div className="profile-container">
           <div className="profile-wrapper">
             <div className="profile-icon" onClick={toggleProfile}>
-              <span className={`circle ${profileOpen ? "open" : ""}`}>
-                {initialUsername}
-              </span>
-              <div className={`profile ${profileOpen ? "open" : ""}`}>
-                <Link to="/inventory_shop">Inventory</Link>
-                <Link to="/Settings">Settings</Link>
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleLogoutClick();
-                  }}
-                >
-                  Logout
-                </a>
+              <div className="inv-shop">
+                <Link to="/inventory_shop">
+                <img className= {`inv-shop-icon ${profileOpen ? "open" : ""}`} src="/assets/icon/ic_shop.webp" onClick={handleInvShopClick}></img>
+                </Link>
+                <Link to="/inventory_shop">
+                <img className= {`inv-shop-icon ${profileOpen ? "open" : ""}`} src="/assets/icon/ic_inventory.webp" onClick={handleInvShopClick}></img>
+                </Link>
+              </div>
+              <span className={`circle ${profileOpen ? "open" : ""}`}></span>
+              <div className={`profile ${profileOpen ? "open" : ""}`} onClick={handleInvShopClick}>
+                <Link to="/inventory_shop" className="profile-link">Inventory</Link>
+                <Link to="/Settings" className="profile-link">Settings</Link>
+                <Link onClick={onLogout} className="profile-link">Logout</Link>
               </div>
             </div>
             <div className={`profile-side ${profileOpen ? "open" : ""}`}>
@@ -109,16 +83,6 @@ export default function Navigation({ onLogout }) {
           </div>
         </div>
       </nav>
-      {isLoggingOut && (
-        <Modal
-          cancelButtonLabel="Cancel"
-          confirmButtonLabel="Confirm"
-          modalTitle="Confirm Logout"
-          modalContent="Are you sure you want to logout?"
-          confirmClick={handleConfirmLogout}
-          cancelClick={handleCancelLogout}
-        />
-      )}
     </section>
   );
 }

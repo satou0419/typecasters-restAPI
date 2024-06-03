@@ -1,54 +1,18 @@
 .simulation-wrapper {
   height: 100%;
   width: 100%;
+  background-color: blue;
 }
 
 .game-card-wrapper {
   margin-top: 2rem;
   width: 80%;
 }
-
-.simulation-card-wrapper {
-  display: flex;
-  overflow-x: auto;
-  gap: 2rem;
-
-  margin-top: 2rem;
-
-  width: 80%;
-}
-
-.room-wrapper {
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
-  align-items: center;
-}
-
-.teacher-card-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.room-card-wrapper {
-  margin-top: 2rem;
-  width: 80%;
-  display: flex;
-  overflow-x: auto;
-  gap: 2rem;
-}
 .txt-Rooms {
   font-family: "lilita One";
   font-size: 2rem;
+  margin-left: 10%;
   margin-top: 4%;
-  margin-left: 0;
 }
 .card-simulation {
   height: 30rem;
