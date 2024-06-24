@@ -1,22 +1,29 @@
 package typecasters.tower_of_words.Service;
 
+import typecasters.tower_of_words.Entity.UserDetailsEntity;
 import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Exception.IncorrectPasswordException;
 import typecasters.tower_of_words.Exception.UsernameNotFoundException;
 import typecasters.tower_of_words.LoginRequest;
+import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import typecasters.tower_of_words.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import typecasters.tower_of_words.UserInfo;
+import typecasters.tower_of_words.UserInfoAndDetails;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserService {
 
     @Autowired
     UserRepository urepo;
+
+    @Autowired
+    UserDetailsRepository ud_repo;
 
     @Autowired
     UserDetailsService ud_serv;
@@ -67,7 +74,7 @@ public class UserService {
 
     // Login
     @SuppressWarnings("finally")
-    public UserEntity login(LoginRequest logReq) {
+    public int login(LoginRequest logReq) {
 
 
         UserEntity user = urepo.findOneByUsername(logReq.getUsername());
@@ -78,8 +85,8 @@ public class UserService {
         if (!user.getPassword().equals(logReq.getPassword())) {
             throw new IncorrectPasswordException("Incorrect password.");
         }
-
-        return user;
+        user.setLoggedIn(true);
+        return user.getUserID();
     }
 
     //Account Edit
@@ -127,8 +134,42 @@ public class UserService {
         return user.getUserID();
     }
 
+    public UserInfoAndDetails getUserInfo(int userId){
+        UserEntity user = new UserEntity();
+        UserDetailsEntity userDetails = new UserDetailsEntity();
+        try{
+            user = urepo.findById(userId).get();
+            userDetails = ud_repo.findOneByUserId(userId);
+
+            return new UserInfoAndDetails(user.getUserType(), user.getEmail(), user.getLastname(), user.getFirstname(), user.getUsername(), userDetails.getUser_detail_id());
+        }catch(NoSuchElementException e){
+            throw new NoSuchElementException(e);
+        }
+    }
+
+    public boolean changePassword(int userId, String oldPassword, String newPassword){
+        UserEntity user = new UserEntity();
+
+        try{
+            user = urepo.findById(userId).get();
+
+            if(user.getPassword().equals(oldPassword)){
+                user.setPassword(newPassword);
+
+                return true;
+            }else{
+                return false;
+            }
+
+        }catch(NoSuchElementException e){
+            throw new NoSuchElementException(e);
+        }
+    }
+
     //findTest
     public UserEntity testFind(String username){
         return urepo.findOneByUsername(username);
     }
+
+
 }

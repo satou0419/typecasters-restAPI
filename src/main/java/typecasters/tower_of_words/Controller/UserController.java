@@ -60,8 +60,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@RequestBody LoginRequest logReq) {
         try {
-            UserEntity user = userv.login(logReq);
-            return ResponseEntity.ok(user); // 200 OK
+            int userId = userv.login(logReq);
+            return ResponseEntity.ok(userId); // 200 OK
         }
 
         catch (UsernameNotFoundException e) {
