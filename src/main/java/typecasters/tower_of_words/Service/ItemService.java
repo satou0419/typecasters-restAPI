@@ -29,11 +29,11 @@ public class ItemService {
 //    }
 
     public String getItemName(int itemId){
-        return itemRepository.findItemNameByItemId(itemId);
+        return itemRepository.findNameByItemID(itemId);
     }
 
     public ItemEntity getItem(int itemId){
-        return itemRepository.findOneByItemId(itemId);
+        return itemRepository.findOneByItemID(itemId);
     }
 
     // Update
@@ -44,10 +44,10 @@ public class ItemService {
         try {
             item = itemRepository.findById(item_id).get();
 
-            item.setItem_name(new_item_details.getItem_name());
-            item.setItem_description(new_item_details.getItem_description());
-            item.setItem_price(new_item_details.getItem_price());
-            item.setImage_path(new_item_details.getImage_path());
+            item.setName(new_item_details.getName());
+            item.setDescription(new_item_details.getDescription());
+            item.setPrice(new_item_details.getPrice());
+            item.setImagePath(new_item_details.getImagePath());
         }catch (NoSuchElementException ex) {
             throw new NoSuchElementException("Item " + item_id + " does not exist!");
         }finally {

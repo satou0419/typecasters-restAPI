@@ -43,14 +43,14 @@ public class AdventureRewardService {
     }
 
     public Optional<AdventureRewardEntity> getRewardByTowerFloorId(int towerFloorId) {
-        return adventureRewardRepository.findByTowerFloorId(towerFloorId);
+        return adventureRewardRepository.findByTowerFloorID(towerFloorId);
     }
 
     // Update
     public AdventureRewardEntity updateReward(AdventureRewardEntity newRewardDetail, int rewardId) {
         try {
             AdventureRewardEntity reward = adventureRewardRepository.findById(rewardId).orElseThrow(() -> new NoSuchElementException("Reward does not exist"));
-            reward.setAdvRewardCredit(newRewardDetail.getAdvRewardCredit());
+            reward.setAdventureRewardCredit(newRewardDetail.getAdventureRewardCredit());
             reward.setRewardItemOne(newRewardDetail.getRewardItemOne());
             reward.setRewardItemTwo(newRewardDetail.getRewardItemTwo());
             return adventureRewardRepository.save(reward);
@@ -79,16 +79,16 @@ public class AdventureRewardService {
             if(adventureRewardObject.isPresent()){
                 AdventureRewardEntity adventureReward = adventureRewardObject.get();
 
-                int rewardCredit = adventureReward.getAdvRewardCredit();
-                int userCredit = userDetails.getCredit_amount();
+                int rewardCredit = adventureReward.getAdventureRewardCredit();
+                int userCredit = userDetails.getCreditAmount();
 
                 if(rewardCredit > 0){
-                    userDetails.setCredit_amount(userCredit + rewardCredit);
+                    userDetails.setCreditAmount(userCredit + rewardCredit);
                   //  adventureReward.getRewardItemOne().getRewardItemQuantity()
-                    int rewardItemIdOne = adventureReward.getRewardItemOne().getRewardItem().getItemId();
+                    int rewardItemIdOne = adventureReward.getRewardItemOne().getRewardItem().getItemID();
                     int rewardItemQuantityOne = adventureReward.getRewardItemOne().getRewardItemQuantity();
 
-                    int rewardItemIdTwo = adventureReward.getRewardItemTwo().getRewardItem().getItemId();
+                    int rewardItemIdTwo = adventureReward.getRewardItemTwo().getRewardItem().getItemID();
                     int rewardItemQuantityTwo = adventureReward.getRewardItemTwo().getRewardItemQuantity();
 
                     boolean updatedUserItemQuantityOne = updateUserItemQuantityByRewardItemQuantity(userId, rewardItemIdOne, rewardItemQuantityOne);

@@ -27,7 +27,7 @@ public class UserArchiveAchievementService {
         try {
             edit = userArchiveAchievementRepository.findById(user.getUserArchiveAchievementID()).get();
 
-            edit.setUserId(user.getUserId());
+            edit.setUserID(user.getUserID());
             edit.setArchiveAchievementID(user.getArchiveAchievementID());
 
         }catch(NoSuchElementException ex) {

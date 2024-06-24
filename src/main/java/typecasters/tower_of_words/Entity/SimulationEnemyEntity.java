@@ -1,46 +1,30 @@
 package typecasters.tower_of_words.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "tbl_simulation_enemy")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "tbl_simulation_enemy_word")
 public class SimulationEnemyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int simulationEnemyID;
+
     private String imagePath;
-    private String word;
 
-    public SimulationEnemyEntity() {
-    }
-
-    public SimulationEnemyEntity(int simulationEnemyID, int simulationID, String imagePath, String word) {
-        this.simulationEnemyID = simulationEnemyID;
-        this.imagePath = imagePath;
-        this.word = word;
-    }
-
-    public int getSimulationEnemyID() {
-        return simulationEnemyID;
-    }
-
-    public void setSimulationEnemyID(int simulationEnemyID) {
-        this.simulationEnemyID = simulationEnemyID;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getWord() {
-        return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tbl_simulation_enemy_words",
+            joinColumns = @JoinColumn(name = "simulationEnemyID"),
+            inverseJoinColumns = @JoinColumn(name = "simulationWordsID")
+    )
+    private List<SimulationWordsEntity> words = new ArrayList<>();
 }

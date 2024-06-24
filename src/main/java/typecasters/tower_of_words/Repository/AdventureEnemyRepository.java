@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface AdventureEnemyRepository extends JpaRepository<AdventureEnemyEntity, Integer> {
-    Optional<List<AdventureEnemyEntity>> findAllByTowerFloorId(int towerFloorId);
+    Optional<List<AdventureEnemyEntity>> findAllByTowerFloorID(int towerFloorID);
 }

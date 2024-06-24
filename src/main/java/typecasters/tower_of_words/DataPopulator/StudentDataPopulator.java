@@ -21,12 +21,12 @@ public class StudentDataPopulator {
     @PostConstruct
     public void populateData() {
         List<StudentEntity> students = Arrays.asList(
-                new StudentEntity("Male", "Rey Dante", "Garcia", 101, 1L),
-                new StudentEntity("Male", "Rey Mar", "Segalle", 102, 2L),
-                new StudentEntity("Male", "Anton Joseph", "Cruz", 103, 3L),
-                new StudentEntity("Male", "Gil Joshua", "Yabao", 104, 4L),
-                new StudentEntity("Male", "Jhon Lorenz", "Pabroa", 105, 5L),
-                new StudentEntity("Female", "Trisha Mae", "Rivera", 106, 6L)
+                new StudentEntity(1L, 101, "Male", "Rey Dante", "Garcia"),
+                new StudentEntity(2L, 102, "Male", "Rey Mar", "Segalle"),
+                new StudentEntity(3L, 103, "Male", "Anton Joseph", "Cruz"),
+                new StudentEntity(4L, 104, "Male", "Gil Joshua", "Yabao"),
+                new StudentEntity(5L, 105, "Male", "Jhon Lorenz", "Pabroa"),
+                new StudentEntity(6L, 106, "Female", "Trisha Mae", "Rivera")
                 // Add more sample data here if needed
         );
         studentRepository.saveAll(students);

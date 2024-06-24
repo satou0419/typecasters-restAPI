@@ -1,6 +1,6 @@
 package typecasters.tower_of_words.Service;
 
-import typecasters.tower_of_words.Entity.TowerProgressEntity;
+import typecasters.tower_of_words.Entity.UserProgressEntity;
 import typecasters.tower_of_words.Entity.UserDetailsEntity;
 import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class UserDetailsService {
 
     //Initialized User Details
     public void initUserDetails(int user_id){
-        TowerProgressEntity towerProg = new TowerProgressEntity(user_id, 0, 1);
+        UserProgressEntity towerProg = new UserProgressEntity(user_id, 0, 1);
         UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg);
 
         ud_repo.save(userDetails);
@@ -24,7 +24,7 @@ public class UserDetailsService {
 
     //Get user details
     public UserDetailsEntity getUserDetails(int user_id){
-        return ud_repo.findOneByUserId(user_id);
+        return ud_repo.findOneByUserID(user_id);
     }
 
     //Edit Credit
@@ -36,11 +36,11 @@ public class UserDetailsService {
             userDetails = ud_repo.findById(user_detail_id).get();
 
             if(userDetails != null){
-                int new_credit = userDetails.getCredit_amount() + s_credit;
+                int new_credit = userDetails.getCreditAmount() + s_credit;
                 if(new_credit < 0){
                 message =  "Credit below zero.";
                 }else{
-                    userDetails.setCredit_amount(new_credit);
+                    userDetails.setCreditAmount(new_credit);
                     ud_repo.save(userDetails);
                     message =  "Credit updated.";
                 }
@@ -56,16 +56,16 @@ public class UserDetailsService {
 
     //Increment
     public String incrementUserDetailWords(int user_id){
-        UserDetailsEntity userDetails = ud_repo.findOneByUserId(user_id);
-        userDetails.setWords_collected(userDetails.getWords_collected() + 1);
+        UserDetailsEntity userDetails = ud_repo.findOneByUserID(user_id);
+        userDetails.setWordsCollected(userDetails.getWordsCollected() + 1);
         ud_repo.save(userDetails);
 
         return "word count incremented";
     }
 
     public String incrementUserAchievementCount(int user_id){
-        UserDetailsEntity userDetails = ud_repo.findOneByUserId(user_id);
-        userDetails.setAchievement_count(userDetails.getAchievement_count() + 1);
+        UserDetailsEntity userDetails = ud_repo.findOneByUserID(user_id);
+        userDetails.setAchievementCount(userDetails.getAchievementCount() + 1);
         ud_repo.save(userDetails);
 
         return "achievement count incremented";
@@ -73,6 +73,6 @@ public class UserDetailsService {
 
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {
 
-        return ud_repo.findCreditAmountByUserDetailId(userDetailId);
+        return ud_repo.findCreditAmountByUserDetailsID(userDetailId);
     }
 }

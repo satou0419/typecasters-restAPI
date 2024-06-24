@@ -51,7 +51,7 @@ public class RoomController {
         try {
             roomService.insertMemberByCode(userID, code);
             RoomEntity room = roomRepository.findByCode(code);
-            return ResponseEntity.ok("Welcome to " + room.getRoomName() + "!");
+            return ResponseEntity.ok("Welcome to " + room.getName() + "!");
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
