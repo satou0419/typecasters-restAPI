@@ -23,22 +23,24 @@ public class UserEntity {
 
     private String userType;
     private String email;
+    private Boolean isLoggedIn = false;
 
 
     public UserEntity() {
         super();
     }
 
-    public UserEntity(String lastname, String firstname, String username, String password, String userType, String email) {
+    public UserEntity(String lastname, String firstname, String username, String password, String userType, String email, Boolean isLoggedIn) {
         this.lastname = lastname;
         this.firstname = firstname;
         this.username = username;
         this.password = password;
         this.userType = userType;
         this.email = email;
+        this.isLoggedIn = isLoggedIn;
     }
 
-    public UserEntity(int userID, String firstname, String lastname, String username, String password, String userType, String email) {
+    public UserEntity(int userID, String firstname, String lastname, String username, String password, String userType, String email, Boolean isLoggedIn) {
         this.userID = userID;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -46,6 +48,7 @@ public class UserEntity {
         this.password = password;
         this.userType = userType;
         this.email = email;
+        this.isLoggedIn = isLoggedIn;
     }
 
     public int getUserID() {
@@ -102,5 +105,13 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(Boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 }
