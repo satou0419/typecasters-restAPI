@@ -109,7 +109,7 @@ public class RoomService {
         try {
             edit = roomRepository.findById(room.getRoomID()).get();
 
-            edit.setRoomName(room.getRoomName());
+            edit.setName(room.getName());
 
         }catch(NoSuchElementException ex) {
             throw new NoSuchElementException ("Room " + room.getRoomID() + " does not exist");

@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface UserItemRepository extends JpaRepository<UserItemEntity, Integer> {
 
-    List<UserItemEntity> findAllByUserId(int userId);
+    List<UserItemEntity> findAllByUserID(int userID);
 
-    @Query("SELECT ui.userItemId FROM UserItemEntity ui WHERE ui.userId = ?1 AND ui.itemId = ?2")
-    Optional<Integer> findUserItemIdByUserIdAndItemId(int userId, ItemEntity itemId);
+    @Query("SELECT ui.userItemID FROM UserItemEntity ui WHERE ui.userID = ?1 AND ui.itemID = ?2")
+    Optional<Integer> findUserItemIDByUserIDAndItemID(int userID, ItemEntity itemID);
 
-    Optional<UserItemEntity> findOneByUserIdAndItemId(int userId, ItemEntity itemId);
+    Optional<UserItemEntity> findOneByUserIDAndItemID(int userID, ItemEntity itemID);
 }

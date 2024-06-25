@@ -32,7 +32,7 @@ public class AdventureEnemyService {
     //Get All By TowerId
 
     public Optional<List<AdventureEnemyEntity>> getAllByFloorId(int tower_id){
-        return ae_rep.findAllByTowerFloorId(tower_id);
+        return ae_rep.findAllByTowerFloorID(tower_id);
     }
 
     //Update
@@ -44,7 +44,7 @@ public class AdventureEnemyService {
             enemy = ae_rep.findById(enemy_id).get();
 
             enemy.setImagePath(newEnemyDetail.getImagePath());
-            enemy.setTowerFloorId(newEnemyDetail.getTowerFloorId());
+            enemy.setTowerFloorID(newEnemyDetail.getTowerFloorID());
             enemy.setWords(newEnemyDetail.getWords());
         }catch (NoSuchElementException ex){
             throw new NoSuchElementException("Enemy does not exist");

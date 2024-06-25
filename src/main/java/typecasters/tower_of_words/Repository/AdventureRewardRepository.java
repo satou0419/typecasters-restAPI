@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AdventureRewardRepository extends JpaRepository<AdventureRewardEntity, Integer> {
-
-    Optional<AdventureRewardEntity> findByTowerFloorId(int towerFloorId);
+    Optional<AdventureRewardEntity> findByTowerFloorID(int towerFloorID);
 }

@@ -40,18 +40,18 @@ public class UserItemService {
 
     public Optional<Integer> getUserItemIdByUserIdAndItemId(int userId, int itemId){
         ItemEntity itemEntity = new ItemEntity();
-        itemEntity.setItemId(itemId);
-        return userItemRepository.findUserItemIdByUserIdAndItemId(userId, itemEntity);
+        itemEntity.setItemID(itemId);
+        return userItemRepository.findUserItemIDByUserIDAndItemID(userId, itemEntity);
     }
 
     public List<UserItemEntity> getUserItemByUserId(int userId) {
-        return userItemRepository.findAllByUserId(userId);
+        return userItemRepository.findAllByUserID(userId);
     }
 
     public Optional <UserItemEntity> getUserItemByUserIdAndItemId(int userId, int itemId){
         ItemEntity itemEntity = new ItemEntity();
-        itemEntity.setItemId(itemId);
-        return userItemRepository.findOneByUserIdAndItemId(userId, itemEntity);
+        itemEntity.setItemID(itemId);
+        return userItemRepository.findOneByUserIDAndItemID(userId, itemEntity);
     }
 
     @SuppressWarnings({"finally", "ReturnInsideFinallyBlock"})
@@ -92,7 +92,7 @@ public class UserItemService {
             item = itemService.getItem(itemId);
             int totalAmountOfItemPurchased = getTotalAmountOfItemPurchased(itemQuantity, item, userDetails);
 
-            userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -(totalAmountOfItemPurchased));
+            userDetailsService.updateUserCredit(userDetails.getUserDetailsID(), -(totalAmountOfItemPurchased));
 
             Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
 
@@ -122,13 +122,13 @@ public class UserItemService {
         try {
             UserDetailsEntity userDetails = userDetailsService.getUserDetails(userId);
             ItemEntity item = itemService.getItem(itemId);
-            int itemPrice = item.getItem_price();
+            int itemPrice = item.getPrice();
 
-            if (userDetails.getCredit_amount() < itemPrice) {
+            if (userDetails.getCreditAmount() < itemPrice) {
                 throw new InsufficientCreditException("Insufficient credit to buy this item.");
             }
 
-            userDetailsService.updateUserCredit(userDetails.getUser_detail_id(), -itemPrice);
+            userDetailsService.updateUserCredit(userDetails.getUserDetailsID(), -itemPrice);
 
             Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
             if (existingUserItemObject.isPresent()) {
@@ -153,13 +153,13 @@ public class UserItemService {
     }
 
     private static int getTotalAmountOfItemPurchased(int itemQuantity, ItemEntity item, UserDetailsEntity userDetails) {
-        int totalAmountOfItemPurchased = item.getItem_price() * itemQuantity;
+        int totalAmountOfItemPurchased = item.getPrice() * itemQuantity;
 
         if (itemQuantity <= 0) {
             throw new InvalidItemQuantityException("The item cannot be used when quantity is 0 or below.");
         }
 
-        if (userDetails.getCredit_amount() < totalAmountOfItemPurchased) {
+        if (userDetails.getCreditAmount() < totalAmountOfItemPurchased) {
             throw new InsufficientCreditException("Insufficient credit to buy this item.");
         }
         return totalAmountOfItemPurchased;

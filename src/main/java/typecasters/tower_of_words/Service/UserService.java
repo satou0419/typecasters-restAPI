@@ -14,7 +14,6 @@ import typecasters.tower_of_words.UserInfo;
 import typecasters.tower_of_words.UserInfoAndDetails;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -85,7 +84,7 @@ public class UserService {
         if (!user.getPassword().equals(logReq.getPassword())) {
             throw new IncorrectPasswordException("Incorrect password.");
         }
-        user.setLoggedIn(true);
+        user.setIsLoggedIn(true);
         return user.getUserID();
     }
 
@@ -139,9 +138,9 @@ public class UserService {
         UserDetailsEntity userDetails = new UserDetailsEntity();
         try{
             user = urepo.findById(userId).get();
-            userDetails = ud_repo.findOneByUserId(userId);
+            userDetails = ud_repo.findOneByUserID(userId);
 
-            return new UserInfoAndDetails(user.getUserType(), user.getEmail(), user.getLastname(), user.getFirstname(), user.getUsername(), userDetails.getUser_detail_id());
+            return new UserInfoAndDetails(user.getUserType(), user.getEmail(), user.getLastname(), user.getFirstname(), user.getUsername(), userDetails.getUserDetailsID());
         }catch(NoSuchElementException e){
             throw new NoSuchElementException(e);
         }

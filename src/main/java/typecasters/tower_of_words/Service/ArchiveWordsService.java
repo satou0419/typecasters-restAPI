@@ -48,7 +48,7 @@ public class ArchiveWordsService {
 
             edit.setUserID(word.getUserID());
             edit.setWord(word.getWord());
-            edit.setCheck(word.isCheck());
+            edit.setChecked(word.isChecked());
 
         } catch (NoSuchElementException ex) {
             throw new NoSuchElementException("Word " + word.getArchiveWordsID() + " does not exist");
