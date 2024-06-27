@@ -31,8 +31,6 @@ public class UserService {
     @Transactional
     public String registerUser(UserEntity user) {
         try {
-
-
             if (urepo.findOneByUsername(user.getUsername()) != null) {
                 throw new IllegalArgumentException("Username already exists");
             }
@@ -45,6 +43,7 @@ public class UserService {
                 throw new IllegalArgumentException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
             }
 
+            user.setIsLoggedIn(false);  // Ensure isLoggedIn is set to false
             int userId = urepo.save(user).getUserID();
             ud_serv.initUserDetails(userId);
 
