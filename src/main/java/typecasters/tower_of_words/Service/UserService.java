@@ -97,39 +97,15 @@ public class UserService {
 
     //Account Edit
     @Transactional
-    public UserEntity editAccount(UserEntity newUserInfo, int uid){
-        UserEntity user = new UserEntity();
+    public void editAccount(UserEntity newUserInfo, int uid) {
         try {
-
-            user = urepo.findById(uid).orElse(null);
-
-            if (user == null) {
-                throw new Exception("User id does not exist");
+            if (!urepo.existsById(uid)) {
+                throw new NoSuchElementException("User id does not exist");
             } else {
-                user.setFirstname(newUserInfo.getFirstname());
-                user.setLastname(newUserInfo.getLastname());
-
-                if (newUserInfo.getPassword() != null) {
-                    user.setPassword(user.getPassword());
-                }
-                if (newUserInfo.getUserType() != null) {
-                    user.setUserType(user.getUserType());
-                }
-                if (newUserInfo.getEmail() != null) {
-                    user.setEmail(user.getEmail());
-                }
-                if (newUserInfo.getUsername() != null) {
-                    user.setUsername(user.getUsername());
-                }
-                if (newUserInfo.getIsLoggedIn() != null) {
-                    user.setIsLoggedIn(user.getIsLoggedIn());
-                }
-                return urepo.save(user);
+                urepo.updateUserInfo(newUserInfo.getFirstname(), newUserInfo.getLastname(), uid);
             }
-
-
-        }catch(Exception e) {
-            throw new RuntimeException(e);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException(e);
         }
     }
 

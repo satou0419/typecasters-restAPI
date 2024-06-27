@@ -159,14 +159,15 @@ public class UserController {
     @PutMapping("/update_user")
     public ResponseEntity<Object> updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo) {
         try {
-            UserEntity updatedUser = userv.editAccount(newUserInfo, uid);
-            return Response.response(HttpStatus.OK, "User updated successfully", updatedUser);
+            userv.editAccount(newUserInfo, uid);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "User updated successfully");
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "User not found");
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update user");
         }
     }
+
 
     @PostMapping("/test_find")
     public UserEntity loginUser(@RequestBody String username){
