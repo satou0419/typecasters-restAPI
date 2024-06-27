@@ -49,6 +49,7 @@ public class UserService {
 
             return "Registration Successful";
         } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
             // Catch the exception and return the error message
             return ex.getMessage();
         }
