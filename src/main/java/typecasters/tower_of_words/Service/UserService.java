@@ -88,8 +88,15 @@ public class UserService {
         return user.getUserID();
     }
 
+    @Transactional
+    public void logout(int userId) {
+        UserEntity user = urepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        user.setIsLoggedIn(false);
+        urepo.save(user);
+    }
+
     //Account Edit
-    @SuppressWarnings("finally")
+    @Transactional
     public UserEntity editAccount(UserEntity newUserInfo, int uid){
         UserEntity user = new UserEntity();
         try {
@@ -108,28 +115,30 @@ public class UserService {
 
         }catch(Exception e) {
             throw new RuntimeException(e);
-        }finally {
-
         }
     }
 
     public UserInfo findUserInfoById(int user_id){
         UserEntity user = new UserEntity();
 
-
         try{
             user = urepo.findById(user_id).get();
 
-            return new UserInfo(user.getUserID(), user.getUsername(), user.getFirstname(), user.getLastname());
-
+            if(user == null){
+                throw new NoSuchElementException("User id doest not exist");
+            }else{
+                return new UserInfo(user.getUserID(), user.getUsername(), user.getFirstname(), user.getLastname());
+            }
         }catch(NoSuchElementException e){
             throw new NoSuchElementException(e);
         }
     }
 
-    public int findUserIdByUsername(String username){
+    public int findUserIdByUsername(String username) {
         UserEntity user = urepo.findOneByUsername(username);
-
+        if (user == null) {
+            throw new NoSuchElementException("User not found");
+        }
         return user.getUserID();
     }
 
@@ -168,6 +177,10 @@ public class UserService {
     //findTest
     public UserEntity testFind(String username){
         return urepo.findOneByUsername(username);
+    }
+
+    public boolean checkUserIfExist(int userId) {
+        return urepo.findById(userId).isPresent();
     }
 
 
