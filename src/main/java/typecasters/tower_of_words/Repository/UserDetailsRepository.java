@@ -9,12 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserDetailsRepository extends JpaRepository<UserDetailsEntity, Integer> {
+    UserDetailsEntity findOneByUserID(int userID);
 
-    UserDetailsEntity findOneByUserId(int userId);
-
-    @Query("SELECT ud.credit_amount FROM UserDetailsEntity ud WHERE ud.user_detail_id = ?1")
-    Optional<Integer> findCreditAmountByUserDetailId(int userDetailId);
-
-    @Query("SELECT ud.user_detail_id FROM UserDetailsEntity ud WHERE ud.userId = ?1")
-    Optional<Integer> findUserDetailIdByUserId(int userId);
+    @Query("SELECT ud.creditAmount FROM UserDetailsEntity ud WHERE ud.userDetailsID = ?1")
+    Optional<Integer> findCreditAmountByUserDetailsID(int userDetailsID);
 }

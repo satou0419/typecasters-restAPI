@@ -1,66 +1,28 @@
 package typecasters.tower_of_words.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tbl_adventure_enemy")
 public class AdventureEnemyEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "enemy_id")
-    private int enemyId;
+    private int adventureEnemyID;
 
-    private int towerFloorId;
+    private int towerFloorID;
+
     private String imagePath;
 
-    //    @OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL, orphanRemoval = true)
     @ElementCollection
-    @CollectionTable(name = "adventure_words", joinColumns = @JoinColumn(name = "enemyId"))
+    @CollectionTable(name = "tbl_adventure_words", joinColumns = @JoinColumn(name = "adventure_enemy_id"))
     private List<String> words = new ArrayList<>();
-
-    public AdventureEnemyEntity() {
-    }
-
-    public AdventureEnemyEntity(int enemyId, int towerFloorId, String imagePath, List<String> words) {
-        this.enemyId = enemyId;
-        this.towerFloorId = towerFloorId;
-        this.imagePath = imagePath;
-        this.words = words;
-    }
-
-    public int getEnemyId() {
-        return enemyId;
-    }
-
-    public void setEnemyId(int enemyId) {
-        this.enemyId = enemyId;
-    }
-
-    public int getTowerFloorId() {
-        return towerFloorId;
-    }
-
-    public void setTowerFloorId(int towerFloorId) {
-        this.towerFloorId = towerFloorId;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public List<String> getWords() {
-        return words;
-    }
-
-    public void setWords(List<String> words) {
-        this.words = words;
-    }
 }

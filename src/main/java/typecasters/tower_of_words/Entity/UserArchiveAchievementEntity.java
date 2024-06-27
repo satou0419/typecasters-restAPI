@@ -9,17 +9,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tbl_archive_words")
-public class ArchiveWordsEntity {
+@Table(name = "tbl_user_archive_achievement")
+public class UserArchiveAchievementEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int archiveWordsID;
+    private int userArchiveAchievementID;
 
     private int userID;
 
-    private String word;
-
-    private boolean isChecked = false;
-
-    private boolean isDeleted = false;
+    @ManyToOne
+    @JoinColumn(name = "archive_achievement_id")
+    private ArchiveAchievementEntity archiveAchievementID;
 }

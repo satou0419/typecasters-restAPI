@@ -33,26 +33,15 @@ public class SimulationController {
     //READ
     @GetMapping("/view_by_room/{roomID}")
     public ResponseEntity<List<SimulationEntity>> viewSimulationsByRoomID(@PathVariable int roomID) {
-        try{
-            List<SimulationEntity> simulations = simulationService.viewSimulationsByRoomID(roomID);
-            return new ResponseEntity<>(simulations, HttpStatus.OK);
-        } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        List<SimulationEntity> simulations = simulationService.viewSimulationsByRoomID(roomID);
+        return new ResponseEntity<>(simulations, HttpStatus.OK);
+
     }
 
     @GetMapping("/view_by_id/{simulationID}")
     public ResponseEntity<SimulationEntity> viewSimulationByID(@PathVariable int simulationID) {
-        try{
-            Optional<SimulationEntity> simulation = simulationService.viewSimulationByID(simulationID);
-            return simulation.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        SimulationEntity simulation = simulationService.viewSimulationByID(simulationID).get();
+        return new ResponseEntity<>(simulation, HttpStatus.OK);
     }
 
     @GetMapping("/view_by_member/{userID}")

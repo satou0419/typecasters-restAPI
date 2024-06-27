@@ -9,17 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tbl_archive_words")
-public class ArchiveWordsEntity {
+@Table(name = "tbl_simulation_words")
+public class SimulationWordsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int archiveWordsID;
+    private int simulationWordsID;
 
     private int userID;
 
-    private String word;
-
-    private boolean isChecked = false;
-
-    private boolean isDeleted = false;
+    private String silentIndex;
 }

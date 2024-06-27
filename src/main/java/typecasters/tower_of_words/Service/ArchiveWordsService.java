@@ -17,31 +17,19 @@ public class ArchiveWordsService {
     UserDetailsService userDetailsService;
 
     public ArchiveWordsEntity insertArchiveWords(int userID, String word) {
-        boolean wordExists = false;
+        Optional<ArchiveWordsEntity> insert = archiveWordsRepository.findByUserIDAndWord(userID, word);
 
-        try {
-            List<ArchiveWordsEntity> insert = archiveWordsRepository.findAllByUserID(userID);
-
-            for (ArchiveWordsEntity i : insert) {
-                if (i.getWord().equals(word)) {
-                    wordExists = true;
-                    break;
-                }
-            }
-
-        } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("User " + userID + " does not exist");
+        if (insert.isPresent()) {
+            throw new IllegalArgumentException("Word Already Exists!");
         }
 
-        if (!wordExists) {
-            ArchiveWordsEntity archive = new ArchiveWordsEntity();
-            archive.setUserID(userID);
-            archive.setWord(word);
-            userDetailsService.incrementUserDetailWords(userID);
-            return archiveWordsRepository.save(archive);
-        } else {
-            throw new IllegalArgumentException("Word Already Exist!");
-        }
+        ArchiveWordsEntity archive = new ArchiveWordsEntity();
+        archive.setUserID(userID);
+        archive.setWord(word);
+
+        userDetailsService.incrementUserDetailWords(userID);
+
+        return archiveWordsRepository.save(archive);
     }
 
     public List<ArchiveWordsEntity> viewAllArchiveWords(int userID) {
@@ -60,7 +48,7 @@ public class ArchiveWordsService {
 
             edit.setUserID(word.getUserID());
             edit.setWord(word.getWord());
-            edit.setCheck(word.isCheck());
+            edit.setChecked(word.isChecked());
 
         } catch (NoSuchElementException ex) {
             throw new NoSuchElementException("Word " + word.getArchiveWordsID() + " does not exist");

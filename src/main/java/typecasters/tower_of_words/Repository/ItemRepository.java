@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
+    ItemEntity findOneByItemID(Integer itemID);
 
-    ItemEntity findOneByItemId(Integer itemId);
-
-    @Query("SELECT i.item_name FROM ItemEntity i WHERE i.itemId = ?1")
-    String findItemNameByItemId(Integer itemId);
+    @Query("SELECT i.name FROM ItemEntity i WHERE i.itemID = ?1")
+    String findNameByItemID(Integer itemID);
 
 }

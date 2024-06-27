@@ -1,93 +1,32 @@
 package typecasters.tower_of_words.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tbl_user_item")
 public class UserItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_item_id")
-    private int userItemId;
+    private int userItemID;
 
     private int quantity;
 
-    private int userId;
+    private int userID;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private ItemEntity itemId;
+    private ItemEntity itemID;
 
-//    @JsonBackReference
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_details_id")
-//    private UserDetailsEntity userDetails;
-
-
-//    public UserItemEntity(int user_item_id, int quantity, int item_id, UserDetailsEntity user_details) {
-//        super();
-//        this.user_item_id = user_item_id;
-//        this.quantity = quantity;
-//        this.item_id = item_id;
-//        this.user_details = user_details;
-//    }
-
-
-    public UserItemEntity(int userItemId, int quantity, int userId, ItemEntity itemId) {
-        this.userItemId = userItemId;
+    public UserItemEntity(int quantity, int userID, ItemEntity itemID) {
         this.quantity = quantity;
-        this.userId = userId;
-        this.itemId = itemId;
+        this.userID = userID;
+        this.itemID = itemID;
     }
-
-    public UserItemEntity(int quantity, int userId, ItemEntity itemId) {
-        this.quantity = quantity;
-        this.userId = userId;
-        this.itemId = itemId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public UserItemEntity() {
-        super();
-    }
-
-    public int getUserItemId() {
-        return userItemId;
-    }
-
-    public void setUserItemId(int userItemId) {
-        this.userItemId = userItemId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public ItemEntity getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(ItemEntity itemId) {
-        this.itemId = itemId;
-    }
-
-//    public UserDetailsEntity getUser_details() {
-//        return user_details;
-//    }
-//
-//    public void setUser_details(UserDetailsEntity user_details) {
-//        this.user_details = user_details;
-//    }
 }

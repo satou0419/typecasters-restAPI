@@ -30,11 +30,11 @@ public class SimulationService {
                 user.setUserID(i.intValue());
                 simulation.addParticipants(user);
             }
-            simulationRepository.save(simulation);
+//            simulationRepository.save(simulation);
         }
-        if (simulation.getWords().size() != 10) {
-            throw new IllegalArgumentException("The number of words must be 10.");
-        }
+//        if (simulation.getWords().size() != 10) {
+//            throw new IllegalArgumentException("The number of words must be 10.");
+//        }
         return simulationRepository.save(simulation);
     }
 

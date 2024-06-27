@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import typecasters.tower_of_words.UserInfo;
 
 
 @RestController
@@ -47,11 +47,21 @@ public class UserController {
         return "testinnnngg";
     }
 
+    @GetMapping("/get_user_id/{username}")
+    public int getUserId(@PathVariable String username){
+        return userv.findUserIdByUsername(username);
+    }
+
+    @GetMapping("/get_user_info/{user_id}")
+    public UserInfo getUserInfo(@PathVariable int user_id){
+        return userv.findUserInfoById(user_id);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@RequestBody LoginRequest logReq) {
         try {
-            UserEntity user = userv.login(logReq);
-            return ResponseEntity.ok(user); // 200 OK
+            int userId = userv.login(logReq);
+            return ResponseEntity.ok(userId); // 200 OK
         }
 
         catch (UsernameNotFoundException e) {
