@@ -103,11 +103,27 @@ public class UserService {
 
             user = urepo.findById(uid).orElse(null);
 
-            if(user == null){
-                throw new Exception("User id does not exit");
-            }else{
+            if (user == null) {
+                throw new Exception("User id does not exist");
+            } else {
                 user.setFirstname(newUserInfo.getFirstname());
                 user.setLastname(newUserInfo.getLastname());
+
+                if (newUserInfo.getPassword() != null) {
+                    user.setPassword(newUserInfo.getPassword());
+                }
+                if (newUserInfo.getUserType() != null) {
+                    user.setUserType(newUserInfo.getUserType());
+                }
+                if (newUserInfo.getEmail() != null) {
+                    user.setEmail(newUserInfo.getEmail());
+                }
+                if (newUserInfo.getUsername() != null) {
+                    user.setUsername(newUserInfo.getUsername());
+                }
+                if (newUserInfo.getIsLoggedIn() != null) {
+                    user.setIsLoggedIn(newUserInfo.getIsLoggedIn());
+                }
                 return urepo.save(user);
             }
 
