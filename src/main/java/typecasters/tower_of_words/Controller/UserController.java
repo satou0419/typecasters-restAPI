@@ -162,16 +162,19 @@ public class UserController {
         return userv.testFind(username);
     }
 
-    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
-    public String logoutUser(HttpServletRequest request, HttpServletResponse response, int user_id){
-
-        return "redirect:/login";
-    }
+//    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
+//    public String logoutUser(HttpServletRequest request, HttpServletResponse response, int user_id){
+//
+//        return "redirect:/login";
+//    }
 
     @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
     public ResponseEntity<Object> logoutUser(@RequestParam int userId, HttpServletRequest request, HttpServletResponse response) {
         try {
             userv.logout(userId);
+
+            response.sendRedirect("/login");
+
             return NoDataResponse.noDataResponse(HttpStatus.OK, "User logged out successfully");
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to logout user");
