@@ -110,19 +110,19 @@ public class UserService {
                 user.setLastname(newUserInfo.getLastname());
 
                 if (newUserInfo.getPassword() != null) {
-                    user.setPassword(newUserInfo.getPassword());
+                    user.setPassword(user.getPassword());
                 }
                 if (newUserInfo.getUserType() != null) {
-                    user.setUserType(newUserInfo.getUserType());
+                    user.setUserType(user.getUserType());
                 }
                 if (newUserInfo.getEmail() != null) {
-                    user.setEmail(newUserInfo.getEmail());
+                    user.setEmail(user.getEmail());
                 }
                 if (newUserInfo.getUsername() != null) {
-                    user.setUsername(newUserInfo.getUsername());
+                    user.setUsername(user.getUsername());
                 }
                 if (newUserInfo.getIsLoggedIn() != null) {
-                    user.setIsLoggedIn(newUserInfo.getIsLoggedIn());
+                    user.setIsLoggedIn(user.getIsLoggedIn());
                 }
                 return urepo.save(user);
             }
