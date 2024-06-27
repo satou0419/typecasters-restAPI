@@ -108,7 +108,6 @@ public class UserService {
             }else{
                 user.setFirstname(newUserInfo.getFirstname());
                 user.setLastname(newUserInfo.getLastname());
-                user.setPassword(newUserInfo.getPassword());
                 return urepo.save(user);
             }
 

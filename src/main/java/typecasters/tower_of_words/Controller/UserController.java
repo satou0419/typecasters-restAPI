@@ -81,7 +81,7 @@ public class UserController {
             int userId = userv.findUserIdByUsername(username);
             return Response.response(HttpStatus.OK, "User ID found", userId);
         }catch(NoSuchElementException e){
-            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
         }catch(Exception e){
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -157,8 +157,15 @@ public class UserController {
 
 
     @PutMapping("/update_user")
-    public UserEntity updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo){
-        return userv.editAccount(newUserInfo, uid);
+    public ResponseEntity<Object> updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo) {
+        try {
+            UserEntity updatedUser = userv.editAccount(newUserInfo, uid);
+            return Response.response(HttpStatus.OK, "User updated successfully", updatedUser);
+        } catch (NoSuchElementException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "User not found");
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update user");
+        }
     }
 
     @PostMapping("/test_find")
@@ -191,7 +198,7 @@ public class UserController {
             if(userExists){
                 return Response.response(HttpStatus.OK, "User exists", userExists);
             }else{
-                return Response.response(HttpStatus.BAD_GATEWAY, "User doesn't exist", userExists);
+                return Response.response(HttpStatus.NOT_FOUND, "User doesn't exist", userExists);
             }
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to check user existence");
