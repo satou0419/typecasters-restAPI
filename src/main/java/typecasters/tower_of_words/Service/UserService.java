@@ -149,7 +149,15 @@ public class UserService {
             user = urepo.findById(userId).get();
             userDetails = ud_repo.findOneByUserID(userId);
 
-            return new UserInfoAndDetails(user.getUserType(), user.getEmail(), user.getLastname(), user.getFirstname(), user.getUsername(), userDetails.getUserDetailsID());
+            return new UserInfoAndDetails(
+                    user.getUserType(),
+                    user.getEmail(),
+                    user.getLastname(),
+                    user.getFirstname(),
+                    user.getUsername(),
+                    userDetails.getUserDetailsID()
+                );
+
         }catch(NoSuchElementException e){
             throw new NoSuchElementException(e);
         }
@@ -179,8 +187,8 @@ public class UserService {
         return urepo.findOneByUsername(username);
     }
 
-    public boolean checkUserIfExist(int userId) {
-        return urepo.findById(userId).isPresent();
+    public boolean checkUserIfExist(String username) {
+        return urepo.findByUsername(username).isPresent();
     }
 
 

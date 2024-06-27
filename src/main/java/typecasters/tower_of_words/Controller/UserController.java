@@ -51,7 +51,7 @@ public class UserController {
             String registrationStatus = userv.registerUser(user);
 
             if ("Registration Successful".equals(registrationStatus)) {
-                return Response.response(HttpStatus.OK, "Registration Successful", null);
+                return NoDataResponse.noDataResponse(HttpStatus.OK, "Registration Successful");
             } else {
                 return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, registrationStatus);
             }
@@ -134,6 +134,8 @@ public class UserController {
             return Response.response(HttpStatus.OK, "User info found", userInfoAndDetails);
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "User not found");
+        } catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -148,6 +150,8 @@ public class UserController {
             }
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "User not found");
+        } catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -169,22 +173,20 @@ public class UserController {
 //    }
 
     @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
-    public ResponseEntity<Object> logoutUser(@RequestParam int userId, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Object> logoutUser(@RequestParam int userId) {
         try {
             userv.logout(userId);
-
-            response.sendRedirect("/login");
-
+//            response.sendRedirect("/login");
             return NoDataResponse.noDataResponse(HttpStatus.OK, "User logged out successfully");
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to logout user");
         }
     }
 
-    @GetMapping("/checkExist/{userId}")
-    public ResponseEntity<Object> checkUserExistence(@PathVariable int userId) {
+    @GetMapping("/checkExist/{username}")
+    public ResponseEntity<Object> checkUserExistence(@PathVariable String username) {
         try {
-            boolean userExists = userv.checkUserIfExist(userId);
+            boolean userExists = userv.checkUserIfExist(username);
 
             if(userExists){
                 return Response.response(HttpStatus.OK, "User exists", userExists);
