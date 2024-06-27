@@ -162,14 +162,14 @@ public class UserController {
         return userv.testFind(username);
     }
 
-//    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
-//    public String logoutUser(HttpServletRequest request, HttpServletResponse response, int user_id){
-//
-//        return "redirect:/login";
-//    }
+    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
+    public String logoutUser(HttpServletRequest request, HttpServletResponse response, int user_id){
 
-    @PostMapping("/logout")
-    public ResponseEntity<Object> logoutUser(@RequestParam int userId) {
+        return "redirect:/login";
+    }
+
+    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
+    public ResponseEntity<Object> logoutUser(@RequestParam int userId, HttpServletRequest request, HttpServletResponse response) {
         try {
             userv.logout(userId);
             return NoDataResponse.noDataResponse(HttpStatus.OK, "User logged out successfully");
@@ -182,7 +182,12 @@ public class UserController {
     public ResponseEntity<Object> checkUserExistence(@PathVariable int userId) {
         try {
             boolean userExists = userv.checkUserIfExist(userId);
-            return Response.response(HttpStatus.OK, "User exists", userExists);
+
+            if(userExists){
+                return Response.response(HttpStatus.OK, "User exists", userExists);
+            }else{
+                return Response.response(HttpStatus.BAD_GATEWAY, "User doesn't exist", userExists);
+            }
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to check user existence");
         }
