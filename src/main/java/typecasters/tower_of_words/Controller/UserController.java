@@ -140,7 +140,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/change_password")
+    @PatchMapping("/change_password")
     public ResponseEntity<Object> changePassword(@RequestParam int user_id, @RequestParam String oldPassword, @RequestParam String newPassword) {
         try {
             boolean passwordChanged = userv.changePassword(user_id, oldPassword, newPassword);
@@ -157,7 +157,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/update_user")
+    @PatchMapping("/update_user")
     public ResponseEntity<Object> updateUser(@RequestParam int uid, @RequestBody UserEntity newUserInfo) {
         try {
             userv.editAccount(newUserInfo, uid);
