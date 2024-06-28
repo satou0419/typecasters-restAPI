@@ -25,4 +25,5 @@ public class UserProgressController {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
 }
