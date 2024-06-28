@@ -109,24 +109,21 @@ public class UserController {
     public ResponseEntity<Object> loginUser(@RequestBody LoginRequest logReq) {
         try {
             int userId = userv.login(logReq);
-            return ResponseEntity.ok(userId); // 200 OK
-        }
-
-        catch (UsernameNotFoundException e) {
+            return Response.response(HttpStatus.OK, "Login successful", userId); // 200 OK
+        } catch (UsernameNotFoundException e) {
             // Username not found
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // 404 Not Found
-        }
-
-        catch (IncorrectPasswordException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage()); // 404 Not Found
+        } catch (IncorrectPasswordException e) {
             // Incorrect password
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage()); // 401 Unauthorized
-        }
-
-        catch (RuntimeException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.UNAUTHORIZED, e.getMessage()); // 401 Unauthorized
+        } catch (RuntimeException e) {
             // Internal Server Error for any other unhandled error
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal error occurred. Please try again later."); // 500 Internal Server Error
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An internal error occurred. Please try again later."); // 500 Internal Server Error
         }
     }
+
+
+
 
     @GetMapping("/get_user_info/{user_id}")
     public ResponseEntity<Object> getUserInfo(@PathVariable int user_id) {
