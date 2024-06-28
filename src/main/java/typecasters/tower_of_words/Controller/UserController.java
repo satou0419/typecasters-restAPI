@@ -3,6 +3,7 @@ import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Exception.IncorrectPasswordException;
 import typecasters.tower_of_words.Exception.UsernameNotFoundException;
 import typecasters.tower_of_words.LoginRequest;
+import typecasters.tower_of_words.LoginResponse;
 import typecasters.tower_of_words.Response.NoDataResponse;
 import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.UserService;
@@ -108,19 +109,17 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@RequestBody LoginRequest logReq) {
         try {
-            int userId = userv.login(logReq);
-            return Response.response(HttpStatus.OK, "Login successful", userId); // 200 OK
+            LoginResponse loginResponse = userv.login(logReq);
+            return Response.response(HttpStatus.OK, "Login successful", loginResponse); // 200 OK
         } catch (UsernameNotFoundException e) {
-            // Username not found
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage()); // 404 Not Found
         } catch (IncorrectPasswordException e) {
-            // Incorrect password
             return NoDataResponse.noDataResponse(HttpStatus.UNAUTHORIZED, e.getMessage()); // 401 Unauthorized
         } catch (RuntimeException e) {
-            // Internal Server Error for any other unhandled error
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An internal error occurred. Please try again later."); // 500 Internal Server Error
         }
     }
+
 
 
 
@@ -148,7 +147,9 @@ public class UserController {
             }
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "User not found");
-        } catch (Exception e){
+        } catch (IncorrectPasswordException e){
+            return NoDataResponse.noDataResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (Exception e){
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

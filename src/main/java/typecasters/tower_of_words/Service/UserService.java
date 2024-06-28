@@ -5,6 +5,7 @@ import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Exception.IncorrectPasswordException;
 import typecasters.tower_of_words.Exception.UsernameNotFoundException;
 import typecasters.tower_of_words.LoginRequest;
+import typecasters.tower_of_words.LoginResponse;
 import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import typecasters.tower_of_words.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,10 +73,24 @@ public class UserService {
 
 
     // Login
-    @SuppressWarnings("finally")
-    public int login(LoginRequest logReq) {
+//    @SuppressWarnings("finally")
+//    public int login(LoginRequest logReq) {
+//
+//
+//        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
+//        if (user == null) {
+//            throw new UsernameNotFoundException("Username cannot be found!");
+//        }
+//
+//        if (!user.getPassword().equals(logReq.getPassword())) {
+//            throw new IncorrectPasswordException("Incorrect password.");
+//        }
+//        user.setIsLoggedIn(true);
+//        return user.getUserID();
+//    }
 
-
+    @Transactional
+    public LoginResponse login(LoginRequest logReq) {
         UserEntity user = urepo.findOneByUsername(logReq.getUsername());
         if (user == null) {
             throw new UsernameNotFoundException("Username cannot be found!");
@@ -85,7 +100,8 @@ public class UserService {
             throw new IncorrectPasswordException("Incorrect password.");
         }
         user.setIsLoggedIn(true);
-        return user.getUserID();
+        urepo.save(user);
+        return new LoginResponse(user.getUserID(), user.getIsLoggedIn());
     }
 
     @Transactional
@@ -161,8 +177,12 @@ public class UserService {
             user = urepo.findById(userId).get();
 
             if(user.getPassword().equals(oldPassword)){
-                user.setPassword(newPassword);
+                if (!isValidPassword(newPassword)) {
+                    throw new IncorrectPasswordException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
+                }
 
+                user.setPassword(newPassword);
+                urepo.save(user);
                 return true;
             }else{
                 return false;
