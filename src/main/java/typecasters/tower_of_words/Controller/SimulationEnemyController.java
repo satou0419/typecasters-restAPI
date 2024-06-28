@@ -1,6 +1,8 @@
 package typecasters.tower_of_words.Controller;
 
 import typecasters.tower_of_words.Entity.SimulationEnemyEntity;
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.SimulationEnemyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,32 +19,53 @@ public class SimulationEnemyController {
     private SimulationEnemyService simulationEnemyService;
 
     @PostMapping("/insert")
-    public ResponseEntity<SimulationEnemyEntity> insertSimulationWord(@RequestBody SimulationEnemyEntity word) {
-        SimulationEnemyEntity insertedWord = simulationEnemyService.insertSimulationWord(word);
-        return new ResponseEntity<>(insertedWord, HttpStatus.OK);
+    public ResponseEntity<Object> insertSimulationWord(@RequestBody SimulationEnemyEntity word) {
+        try {
+            SimulationEnemyEntity insertedWord = simulationEnemyService.insertSimulationWord(word);
+            return Response.response(HttpStatus.OK, "Simulation word inserted successfully", insertedWord);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/view")
-    public ResponseEntity<List<SimulationEnemyEntity>> getAllSimulationWords() {
-        List<SimulationEnemyEntity> words = simulationEnemyService.getAllSimulationWords();
-        return new ResponseEntity<>(words, HttpStatus.OK);
+    public ResponseEntity<Object> getAllSimulationWords() {
+        try {
+            List<SimulationEnemyEntity> words = simulationEnemyService.getAllSimulationWords();
+            return Response.response(HttpStatus.OK, "Simulations words retrieved successfully", words);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
-    @GetMapping("view_by_id/{id}")
-    public ResponseEntity<SimulationEnemyEntity> getSimulationWordById(@PathVariable int id) {
-        Optional<SimulationEnemyEntity> word = simulationEnemyService.getSimulationWordById(id);
-        return word.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @GetMapping("/view_by_id/{id}")
+    public ResponseEntity<Object> getSimulationWordById(@PathVariable int id) {
+        try {
+            Optional<SimulationEnemyEntity> word = simulationEnemyService.getSimulationWordById(id);
+            return word.map(value -> Response.response(HttpStatus.OK, "Simulation word retrieved successfully", value))
+                    .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Simulation word not found"));
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<SimulationEnemyEntity> updateSimulationWord(@RequestBody SimulationEnemyEntity word) {
-        SimulationEnemyEntity updatedWord = simulationEnemyService.updateSimulationWord(word);
-        return new ResponseEntity<>(updatedWord, HttpStatus.OK);
+    public ResponseEntity<Object> updateSimulationWord(@RequestBody SimulationEnemyEntity word) {
+        try {
+            SimulationEnemyEntity updatedWord = simulationEnemyService.updateSimulationWord(word);
+            return Response.response(HttpStatus.OK, "Simulation word updated successfully", updatedWord);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @DeleteMapping("/remove/{id}")
-    public ResponseEntity<Void> deleteSimulationWord(@PathVariable int id) {
-        simulationEnemyService.deleteSimulationWord(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> deleteSimulationWord(@PathVariable int id) {
+        try {
+            simulationEnemyService.deleteSimulationWord(id);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Simulation word deleted successfully");
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 }

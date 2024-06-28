@@ -2,6 +2,8 @@ package typecasters.tower_of_words.Controller;
 
 import typecasters.tower_of_words.Entity.RoomEntity;
 import typecasters.tower_of_words.Repository.RoomRepository;
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,114 +25,115 @@ public class RoomController {
 
     //CREATE
     @PostMapping("/insert")
-    public ResponseEntity<RoomEntity> insertRoom(@RequestBody RoomEntity room) {
+    public ResponseEntity<Object> insertRoom(@RequestBody RoomEntity room) {
         try {
-            RoomEntity insertRoom = roomService.insertRoom(room);
-            return new ResponseEntity<>(insertRoom, HttpStatus.OK);
+            RoomEntity insertedRoom = roomService.insertRoom(room);
+            return Response.response(HttpStatus.OK, "Room inserted successfully", insertedRoom);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @PutMapping("/insert_member/{userID}/room/{roomID}")
-    public ResponseEntity<String> insertMember(@PathVariable int userID, @PathVariable int roomID) {
+    public ResponseEntity<Object> insertMember(@PathVariable int userID, @PathVariable int roomID) {
         try {
             roomService.insertMember(userID, roomID);
-            return ResponseEntity.ok("Student Added!");
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Student Added!");
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @PutMapping("/insert_member_by_code/{userID}/code/{code}")
-    public ResponseEntity<String> insertMemberByCode(@PathVariable int userID, @PathVariable String code) {
+    public ResponseEntity<Object> insertMemberByCode(@PathVariable int userID, @PathVariable String code) {
         try {
             roomService.insertMemberByCode(userID, code);
             RoomEntity room = roomRepository.findByCode(code);
-            return ResponseEntity.ok("Welcome to " + room.getName() + "!");
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Welcome to " + room.getName() + "!");
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     //READ
     @GetMapping("/view_created_room/{creatorID}")
-    public ResponseEntity<List<RoomEntity>> viewCreatedRooms(@PathVariable int creatorID) {
-        try{
+    public ResponseEntity<Object> viewCreatedRooms(@PathVariable int creatorID) {
+        try {
             List<RoomEntity> createdRooms = roomService.viewCreatedRooms(creatorID);
-            return new ResponseEntity<>(createdRooms, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Created rooms retrieved successfully", createdRooms);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @GetMapping("/view_room_by_code/{code}")
-    public ResponseEntity<RoomEntity> viewRoomByCode(@PathVariable String code) {
-        try{
+    public ResponseEntity<Object> viewRoomByCode(@PathVariable String code) {
+        try {
             RoomEntity room = roomService.viewRoomByCode(code);
-            return new ResponseEntity<>(room, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Room retrieved successfully", room);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @GetMapping("/view_room_by_id/{roomID}")
-    public ResponseEntity<RoomEntity> viewRoomByID(@PathVariable int roomID) {
-        try{
+    public ResponseEntity<Object> viewRoomByID(@PathVariable int roomID) {
+        try {
             Optional<RoomEntity> roomOptional = roomService.viewRoomByID(roomID);
-            return roomOptional.map(room -> new ResponseEntity<>(room, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            return roomOptional.map(room -> Response.response(HttpStatus.OK, "Room retrieved successfully", room))
+                    .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Room not found"));
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @GetMapping("/view_room_by_member/{userID}")
-    public ResponseEntity<List<RoomEntity>> viewRoomByMember(@PathVariable int userID) {
-        try{
+    public ResponseEntity<Object> viewRoomByMember(@PathVariable int userID) {
+        try {
             List<RoomEntity> memberRooms = roomService.viewRoomByMember(userID);
-            return new ResponseEntity<>(memberRooms, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Member rooms retrieved successfully", memberRooms);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     //UPDATE
     @PutMapping("/edit")
-    public ResponseEntity<RoomEntity> editRoom(@RequestBody RoomEntity room) {
+    public ResponseEntity<Object> editRoom(@RequestBody RoomEntity room) {
         try {
             RoomEntity updatedRoom = roomService.editRoom(room);
-            return new ResponseEntity<>(updatedRoom, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Room updated successfully", updatedRoom);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     //DELETE
     @PutMapping("/remove/{roomID}")
-    public ResponseEntity<String> removeRoom(@PathVariable int roomID) {
+    public ResponseEntity<Object> removeRoom(@PathVariable int roomID) {
         try {
-            RoomEntity removedRoom = roomService.removeRoom(roomID);
-            return new ResponseEntity<>("Room Removed!", HttpStatus.OK);
+            roomService.removeRoom(roomID);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Room Removed!");
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 }
