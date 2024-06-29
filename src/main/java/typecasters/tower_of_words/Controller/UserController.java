@@ -1,6 +1,7 @@
 package typecasters.tower_of_words.Controller;
 import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Exception.IncorrectPasswordException;
+import typecasters.tower_of_words.Exception.LoggedOutException;
 import typecasters.tower_of_words.Exception.UsernameNotFoundException;
 import typecasters.tower_of_words.LoginRequest;
 import typecasters.tower_of_words.LoginResponse;
@@ -185,6 +186,8 @@ public class UserController {
             userv.logout(userId);
 //            response.sendRedirect("/login");
             return NoDataResponse.noDataResponse(HttpStatus.OK, "User logged out successfully");
+        } catch (LoggedOutException e){
+            return NoDataResponse.noDataResponse(HttpStatus.CONFLICT, e.getMessage());
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to logout user");
         }

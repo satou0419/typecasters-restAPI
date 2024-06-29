@@ -3,6 +3,7 @@ package typecasters.tower_of_words.Service;
 import typecasters.tower_of_words.Entity.UserDetailsEntity;
 import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Exception.IncorrectPasswordException;
+import typecasters.tower_of_words.Exception.LoggedOutException;
 import typecasters.tower_of_words.Exception.UsernameNotFoundException;
 import typecasters.tower_of_words.LoginRequest;
 import typecasters.tower_of_words.LoginResponse;
@@ -108,6 +109,10 @@ public class UserService {
     public void logout(int userId) {
         UserEntity user = urepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
         user.setIsLoggedIn(false);
+
+        if(user.getIsLoggedIn() == false){
+            throw new LoggedOutException("User is already logged out!");
+        }
         urepo.save(user);
     }
 
