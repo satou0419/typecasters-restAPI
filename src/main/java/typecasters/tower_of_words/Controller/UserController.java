@@ -179,7 +179,7 @@ public class UserController {
 //        return "redirect:/login";
 //    }
 
-    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/logout"}, method = RequestMethod.PATCH)
     public ResponseEntity<Object> logoutUser(@RequestParam int userId) {
         try {
             userv.logout(userId);
