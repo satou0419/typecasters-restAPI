@@ -19,13 +19,13 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     @Autowired
-    UserRepository urepo;
+    UserRepository userRepository;
 
     @Autowired
-    UserDetailsRepository ud_repo;
+    UserDetailsRepository userDetailsRepository;
 
     @Autowired
-    UserDetailsService ud_serv;
+    UserDetailsService userDetailsService;
 
 
     @Transactional
@@ -33,7 +33,7 @@ public class UserService {
         try {
 
 
-            if (urepo.findOneByUsername(user.getUsername()) != null) {
+            if (userRepository.findOneByUsername(user.getUsername()) != null) {
                 throw new IllegalArgumentException("Username already exists");
             }
 
@@ -45,8 +45,8 @@ public class UserService {
                 throw new IllegalArgumentException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
             }
 
-            int userId = urepo.save(user).getUserID();
-            ud_serv.initUserDetails(userId);
+            int userId = userRepository.save(user).getUserID();
+            userDetailsService.initUserDetails(userId);
 
             return "Registration Successful";
         } catch (IllegalArgumentException ex) {
@@ -76,7 +76,7 @@ public class UserService {
     public int login(LoginRequest logReq) {
 
 
-        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
+        UserEntity user = userRepository.findOneByUsername(logReq.getUsername());
         if (user == null) {
             throw new UsernameNotFoundException("Username cannot be found!");
         }
@@ -94,7 +94,7 @@ public class UserService {
         UserEntity user = new UserEntity();
         try {
 
-            user = urepo.findById(uid).orElse(null);
+            user = userRepository.findById(uid).orElse(null);
 
             if(user == null){
                 throw new Exception("User id does not exit");
@@ -102,7 +102,7 @@ public class UserService {
                 user.setFirstname(newUserInfo.getFirstname());
                 user.setLastname(newUserInfo.getLastname());
                 user.setPassword(newUserInfo.getPassword());
-                return urepo.save(user);
+                return userRepository.save(user);
             }
 
 
@@ -118,7 +118,7 @@ public class UserService {
 
 
         try{
-            user = urepo.findById(user_id).get();
+            user = userRepository.findById(user_id).get();
 
             return new UserInfo(user.getUserID(), user.getUsername(), user.getFirstname(), user.getLastname());
 
@@ -128,7 +128,7 @@ public class UserService {
     }
 
     public int findUserIdByUsername(String username){
-        UserEntity user = urepo.findOneByUsername(username);
+        UserEntity user = userRepository.findOneByUsername(username);
 
         return user.getUserID();
     }
@@ -137,8 +137,8 @@ public class UserService {
         UserEntity user = new UserEntity();
         UserDetailsEntity userDetails = new UserDetailsEntity();
         try{
-            user = urepo.findById(userId).get();
-            userDetails = ud_repo.findOneByUserID(userId);
+            user = userRepository.findById(userId).get();
+            userDetails = userDetailsRepository.findOneByUserID(userId);
 
             return new UserInfoAndDetails(user.getUserType(), user.getEmail(), user.getLastname(), user.getFirstname(), user.getUsername(), userDetails.getUserDetailsID());
         }catch(NoSuchElementException e){
@@ -150,7 +150,7 @@ public class UserService {
         UserEntity user = new UserEntity();
 
         try{
-            user = urepo.findById(userId).get();
+            user = userRepository.findById(userId).get();
 
             if(user.getPassword().equals(oldPassword)){
                 user.setPassword(newPassword);
@@ -167,7 +167,7 @@ public class UserService {
 
     //findTest
     public UserEntity testFind(String username){
-        return urepo.findOneByUsername(username);
+        return userRepository.findOneByUsername(username);
     }
 
 

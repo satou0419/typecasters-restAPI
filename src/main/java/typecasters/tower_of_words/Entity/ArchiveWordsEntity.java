@@ -20,6 +20,4 @@ public class ArchiveWordsEntity {
     private String word;
 
     private boolean isChecked = false;
-
-    private boolean isDeleted = false;
 }

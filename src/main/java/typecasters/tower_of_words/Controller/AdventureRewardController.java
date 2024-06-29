@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 public class AdventureRewardController {
 
     @Autowired
-    private AdventureRewardService ar_serv;
+    private AdventureRewardService adventureRewardService;
 
     // The <?> is a wildcard / unknown type, it actually just means it can return any type, usually
     // does not restrict what type the ResponseEntity that will return
@@ -31,7 +31,7 @@ public class AdventureRewardController {
     @PostMapping("/add_reward")
     public ResponseEntity<?> insertReward(@RequestBody AdventureRewardEntity reward) {
         try {
-            AdventureRewardEntity createdReward = ar_serv.insertReward(reward);
+            AdventureRewardEntity createdReward = adventureRewardService.insertReward(reward);
             return ResponseEntity.ok(createdReward);
         } catch (Exception e) {
             return createErrorResponse(e);
@@ -41,7 +41,7 @@ public class AdventureRewardController {
     @GetMapping("/get_all_reward")
     public ResponseEntity<?> getAllReward() {
         try {
-            List<AdventureRewardEntity> rewards = ar_serv.getAllReward();
+            List<AdventureRewardEntity> rewards = adventureRewardService.getAllReward();
             return ResponseEntity.ok(rewards);
         } catch (Exception e) {
             return createErrorResponse(e);
@@ -51,7 +51,7 @@ public class AdventureRewardController {
     @GetMapping("/get_reward_by_floor_id")
     public ResponseEntity<?> getRewardByTowerFloor(@RequestParam int floor_id) {
         try {
-            Optional<AdventureRewardEntity> reward = ar_serv.getRewardByTowerFloorId(floor_id);
+            Optional<AdventureRewardEntity> reward = adventureRewardService.getRewardByTowerFloorId(floor_id);
             return ResponseEntity.ok(reward);
         } catch (Exception e) {
             return createErrorResponse(e);
@@ -61,7 +61,7 @@ public class AdventureRewardController {
     @PutMapping("/update_reward")
     public ResponseEntity<?> updateReward(@RequestParam int reward_id, @RequestBody AdventureRewardEntity newRewardDetail) {
         try {
-            AdventureRewardEntity updatedReward = ar_serv.updateReward(newRewardDetail, reward_id);
+            AdventureRewardEntity updatedReward = adventureRewardService.updateReward(newRewardDetail, reward_id);
             return ResponseEntity.ok(updatedReward);
         } catch (NoSuchElementException e) {
             return createErrorResponse(String.valueOf(e), HttpStatus.NOT_FOUND);
@@ -73,7 +73,7 @@ public class AdventureRewardController {
     @DeleteMapping("/delete_reward")
     public ResponseEntity<?> deleteReward(@RequestParam int rewardId) {
         try {
-            String message = ar_serv.deleteReward(rewardId);
+            String message = adventureRewardService.deleteReward(rewardId);
             Map<String, String> response = new HashMap<>();
             response.put("message", message);
             return ResponseEntity.ok(response);
@@ -85,7 +85,7 @@ public class AdventureRewardController {
     @PutMapping("/give_reward_to_user/{floorId}/{userId}")
     public ResponseEntity<?> updateUserCreditANDUserItem(@PathVariable int floorId, @PathVariable int userId) {
         try {
-            String message = ar_serv.updateUserCreditANDUserItem(floorId, userId);
+            String message = adventureRewardService.updateUserCreditANDUserItem(floorId, userId);
             Map<String, String> response = new HashMap<>();
             response.put("message", message);
             return ResponseEntity.ok(response);

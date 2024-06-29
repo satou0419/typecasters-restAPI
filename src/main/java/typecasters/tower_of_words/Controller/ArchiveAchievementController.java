@@ -73,8 +73,8 @@ public class ArchiveAchievementController {
     @PutMapping("/remove/{archiveAchievementID}")
     public ResponseEntity<String> removeArchiveAchievement(@PathVariable int archiveAchievementID) {
         try{
-            ArchiveAchievementEntity removedAchievement = archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
-            return new ResponseEntity<>("Achievement Removed!", HttpStatus.OK);
+            String removedAchievement = archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
+            return new ResponseEntity<>(removedAchievement, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NoSuchElementException | NullPointerException ex){

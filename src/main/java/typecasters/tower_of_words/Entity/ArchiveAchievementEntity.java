@@ -22,6 +22,4 @@ public class ArchiveAchievementEntity {
     private String imagePath;
 
     private boolean isChecked = false;
-
-    private boolean isDeleted = false;
 }

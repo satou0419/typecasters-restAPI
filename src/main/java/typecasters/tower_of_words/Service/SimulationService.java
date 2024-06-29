@@ -30,11 +30,7 @@ public class SimulationService {
                 user.setUserID(i.intValue());
                 simulation.addParticipants(user);
             }
-//            simulationRepository.save(simulation);
         }
-//        if (simulation.getWords().size() != 10) {
-//            throw new IllegalArgumentException("The number of words must be 10.");
-//        }
         return simulationRepository.save(simulation);
     }
 
@@ -87,17 +83,15 @@ public class SimulationService {
         }
     }
 
-    public SimulationEntity removeSimulation(int simulationID) {
-        SimulationEntity delete = new SimulationEntity();
+    public String removeSimulation(int simulationID) {
+        String msg = "";
 
-        try {
-            delete = simulationRepository.findById(simulationID).get();
+        if(simulationRepository.findById(simulationID).isPresent()) {
+            simulationRepository.deleteById(simulationID);
 
-            delete.setDeleted(true);
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Simulation " + simulationID + " does not exist!");
-        }finally {
-            return simulationRepository.save(delete);
+            msg = "Item " + simulationID + " is successfully deleted!";
         }
+
+        return msg;
     }
 }

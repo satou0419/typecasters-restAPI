@@ -13,20 +13,20 @@ import java.util.Optional;
 public class TowerFloorService {
 
     @Autowired
-    TowerFloorRepository tf_repo;
+    TowerFloorRepository towerFloorRepository;
 
     //Create
     public TowerFloorEntity createFloor(TowerFloorEntity towerFloor){
-        return tf_repo.save(towerFloor);
+        return towerFloorRepository.save(towerFloor);
     }
 
     //Read
     public List<TowerFloorEntity> getAllFloors(){
-        return tf_repo.findAll();
+        return towerFloorRepository.findAll();
     }
 
     public Optional<TowerFloorEntity> getFloorById(int floor_id){
-        return tf_repo.findById(floor_id);
+        return towerFloorRepository.findById(floor_id);
     }
 
     //Update
@@ -35,14 +35,14 @@ public class TowerFloorService {
         TowerFloorEntity floor = new TowerFloorEntity();
 
         try{
-            floor = tf_repo.findById(floor_id).get();
+            floor = towerFloorRepository.findById(floor_id).get();
 
             floor.setSectionFloor(newFloorDetails.getSectionFloor());
             floor.setTowerSection(newFloorDetails.getTowerSection());
         }catch (NoSuchElementException ex){
             throw new NoSuchElementException("Floor " + floor_id + " does not exist");
         }finally {
-            return tf_repo.save(floor);
+            return towerFloorRepository.save(floor);
         }
     }
 
@@ -50,8 +50,8 @@ public class TowerFloorService {
     public String deleteFloor(int floor_id){
         String msg = "Floor id does not exist";
 
-        if(tf_repo.findById(floor_id).isPresent()){
-            tf_repo.deleteById(floor_id);
+        if(towerFloorRepository.findById(floor_id).isPresent()){
+            towerFloorRepository.deleteById(floor_id);
 
             msg = "Floor " + floor_id + " is successfully deleted";
         }

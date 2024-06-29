@@ -37,8 +37,6 @@ public class SimulationEntity {
 
     private boolean numberOfAttempt;
 
-    private boolean isDeleted = false;
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "tbl_simulation_enemy",

@@ -22,7 +22,7 @@ public class RoomController {
     RoomRepository roomRepository;
 
     //CREATE
-    @PostMapping("/insert")
+    @PostMapping("/create_room")
     public ResponseEntity<RoomEntity> insertRoom(@RequestBody RoomEntity room) {
         try {
             RoomEntity insertRoom = roomService.insertRoom(room);
@@ -125,8 +125,8 @@ public class RoomController {
     @PutMapping("/remove/{roomID}")
     public ResponseEntity<String> removeRoom(@PathVariable int roomID) {
         try {
-            RoomEntity removedRoom = roomService.removeRoom(roomID);
-            return new ResponseEntity<>("Room Removed!", HttpStatus.OK);
+            roomService.removeRoom(roomID);
+            return ResponseEntity.ok("Simulation Removed!");
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex){

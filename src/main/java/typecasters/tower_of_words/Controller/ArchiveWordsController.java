@@ -73,8 +73,8 @@ public class ArchiveWordsController {
     @PutMapping("/remove/{archiveWordsID}")
     public ResponseEntity<String> removeArchiveWords(@PathVariable int archiveWordsID) {
         try{
-            ArchiveWordsEntity removedWord = archiveWordsService.removeArchiveWords(archiveWordsID);
-            return new ResponseEntity<>("Word Removed!", HttpStatus.OK);
+            String removedWord = archiveWordsService.removeArchiveWords(archiveWordsID);
+            return new ResponseEntity<>(removedWord, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NoSuchElementException | NullPointerException ex){

@@ -57,17 +57,15 @@ public class ArchiveWordsService {
         }
     }
 
-    public ArchiveWordsEntity removeArchiveWords(int archiveWordsID) {
-        ArchiveWordsEntity delete = new ArchiveWordsEntity();
+    public String removeArchiveWords(int archiveWordsID) {
+        String msg = "";
 
-        try {
-            delete = archiveWordsRepository.findById(archiveWordsID).get();
+        if(archiveWordsRepository.findById(archiveWordsID).isPresent()) {
+            archiveWordsRepository.deleteById(archiveWordsID);
 
-            delete.setDeleted(true);
-        } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("Word " + archiveWordsID + " does not exist!");
-        } finally {
-            return archiveWordsRepository.save(delete);
+            msg = "Item " + archiveWordsID + " is successfully deleted!";
         }
+
+        return msg;
     }
 }
