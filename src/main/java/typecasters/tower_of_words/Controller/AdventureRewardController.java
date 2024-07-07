@@ -77,7 +77,7 @@ public class AdventureRewardController {
         }
     }
 
-    @PutMapping("/give_reward_to_user/{floorId}/{userId}")
+    @PatchMapping("/give_reward_to_user/{floorId}/{userId}")
     public ResponseEntity<Object> updateUserCreditANDUserItem(@PathVariable int floorId, @PathVariable int userId) {
         try {
             String message = ar_serv.updateUserCreditANDUserItem(floorId, userId);

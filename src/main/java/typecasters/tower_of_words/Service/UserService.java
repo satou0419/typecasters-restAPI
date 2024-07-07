@@ -35,21 +35,18 @@ public class UserService {
         try {
             if (urepo.findOneByUsername(user.getUsername()) != null) {
                 throw new IllegalArgumentException("Username already exists");
-            }
-
-            if (!isValidUsername(user.getUsername())) {
+            }else if(!isValidUsername(user.getUsername())) {
                 throw new IllegalArgumentException("Username must be at least 3 characters long and may optionally contain a dot (.) or underscore (_) followed by one or more lowercase letters.");
-            }
-
-            if (!isValidPassword(user.getPassword())) {
+            }else if(!isValidPassword(user.getPassword())) {
                 throw new IllegalArgumentException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
+            }else{
+                user.setIsLoggedIn(false);  // Ensure isLoggedIn is set to false
+                int userId = urepo.save(user).getUserID();
+                ud_serv.initUserDetails(userId);
+
+                return "Registration Successful";
             }
 
-            user.setIsLoggedIn(false);  // Ensure isLoggedIn is set to false
-            int userId = urepo.save(user).getUserID();
-            ud_serv.initUserDetails(userId);
-
-            return "Registration Successful";
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
             // Catch the exception and return the error message
@@ -207,5 +204,21 @@ public class UserService {
         return urepo.findByUsername(username).isPresent();
     }
 
+//    public String deleteItem(int item_id) {
+//        String msg = "";
+//
+//        if(itemRepository.findById(item_id).isPresent()) {
+//            itemRepository.deleteById(item_id);
+//
+//            msg = "Item " + item_id + " is successfully deleted!";
+//        }
+//
+//        return msg;
+//    }
 
+//    public String deleteUser(int user_id){
+//        String msg = "";
+//
+//
+//    }
 }

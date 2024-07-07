@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 @Embeddable
 public class RewardItem {
 
+//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "reward_item_id", insertable = false, updatable = false)
     private ItemEntity rewardItem;

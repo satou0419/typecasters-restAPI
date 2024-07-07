@@ -18,4 +18,5 @@ public interface UserItemRepository extends JpaRepository<UserItemEntity, Intege
     Optional<Integer> findUserItemIDByUserIDAndItemID(int userID, ItemEntity itemID);
 
     Optional<UserItemEntity> findOneByUserIDAndItemID(int userID, ItemEntity itemID);
+
 }
