@@ -71,7 +71,7 @@ public class UserDetailsService {
         return "achievement count incremented";
     }
 
-    public String incrementWordCount(int user_id){
+    public String incrementFloorCount(int user_id){
         UserDetailsEntity userDetails = ud_repo.findOneByUserId(user_id);
         userDetails.setFloor_count(userDetails.getFloor_count()+1);
         ud_repo.save(userDetails);
