@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,6 +54,8 @@ public class SimulationEntity {
     )
     private List<SimulationParticipantsEntity> participants = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "simulationWordAssessmentID")
     private SimulationWordAssessmentEntity assessment;
 
     public void addWord(SimulationEnemyEntity enemy) {
