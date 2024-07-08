@@ -20,4 +20,5 @@ public class ArchiveWordsEntity {
     private String word;
 
     private boolean isChecked = false;
+
 }

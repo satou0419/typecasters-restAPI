@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class UserProgressEntity {
     private int floorID;
 
     @OneToOne(mappedBy = "userProgress")
+    @JsonIgnore
     private UserDetailsEntity userDetails;
 
     public UserProgressEntity(int userDetailsID, int towerSectionProgress, int floorID) {

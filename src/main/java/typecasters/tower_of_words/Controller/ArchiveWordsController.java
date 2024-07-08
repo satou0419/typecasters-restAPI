@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import typecasters.tower_of_words.Entity.ArchiveWordsEntity;
+import typecasters.tower_of_words.Exception.UserIdNotFoundException;
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.ArchiveWordsService;
 
 import java.util.List;
@@ -20,65 +23,66 @@ public class ArchiveWordsController {
 
     // Create
     @PostMapping("/insert/{userID}/{word}")
-    public ResponseEntity<?> insertArchiveWords(@PathVariable int userID ,@PathVariable String word) {
-        try{
+    public ResponseEntity<Object> insertArchiveWords(@PathVariable int userID, @PathVariable String word) {
+        try {
             ArchiveWordsEntity insertedWord = archiveWordsService.insertArchiveWords(userID, word);
-            return new ResponseEntity<>("Word Archived!", HttpStatus.OK);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Word Archived!");
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     // Read
     @GetMapping("/view/{userID}")
-    public ResponseEntity<List<ArchiveWordsEntity>> viewAllArchiveWords(@PathVariable int userID) {
-        try{
+    public ResponseEntity<Object> viewAllArchiveWords(@PathVariable int userID) {
+        try {
             List<ArchiveWordsEntity> words = archiveWordsService.viewAllArchiveWords(userID);
-            return new ResponseEntity<>(words, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Words retrieved successfully", words);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (UserIdNotFoundException | NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @GetMapping("/view_by_id/{archiveWordsID}")
-    public ResponseEntity<ArchiveWordsEntity> viewArchiveWordsByID(@PathVariable int archiveWordsID) {
-        try{
+    public ResponseEntity<Object> viewArchiveWordsByID(@PathVariable int archiveWordsID) {
+        try {
             Optional<ArchiveWordsEntity> word = archiveWordsService.viewArchiveWordsByID(archiveWordsID);
-            return word.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            return word.map(value -> Response.response(HttpStatus.OK, "Word retrieved successfully", value))
+                    .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Word not found"));
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     // Update
     @PutMapping("/edit")
-    public ResponseEntity<ArchiveWordsEntity> editArchiveWords(@RequestBody ArchiveWordsEntity word) {
-        try{
+    public ResponseEntity<Object> editArchiveWords(@RequestBody ArchiveWordsEntity word) {
+        try {
             ArchiveWordsEntity updatedWord = archiveWordsService.editArchiveWords(word);
-            return new ResponseEntity<>(updatedWord, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Word updated successfully", updatedWord);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     // Delete
     @PutMapping("/remove/{archiveWordsID}")
-    public ResponseEntity<String> removeArchiveWords(@PathVariable int archiveWordsID) {
-        try{
-            String removedWord = archiveWordsService.removeArchiveWords(archiveWordsID);
-            return new ResponseEntity<>(removedWord, HttpStatus.OK);
+    public ResponseEntity<Object> removeArchiveWords(@PathVariable int archiveWordsID) {
+        try {
+            archiveWordsService.removeArchiveWords(archiveWordsID);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Word removed successfully");
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 }

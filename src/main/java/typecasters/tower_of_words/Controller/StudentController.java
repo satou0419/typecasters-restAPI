@@ -1,6 +1,8 @@
 package typecasters.tower_of_words.Controller;
 
 import typecasters.tower_of_words.Entity.StudentEntity;
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,13 +25,22 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentEntity>> getAllStudents() {
-        List<StudentEntity> students = studentService.getAllStudents();
-        return new ResponseEntity<>(students, HttpStatus.OK);
+    public ResponseEntity<Object> getAllStudents() {
+        try {
+            List<StudentEntity> students = studentService.getAllStudents();
+            return Response.response(HttpStatus.OK, "Students retrieved successfully", students);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/hello_world")
-    public String helloWorld() {
-        return studentService.helloWorld();
+    public ResponseEntity<Object> helloWorld() {
+        try {
+            String message = studentService.helloWorld();
+            return Response.response(HttpStatus.OK, "Hello World message", message);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 }

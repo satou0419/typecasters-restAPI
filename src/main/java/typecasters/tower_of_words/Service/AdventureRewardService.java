@@ -82,18 +82,22 @@ public class AdventureRewardService {
                 int rewardCredit = adventureReward.getAdventureRewardCredit();
                 int userCredit = userDetails.getCreditAmount();
 
-                if(rewardCredit > 0){
+                if(rewardCredit >= 0){
                     userDetails.setCreditAmount(userCredit + rewardCredit);
-                  //  adventureReward.getRewardItemOne().getRewardItemQuantity()
-                    int rewardItemIdOne = adventureReward.getRewardItemOne().getRewardItem().getItemID();
-                    int rewardItemQuantityOne = adventureReward.getRewardItemOne().getRewardItemQuantity();
+                    boolean updatedUserItemQuantityOne = true;
+                    boolean updatedUserItemQuantityTwo = true;
 
-                    int rewardItemIdTwo = adventureReward.getRewardItemTwo().getRewardItem().getItemID();
-                    int rewardItemQuantityTwo = adventureReward.getRewardItemTwo().getRewardItemQuantity();
+                    if (adventureReward.getRewardItemOne() !=  null){
+                        int rewardItemIdOne = adventureReward.getRewardItemOne().getRewardItem().getItemID();
+                        int rewardItemQuantityOne = adventureReward.getRewardItemOne().getRewardItemQuantity();
+                        updateUserItemQuantityByRewardItemQuantity(userId, rewardItemIdOne, rewardItemQuantityOne);
+                    }
 
-                    boolean updatedUserItemQuantityOne = updateUserItemQuantityByRewardItemQuantity(userId, rewardItemIdOne, rewardItemQuantityOne);
-                    boolean updatedUserItemQuantityTwo = updateUserItemQuantityByRewardItemQuantity(userId, rewardItemIdTwo, rewardItemQuantityTwo);
-
+                    if (adventureReward.getRewardItemTwo() != null){
+                        int rewardItemIdTwo = adventureReward.getRewardItemTwo().getRewardItem().getItemID();
+                        int rewardItemQuantityTwo = adventureReward.getRewardItemTwo().getRewardItemQuantity();
+                        updateUserItemQuantityByRewardItemQuantity(userId, rewardItemIdTwo, rewardItemQuantityTwo);
+                    }
 
                     if(updatedUserItemQuantityOne && updatedUserItemQuantityTwo){
                         return "The reward is successfully sent to the user!";

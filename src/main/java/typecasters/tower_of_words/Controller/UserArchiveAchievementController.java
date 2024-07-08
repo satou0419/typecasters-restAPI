@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import typecasters.tower_of_words.Entity.UserArchiveAchievementEntity;
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.UserArchiveAchievementService;
 
 import java.util.List;
@@ -17,26 +19,42 @@ public class UserArchiveAchievementController {
     private UserArchiveAchievementService userArchiveAchievementService;
 
     @PostMapping("/insert")
-    public ResponseEntity<UserArchiveAchievementEntity> insertSimulationWord(@RequestBody UserArchiveAchievementEntity user) {
-        UserArchiveAchievementEntity insertedWord = userArchiveAchievementService.insertUserArchiveAchievement( user);
-        return new ResponseEntity<>(insertedWord, HttpStatus.OK);
+    public ResponseEntity<Object> insertUserArchiveAchievement(@RequestBody UserArchiveAchievementEntity user) {
+        try {
+            UserArchiveAchievementEntity insertedUser = userArchiveAchievementService.insertUserArchiveAchievement(user);
+            return Response.response(HttpStatus.OK, "User archive achievement inserted successfully", insertedUser);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/view")
-    public ResponseEntity<List<UserArchiveAchievementEntity>> getAllSimulationWords() {
-        List<UserArchiveAchievementEntity> words = userArchiveAchievementService.viewAllUserArchiveAchievement();
-        return new ResponseEntity<>(words, HttpStatus.OK);
+    public ResponseEntity<Object> viewAllUserArchiveAchievement() {
+        try {
+            List<UserArchiveAchievementEntity> userAchievements = userArchiveAchievementService.viewAllUserArchiveAchievement();
+            return Response.response(HttpStatus.OK, "All user archive achievements retrieved successfully", userAchievements);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<UserArchiveAchievementEntity> updateSimulationWord(@RequestBody UserArchiveAchievementEntity word) {
-        UserArchiveAchievementEntity updatedWord = userArchiveAchievementService.editUserArchiveAchievement(word);
-        return new ResponseEntity<>(updatedWord, HttpStatus.OK);
+    public ResponseEntity<Object> editUserArchiveAchievement(@RequestBody UserArchiveAchievementEntity user) {
+        try {
+            UserArchiveAchievementEntity updatedUser = userArchiveAchievementService.editUserArchiveAchievement(user);
+            return Response.response(HttpStatus.OK, "User archive achievement updated successfully", updatedUser);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @DeleteMapping("/remove/{id}")
-    public ResponseEntity<Void> deleteSimulationWord(@PathVariable int id) {
-        userArchiveAchievementService.deleteUserArchiveAchievement( id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> deleteUserArchiveAchievement(@PathVariable int id) {
+        try {
+            userArchiveAchievementService.deleteUserArchiveAchievement(id);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "User archive achievement deleted successfully");
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 }

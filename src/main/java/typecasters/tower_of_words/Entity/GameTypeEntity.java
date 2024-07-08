@@ -9,15 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tbl_tower_floor")
-public class TowerFloorEntity {
+@Table(name="tbl_game_entity")
+public class GameTypeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int towerFloorID;
+    private int gameTypeID;
 
-    private int towerSection;
+    private String gameTypeName;
 
-    private int sectionFloor;
-
-    private int gameType;
+    private String gameTypeDescription;
 }

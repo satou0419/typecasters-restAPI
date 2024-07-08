@@ -3,8 +3,10 @@ package typecasters.tower_of_words.Service;
 import typecasters.tower_of_words.Entity.UserDetailsEntity;
 import typecasters.tower_of_words.Entity.UserEntity;
 import typecasters.tower_of_words.Exception.IncorrectPasswordException;
+import typecasters.tower_of_words.Exception.LoggedOutException;
 import typecasters.tower_of_words.Exception.UsernameNotFoundException;
 import typecasters.tower_of_words.LoginRequest;
+import typecasters.tower_of_words.LoginResponse;
 import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import typecasters.tower_of_words.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,37 +21,34 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     @Autowired
-    UserRepository userRepository;
+    UserRepository urepo;
 
     @Autowired
-    UserDetailsRepository userDetailsRepository;
+    UserDetailsRepository ud_repo;
 
     @Autowired
-    UserDetailsService userDetailsService;
+    UserDetailsService ud_serv;
 
 
     @Transactional
     public String registerUser(UserEntity user) {
         try {
-
-
-            if (userRepository.findOneByUsername(user.getUsername()) != null) {
+            if (urepo.findOneByUsername(user.getUsername()) != null) {
                 throw new IllegalArgumentException("Username already exists");
-            }
-
-            if (!isValidUsername(user.getUsername())) {
+            }else if(!isValidUsername(user.getUsername())) {
                 throw new IllegalArgumentException("Username must be at least 3 characters long and may optionally contain a dot (.) or underscore (_) followed by one or more lowercase letters.");
-            }
-
-            if (!isValidPassword(user.getPassword())) {
+            }else if(!isValidPassword(user.getPassword())) {
                 throw new IllegalArgumentException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
+            }else{
+                user.setIsLoggedIn(false);  // Ensure isLoggedIn is set to false
+                int userId = urepo.save(user).getUserID();
+                ud_serv.initUserDetails(userId);
+
+                return "Registration Successful";
             }
 
-            int userId = userRepository.save(user).getUserID();
-            userDetailsService.initUserDetails(userId);
-
-            return "Registration Successful";
         } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
             // Catch the exception and return the error message
             return ex.getMessage();
         }
@@ -72,11 +71,25 @@ public class UserService {
 
 
     // Login
-    @SuppressWarnings("finally")
-    public int login(LoginRequest logReq) {
+//    @SuppressWarnings("finally")
+//    public int login(LoginRequest logReq) {
+//
+//
+//        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
+//        if (user == null) {
+//            throw new UsernameNotFoundException("Username cannot be found!");
+//        }
+//
+//        if (!user.getPassword().equals(logReq.getPassword())) {
+//            throw new IncorrectPasswordException("Incorrect password.");
+//        }
+//        user.setIsLoggedIn(true);
+//        return user.getUserID();
+//    }
 
-
-        UserEntity user = userRepository.findOneByUsername(logReq.getUsername());
+    @Transactional
+    public LoginResponse login(LoginRequest logReq) {
+        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
         if (user == null) {
             throw new UsernameNotFoundException("Username cannot be found!");
         }
@@ -85,51 +98,56 @@ public class UserService {
             throw new IncorrectPasswordException("Incorrect password.");
         }
         user.setIsLoggedIn(true);
-        return user.getUserID();
+        urepo.save(user);
+        return new LoginResponse(user.getUserID(), user.getIsLoggedIn());
+    }
+
+    @Transactional
+    public void logout(int userId) {
+        UserEntity user = urepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        user.setIsLoggedIn(false);
+
+        if(user.getIsLoggedIn() == false){
+            throw new LoggedOutException("User is already logged out!");
+        }
+        urepo.save(user);
     }
 
     //Account Edit
-    @SuppressWarnings("finally")
-    public UserEntity editAccount(UserEntity newUserInfo, int uid){
-        UserEntity user = new UserEntity();
+    @Transactional
+    public void editAccount(UserEntity newUserInfo, int uid) {
         try {
-
-            user = userRepository.findById(uid).orElse(null);
-
-            if(user == null){
-                throw new Exception("User id does not exit");
-            }else{
-                user.setFirstname(newUserInfo.getFirstname());
-                user.setLastname(newUserInfo.getLastname());
-                user.setPassword(newUserInfo.getPassword());
-                return userRepository.save(user);
+            if (!urepo.existsById(uid)) {
+                throw new NoSuchElementException("User id does not exist");
+            } else {
+                urepo.updateUserInfo(newUserInfo.getFirstname(), newUserInfo.getLastname(), uid);
             }
-
-
-        }catch(Exception e) {
-            throw new RuntimeException(e);
-        }finally {
-
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException(e);
         }
     }
 
     public UserInfo findUserInfoById(int user_id){
         UserEntity user = new UserEntity();
 
-
         try{
-            user = userRepository.findById(user_id).get();
+            user = urepo.findById(user_id).get();
 
-            return new UserInfo(user.getUserID(), user.getUsername(), user.getFirstname(), user.getLastname());
-
+            if(user == null){
+                throw new NoSuchElementException("User id doest not exist");
+            }else{
+                return new UserInfo(user.getUserID(), user.getUsername(), user.getFirstname(), user.getLastname());
+            }
         }catch(NoSuchElementException e){
             throw new NoSuchElementException(e);
         }
     }
 
-    public int findUserIdByUsername(String username){
-        UserEntity user = userRepository.findOneByUsername(username);
-
+    public int findUserIdByUsername(String username) {
+        UserEntity user = urepo.findOneByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("User not found");
+        }
         return user.getUserID();
     }
 
@@ -137,10 +155,18 @@ public class UserService {
         UserEntity user = new UserEntity();
         UserDetailsEntity userDetails = new UserDetailsEntity();
         try{
-            user = userRepository.findById(userId).get();
-            userDetails = userDetailsRepository.findOneByUserID(userId);
+            user = urepo.findById(userId).get();
+            userDetails = ud_repo.findOneByUserID(userId);
 
-            return new UserInfoAndDetails(user.getUserType(), user.getEmail(), user.getLastname(), user.getFirstname(), user.getUsername(), userDetails.getUserDetailsID());
+            return new UserInfoAndDetails(
+                    user.getUserType(),
+                    user.getEmail(),
+                    user.getLastname(),
+                    user.getFirstname(),
+                    user.getUsername(),
+                    userDetails.getUserDetailsID()
+                );
+
         }catch(NoSuchElementException e){
             throw new NoSuchElementException(e);
         }
@@ -150,11 +176,15 @@ public class UserService {
         UserEntity user = new UserEntity();
 
         try{
-            user = userRepository.findById(userId).get();
+            user = urepo.findById(userId).get();
 
             if(user.getPassword().equals(oldPassword)){
-                user.setPassword(newPassword);
+                if (!isValidPassword(newPassword)) {
+                    throw new IncorrectPasswordException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
+                }
 
+                user.setPassword(newPassword);
+                urepo.save(user);
                 return true;
             }else{
                 return false;
@@ -167,8 +197,28 @@ public class UserService {
 
     //findTest
     public UserEntity testFind(String username){
-        return userRepository.findOneByUsername(username);
+        return urepo.findOneByUsername(username);
     }
 
+    public boolean checkUserIfExist(String username) {
+        return urepo.findByUsername(username).isPresent();
+    }
 
+//    public String deleteItem(int item_id) {
+//        String msg = "";
+//
+//        if(itemRepository.findById(item_id).isPresent()) {
+//            itemRepository.deleteById(item_id);
+//
+//            msg = "Item " + item_id + " is successfully deleted!";
+//        }
+//
+//        return msg;
+//    }
+
+//    public String deleteUser(int user_id){
+//        String msg = "";
+//
+//
+//    }
 }

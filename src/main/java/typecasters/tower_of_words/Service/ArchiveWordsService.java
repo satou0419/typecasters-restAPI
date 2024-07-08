@@ -1,10 +1,15 @@
 package typecasters.tower_of_words.Service;
 
 import typecasters.tower_of_words.Entity.ArchiveWordsEntity;
+import typecasters.tower_of_words.Entity.UserEntity;
+import typecasters.tower_of_words.Exception.UserIdNotFoundException;
+import typecasters.tower_of_words.Exception.UsernameNotFoundException;
 import typecasters.tower_of_words.Repository.ArchiveWordsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import typecasters.tower_of_words.Repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,6 +20,9 @@ public class ArchiveWordsService {
     ArchiveWordsRepository archiveWordsRepository;
     @Autowired
     UserDetailsService userDetailsService;
+
+    @Autowired
+    UserRepository userRepository;
 
     public ArchiveWordsEntity insertArchiveWords(int userID, String word) {
         Optional<ArchiveWordsEntity> insert = archiveWordsRepository.findByUserIDAndWord(userID, word);
@@ -33,7 +41,14 @@ public class ArchiveWordsService {
     }
 
     public List<ArchiveWordsEntity> viewAllArchiveWords(int userID) {
-        return archiveWordsRepository.findAllByUserID(userID);
+        List<ArchiveWordsEntity> words = archiveWordsRepository.findAllByUserIDIfExists(userID);
+
+        if (words.isEmpty()) {
+            throw new UserIdNotFoundException("This UserID does not exist =>" + userID);
+        }
+
+        return words;
+
     }
 
     public Optional<ArchiveWordsEntity> viewArchiveWordsByID(int archiveWordsID) {
@@ -57,15 +72,15 @@ public class ArchiveWordsService {
         }
     }
 
-    public String removeArchiveWords(int archiveWordsID) {
-        String msg = "";
+    public ArchiveWordsEntity removeArchiveWords(int archiveWordsID) {
+        ArchiveWordsEntity delete = new ArchiveWordsEntity();
 
-        if(archiveWordsRepository.findById(archiveWordsID).isPresent()) {
-            archiveWordsRepository.deleteById(archiveWordsID);
-
-            msg = "Item " + archiveWordsID + " is successfully deleted!";
+        try {
+            delete = archiveWordsRepository.findById(archiveWordsID).get();
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException("Word " + archiveWordsID + " does not exist!");
+        } finally {
+            return archiveWordsRepository.save(delete);
         }
-
-        return msg;
     }
 }

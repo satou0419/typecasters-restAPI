@@ -10,8 +10,8 @@ public class NoDataResponse {
     public static ResponseEntity<Object> noDataResponse(HttpStatus status, String message) {
         Map<String, Object> response = new HashMap<>();
 
-        response.put("Status", status);
-        response.put("Message", message);
+        response.put("status", status);
+        response.put("message", message);
 
         return new ResponseEntity<>(response, status);
     }

@@ -10,9 +10,9 @@ public class Response {
     public static ResponseEntity<Object> response(HttpStatus status, String message, Object object) {
         Map<String, Object> response = new HashMap<>();
 
-        response.put("Status", status);
-        response.put("Message", message);
-        response.put("Data", object);
+        response.put("status", status);
+        response.put("message", message);
+        response.put("data", object);
 
         return new ResponseEntity<>(response, status);
     }
