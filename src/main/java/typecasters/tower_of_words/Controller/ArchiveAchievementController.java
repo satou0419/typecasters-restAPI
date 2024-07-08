@@ -76,7 +76,7 @@ public class ArchiveAchievementController {
     @PutMapping("/remove/{archiveAchievementID}")
     public ResponseEntity<Object> removeArchiveAchievement(@PathVariable int archiveAchievementID) {
         try {
-            ArchiveAchievementEntity removedAchievement = archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
+            archiveAchievementService.removeArchiveAchievement(archiveAchievementID);
             return NoDataResponse.noDataResponse(HttpStatus.OK, "Achievement removed successfully");
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
