@@ -17,7 +17,7 @@ public class UserDetailsService {
     //Initialized User Details
     public void initUserDetails(int user_id){
         TowerProgressEntity towerProg = new TowerProgressEntity(user_id, 0, 1);
-        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg);
+        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg, 0);
 
         ud_repo.save(userDetails);
     }
@@ -69,6 +69,14 @@ public class UserDetailsService {
         ud_repo.save(userDetails);
 
         return "achievement count incremented";
+    }
+
+    public String incrementWordCount(int user_id){
+        UserDetailsEntity userDetails = ud_repo.findOneByUserId(user_id);
+        userDetails.setFloor_count(userDetails.getFloor_count()+1);
+        ud_repo.save(userDetails);
+
+        return "word count incremented";
     }
 
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {

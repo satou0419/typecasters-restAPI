@@ -34,6 +34,12 @@ public class UserDetailscController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @PutMapping("/increment_floor")
+    public ResponseEntity<String> incrementUserFloorCount(@RequestParam int ud_id){
+        String result = ud_serv.incrementUserAchievementCount(ud_id);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("/get_user_detail")
     public ResponseEntity<UserDetailsEntity> getUserDetails(@RequestParam int user_id){
         UserDetailsEntity userDetails = ud_serv.getUserDetails(user_id);

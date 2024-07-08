@@ -14,6 +14,7 @@ public class UserDetailsEntity {
     private int credit_amount ;
     private int words_collected ;
     private int achievement_count ;
+    private int floor_count;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tower_progress_id")
@@ -32,12 +33,13 @@ public class UserDetailsEntity {
         this.achievement_count = achievement_count;
     }
 
-    public UserDetailsEntity(int userId, int credit_amount, int words_collected, int achievement_count, TowerProgressEntity userProgress) {
+    public UserDetailsEntity(int userId, int credit_amount, int words_collected, int achievement_count, TowerProgressEntity userProgress, int floor_count) {
         this.userId = userId;
         this.credit_amount = credit_amount;
         this.words_collected = words_collected;
         this.achievement_count = achievement_count;
         this.userProgress = userProgress;
+        this.floor_count = floor_count;
     }
 
     public UserDetailsEntity(int user_detail_id, int userId, int credit_amount, int words_collected, int achievement_count) {
@@ -105,5 +107,13 @@ public class UserDetailsEntity {
 
     public void setAchievement_count(int achievement_count) {
         this.achievement_count = achievement_count;
+    }
+
+    public int getFloor_count() {
+        return floor_count;
+    }
+
+    public void setFloor_count(int floor_count) {
+        this.floor_count = floor_count;
     }
 }
