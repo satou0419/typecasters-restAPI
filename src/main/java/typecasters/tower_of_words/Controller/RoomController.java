@@ -36,7 +36,7 @@ public class RoomController {
         }
     }
 
-    @PutMapping("/{roomID}/insert_student/{userID}")
+    @PatchMapping("/{roomID}/insert_student/{userID}")
     public ResponseEntity<Object> insertStudent(@PathVariable int userID, @PathVariable int roomID) {
         try {
             roomService.insertStudent(userID, roomID);
@@ -48,7 +48,7 @@ public class RoomController {
         }
     }
 
-    @PutMapping("/{code}/join_room/{userID}")
+    @PatchMapping("/{code}/join_room/{userID}")
     public ResponseEntity<Object> joinRoom(@PathVariable int userID, @PathVariable String code) {
         try {
             roomService.joinRoom(userID, code);
@@ -127,7 +127,7 @@ public class RoomController {
     }
 
     //UPDATE
-    @PutMapping("/rename")
+    @PatchMapping("/rename")
     public ResponseEntity<Object> editRoom(@RequestBody RoomEntity room) {
         try {
             RoomEntity updatedRoom = roomService.renameRoom(room);
@@ -140,7 +140,7 @@ public class RoomController {
     }
 
     //DELETE
-    @PutMapping("/remove/{roomID}")
+    @DeleteMapping("/remove/{roomID}")
     public ResponseEntity<Object> removeRoom(@PathVariable int roomID) {
         try {
             roomService.removeRoom(roomID);
