@@ -1,5 +1,7 @@
 package typecasters.tower_of_words.Controller;
 
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.SimulationService;
 import typecasters.tower_of_words.Entity.SimulationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/simulation")
@@ -18,90 +21,98 @@ public class SimulationController {
 
     //CREATE
     @PostMapping("/create_simulation")
-    public ResponseEntity<SimulationEntity> createSimulation(@RequestBody SimulationEntity simulation) {
-         try {
+    public ResponseEntity<Object> createSimulation(@RequestBody SimulationEntity simulation) {
+        try {
             SimulationEntity createdSimulation = simulationService.createSimulation(simulation);
-             return new ResponseEntity<>(createdSimulation, HttpStatus.OK);
-         } catch (IllegalArgumentException ex) {
-             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-         } catch (NoSuchElementException | NullPointerException ex){
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-         }
+            return Response.response(HttpStatus.OK, "Simulation created successfully", createdSimulation);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @PostMapping("/clone_simulation")
-    public ResponseEntity<SimulationEntity> cloneSimulation(@RequestBody SimulationEntity simulation) {
+    public ResponseEntity<Object> cloneSimulation(@RequestBody SimulationEntity simulation) {
         try {
             SimulationEntity createdSimulation = simulationService.createSimulation(simulation);
-            return new ResponseEntity<>(createdSimulation, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Simulation cloned successfully", createdSimulation);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     //READ
     @GetMapping("/room_simulations/{roomID}")
-    public ResponseEntity<List<SimulationEntity>> roomSimulations(@PathVariable int roomID) {
+    public ResponseEntity<Object> roomSimulations(@PathVariable int roomID) {
         List<SimulationEntity> simulations = simulationService.roomSimulations(roomID);
-        return new ResponseEntity<>(simulations, HttpStatus.OK);
-
+        if (simulations.isEmpty()) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No simulations found for the given room ID");
+        }
+        return Response.response(HttpStatus.OK, "Simulations retrieved successfully", simulations);
     }
 
     @GetMapping("/simulation_details/{simulationID}")
-    public ResponseEntity<SimulationEntity> simulationDetails(@PathVariable int simulationID) {
-        SimulationEntity simulation = simulationService.simulationDetails(simulationID).get();
-        return new ResponseEntity<>(simulation, HttpStatus.OK);
+    public ResponseEntity<Object> simulationDetails(@PathVariable int simulationID) {
+        try {
+            Optional<SimulationEntity> simulation = simulationService.simulationDetails(simulationID);
+            return simulation.map(value -> Response.response(HttpStatus.OK, "Simulation details retrieved successfully", value))
+                    .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Simulation not found"));
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/student_simulations/{userID}")
-    public ResponseEntity<List<SimulationEntity>> studentSimulations(@PathVariable int userID) {
-        try{
+    public ResponseEntity<Object> studentSimulations(@PathVariable int userID) {
+        try {
             List<SimulationEntity> simulations = simulationService.studentSimulations(userID);
-            return new ResponseEntity<>(simulations, HttpStatus.OK);
+            if (simulations.isEmpty()) {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No simulations found for the given user ID");
+            }
+            return Response.response(HttpStatus.OK, "Simulations retrieved successfully", simulations);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
 
     //UPDATE
     @PutMapping("/rename")
-    public ResponseEntity<SimulationEntity> renameSimulation(@RequestBody SimulationEntity simulation) {
+    public ResponseEntity<Object> renameSimulation(@RequestBody SimulationEntity simulation) {
         try {
             SimulationEntity editedSimulation = simulationService.renameSimulation(simulation);
-            return new ResponseEntity<>(editedSimulation, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Simulation renamed successfully", editedSimulation);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     @PutMapping("/edit_deadline")
-    public ResponseEntity<SimulationEntity> editDeadlineSimulation(@RequestBody SimulationEntity simulation) {
+    public ResponseEntity<Object> editDeadlineSimulation(@RequestBody SimulationEntity simulation) {
         try {
             SimulationEntity editedSimulation = simulationService.editDeadlineSimulation(simulation);
-            return new ResponseEntity<>(editedSimulation, HttpStatus.OK);
+            return Response.response(HttpStatus.OK, "Simulation deadline edited successfully", editedSimulation);
         } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (NoSuchElementException | NullPointerException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
     //DELETE
     @PutMapping("/remove/{simulationID}")
-    public ResponseEntity<String> removeSimulation(@PathVariable int simulationID) {
+    public ResponseEntity<Object> removeSimulation(@PathVariable int simulationID) {
         try {
             simulationService.removeSimulation(simulationID);
-            return ResponseEntity.ok("Simulation Removed!");
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Simulation removed successfully");
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (NoSuchElementException | NullPointerException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (NoSuchElementException | NullPointerException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 }
