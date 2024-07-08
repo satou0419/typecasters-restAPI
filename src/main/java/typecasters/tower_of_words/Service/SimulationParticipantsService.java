@@ -1,6 +1,8 @@
 package typecasters.tower_of_words.Service;
 
+import typecasters.tower_of_words.Entity.RoomEntity;
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
+import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Repository.SimulationParticipantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +28,17 @@ public class SimulationParticipantsService {
         return simulationParticipantsRepository.findById(id);
     }
 
+    public List<StudentWordProgressEntity> wordsProgress(int simulationParticipantsID) {
+        SimulationParticipantsEntity participant = simulationParticipantsRepository.findById(simulationParticipantsID).orElseThrow(() -> new NoSuchElementException("Room " + simulationParticipantsID + " does not exist"));
+        return participant.getWordsProgress();
+    }
+
     public SimulationParticipantsEntity updateParticipant(SimulationParticipantsEntity participant) {
         SimulationParticipantsEntity edit = new SimulationParticipantsEntity();
         try {
             edit = simulationParticipantsRepository.findById(participant.getSimulationParticipantsID()).get();
 
-            edit.setTime(participant.getTime());
+            edit.setDuration(participant.getDuration());
             edit.setScore(participant.getScore());
             edit.setDone(participant.isDone());
 

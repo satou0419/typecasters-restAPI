@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/simulation")
@@ -18,11 +17,11 @@ public class SimulationController {
     SimulationService simulationService;
 
     //CREATE
-    @PostMapping("/insert")
-    public ResponseEntity<SimulationEntity> insertSimulation(@RequestBody SimulationEntity simulation) {
+    @PostMapping("/create_simulation")
+    public ResponseEntity<SimulationEntity> createSimulation(@RequestBody SimulationEntity simulation) {
          try {
-            SimulationEntity insertedSimulation = simulationService.insertSimulation(simulation);
-             return new ResponseEntity<>(insertedSimulation, HttpStatus.OK);
+            SimulationEntity createdSimulation = simulationService.createSimulation(simulation);
+             return new ResponseEntity<>(createdSimulation, HttpStatus.OK);
          } catch (IllegalArgumentException ex) {
              return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
          } catch (NoSuchElementException | NullPointerException ex){
@@ -30,24 +29,36 @@ public class SimulationController {
          }
     }
 
+    @PostMapping("/clone_simulation")
+    public ResponseEntity<SimulationEntity> cloneSimulation(@RequestBody SimulationEntity simulation) {
+        try {
+            SimulationEntity createdSimulation = simulationService.createSimulation(simulation);
+            return new ResponseEntity<>(createdSimulation, HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     //READ
-    @GetMapping("/view_by_room/{roomID}")
-    public ResponseEntity<List<SimulationEntity>> viewSimulationsByRoomID(@PathVariable int roomID) {
-        List<SimulationEntity> simulations = simulationService.viewSimulationsByRoomID(roomID);
+    @GetMapping("/room_simulations/{roomID}")
+    public ResponseEntity<List<SimulationEntity>> roomSimulations(@PathVariable int roomID) {
+        List<SimulationEntity> simulations = simulationService.roomSimulations(roomID);
         return new ResponseEntity<>(simulations, HttpStatus.OK);
 
     }
 
-    @GetMapping("/view_by_id/{simulationID}")
-    public ResponseEntity<SimulationEntity> viewSimulationByID(@PathVariable int simulationID) {
-        SimulationEntity simulation = simulationService.viewSimulationByID(simulationID).get();
+    @GetMapping("/simulation_details/{simulationID}")
+    public ResponseEntity<SimulationEntity> simulationDetails(@PathVariable int simulationID) {
+        SimulationEntity simulation = simulationService.simulationDetails(simulationID).get();
         return new ResponseEntity<>(simulation, HttpStatus.OK);
     }
 
-    @GetMapping("/view_by_member/{userID}")
-    public ResponseEntity<List<SimulationEntity>> viewSimulationsByMember(@PathVariable int userID) {
+    @GetMapping("/student_simulations/{userID}")
+    public ResponseEntity<List<SimulationEntity>> studentSimulations(@PathVariable int userID) {
         try{
-            List<SimulationEntity> simulations = simulationService.viewSimulationsByMember(userID);
+            List<SimulationEntity> simulations = simulationService.studentSimulations(userID);
             return new ResponseEntity<>(simulations, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -57,10 +68,22 @@ public class SimulationController {
     }
 
     //UPDATE
-    @PutMapping("/edit")
-    public ResponseEntity<SimulationEntity> editSimulation(@RequestBody SimulationEntity simulation) {
+    @PutMapping("/rename")
+    public ResponseEntity<SimulationEntity> renameSimulation(@RequestBody SimulationEntity simulation) {
         try {
-            SimulationEntity editedSimulation = simulationService.editSimulation(simulation);
+            SimulationEntity editedSimulation = simulationService.renameSimulation(simulation);
+            return new ResponseEntity<>(editedSimulation, HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException | NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/edit_deadline")
+    public ResponseEntity<SimulationEntity> editDeadlineSimulation(@RequestBody SimulationEntity simulation) {
+        try {
+            SimulationEntity editedSimulation = simulationService.editDeadlineSimulation(simulation);
             return new ResponseEntity<>(editedSimulation, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

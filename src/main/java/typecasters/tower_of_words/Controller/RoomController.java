@@ -23,10 +23,10 @@ public class RoomController {
 
     //CREATE
     @PostMapping("/create_room")
-    public ResponseEntity<RoomEntity> insertRoom(@RequestBody RoomEntity room) {
+    public ResponseEntity<RoomEntity> createRoom(@RequestBody RoomEntity room) {
         try {
-            RoomEntity insertRoom = roomService.insertRoom(room);
-            return new ResponseEntity<>(insertRoom, HttpStatus.OK);
+            RoomEntity createdRoom = roomService.createRoom(room);
+            return new ResponseEntity<>(createdRoom, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (NoSuchElementException | NullPointerException ex){
@@ -34,10 +34,10 @@ public class RoomController {
         }
     }
 
-    @PutMapping("/insert_member/{userID}/room/{roomID}")
-    public ResponseEntity<String> insertMember(@PathVariable int userID, @PathVariable int roomID) {
+    @PutMapping("/{roomID}/insert_student/{userID}")
+    public ResponseEntity<String> insertStudent(@PathVariable int userID, @PathVariable int roomID) {
         try {
-            roomService.insertMember(userID, roomID);
+            roomService.insertStudent(userID, roomID);
             return ResponseEntity.ok("Student Added!");
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
@@ -46,10 +46,10 @@ public class RoomController {
         }
     }
 
-    @PutMapping("/insert_member_by_code/{userID}/code/{code}")
-    public ResponseEntity<String> insertMemberByCode(@PathVariable int userID, @PathVariable String code) {
+    @PutMapping("/{code}/join_room/{userID}")
+    public ResponseEntity<String> joinRoom(@PathVariable int userID, @PathVariable String code) {
         try {
-            roomService.insertMemberByCode(userID, code);
+            roomService.joinRoom(userID, code);
             RoomEntity room = roomRepository.findByCode(code);
             return ResponseEntity.ok("Welcome to " + room.getName() + "!");
         } catch (IllegalArgumentException ex) {
@@ -60,7 +60,7 @@ public class RoomController {
     }
 
     //READ
-    @GetMapping("/view_created_room/{creatorID}")
+    @GetMapping("/view_created_rooms/{creatorID}")
     public ResponseEntity<List<RoomEntity>> viewCreatedRooms(@PathVariable int creatorID) {
         try{
             List<RoomEntity> createdRooms = roomService.viewCreatedRooms(creatorID);
@@ -72,10 +72,10 @@ public class RoomController {
         }
     }
 
-    @GetMapping("/view_room_by_code/{code}")
-    public ResponseEntity<RoomEntity> viewRoomByCode(@PathVariable String code) {
+    @GetMapping("/room_details_by_code/{code}")
+    public ResponseEntity<RoomEntity> roomsDetailsByCode(@PathVariable String code) {
         try{
-            RoomEntity room = roomService.viewRoomByCode(code);
+            RoomEntity room = roomService.roomsDetailsByCode(code);
             return new ResponseEntity<>(room, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -84,10 +84,10 @@ public class RoomController {
         }
     }
 
-    @GetMapping("/view_room_by_id/{roomID}")
-    public ResponseEntity<RoomEntity> viewRoomByID(@PathVariable int roomID) {
+    @GetMapping("/room_details_by_id/{roomID}")
+    public ResponseEntity<RoomEntity> roomsDetailsByID(@PathVariable int roomID) {
         try{
-            Optional<RoomEntity> roomOptional = roomService.viewRoomByID(roomID);
+            Optional<RoomEntity> roomOptional = roomService.roomsDetailsByID(roomID);
             return roomOptional.map(room -> new ResponseEntity<>(room, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -96,10 +96,10 @@ public class RoomController {
         }
     }
 
-    @GetMapping("/view_room_by_member/{userID}")
-    public ResponseEntity<List<RoomEntity>> viewRoomByMember(@PathVariable int userID) {
+    @GetMapping("/student_rooms/{userID}")
+    public ResponseEntity<List<RoomEntity>> studentRooms(@PathVariable int userID) {
         try{
-            List<RoomEntity> memberRooms = roomService.viewRoomByMember(userID);
+            List<RoomEntity> memberRooms = roomService.studentRooms(userID);
             return new ResponseEntity<>(memberRooms, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -108,11 +108,17 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/students/{roomID}")
+    public ResponseEntity<List<Integer>> roomStudents(@PathVariable int roomId) {
+        List<Integer> memberIds = roomService.roomStudents(roomId);
+        return ResponseEntity.ok(memberIds);
+    }
+
     //UPDATE
-    @PutMapping("/edit")
+    @PutMapping("/rename")
     public ResponseEntity<RoomEntity> editRoom(@RequestBody RoomEntity room) {
         try {
-            RoomEntity updatedRoom = roomService.editRoom(room);
+            RoomEntity updatedRoom = roomService.renameRoom(room);
             return new ResponseEntity<>(updatedRoom, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

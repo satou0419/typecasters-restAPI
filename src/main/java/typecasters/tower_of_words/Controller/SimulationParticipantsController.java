@@ -1,6 +1,7 @@
 package typecasters.tower_of_words.Controller;
 
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
+import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Service.SimulationParticipantsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,16 @@ public class SimulationParticipantsController {
         return new ResponseEntity<>(participant, HttpStatus.OK);
     }
 
-    @GetMapping("/view_by_id/{simulationParticipantsID}")
-    public ResponseEntity<SimulationParticipantsEntity> getSimulationParticipantsByID(@PathVariable int simulationParticipantsID) {
+    @GetMapping("/student_game_assessment/{simulationParticipantsID}")
+    public ResponseEntity<SimulationParticipantsEntity> studentGameAssessment(@PathVariable int simulationParticipantsID) {
         Optional<SimulationParticipantsEntity> participant = simulationParticipantsService.getParticipantById(simulationParticipantsID);
         return participant.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/words_progress/{simulationParticipantsID}")
+    public ResponseEntity<List<StudentWordProgressEntity>> wordsProgress(@PathVariable int simulationParticipantsID) {
+        List<StudentWordProgressEntity> memberIds = simulationParticipantsService.wordsProgress(simulationParticipantsID);
+        return ResponseEntity.ok(memberIds);
     }
 
     @PutMapping("/edit")

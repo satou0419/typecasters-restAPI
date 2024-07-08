@@ -53,6 +53,8 @@ public class SimulationEntity {
     )
     private List<SimulationParticipantsEntity> participants = new ArrayList<>();
 
+    private SimulationWordAssessmentEntity assessment;
+
     public void addWord(SimulationEnemyEntity enemy) {
         this.enemy.add(enemy);
     }
