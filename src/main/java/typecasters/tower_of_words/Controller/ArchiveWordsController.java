@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import typecasters.tower_of_words.Entity.ArchiveWordsEntity;
+import typecasters.tower_of_words.Exception.UserIdNotFoundException;
 import typecasters.tower_of_words.Response.NoDataResponse;
 import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.ArchiveWordsService;
@@ -41,7 +42,7 @@ public class ArchiveWordsController {
             return Response.response(HttpStatus.OK, "Words retrieved successfully", words);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-        } catch (NoSuchElementException | NullPointerException ex) {
+        } catch (UserIdNotFoundException | NoSuchElementException | NullPointerException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }

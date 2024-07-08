@@ -21,5 +21,4 @@ public class ArchiveWordsEntity {
 
     private boolean isChecked = false;
 
-    private boolean isDeleted = false;
 }
