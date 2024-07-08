@@ -9,13 +9,23 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tbl_simulation_words")
-public class SimulationWordsEntity {
+@Table(name = "tbl_student_word_progress")
+public class StudentWordProgressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int studentWordProgressID;
+
     private int simulationWordsID;
 
-    private int creatorID;
+    private int studentID;
 
-    private String silentIndex;
+    private int numberOfAttempts;
+
+    private boolean isCorrect;
+
+    private int score;
+
+    private int duration;
+
+    private double accuracy;
 }

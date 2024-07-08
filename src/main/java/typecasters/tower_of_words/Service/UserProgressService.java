@@ -11,20 +11,20 @@ import java.util.NoSuchElementException;
 public class UserProgressService {
 
     @Autowired
-    UserProgressRepository tp_repo;
+    UserProgressRepository userProgressRepository;
 
     //Update tower progress
     public String updateTowerProgress(UserProgressEntity towerProgUpdate, int userProgId){
         String message = "User Progress Updated!";
 
         try{
-            UserProgressEntity towerProgress = tp_repo.findById(userProgId).get();
+            UserProgressEntity towerProgress = userProgressRepository.findById(userProgId).get();
 
 
             towerProgress.setTowerSectionProgress(towerProgUpdate.getTowerSectionProgress());
             towerProgress.setFloorID(towerProgUpdate.getFloorID());
 
-            tp_repo.save(towerProgress);
+            userProgressRepository.save(towerProgress);
         }catch(NoSuchElementException e){
             message = "User Progress Id Does not Exist";
         }

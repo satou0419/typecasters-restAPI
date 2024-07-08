@@ -1,6 +1,7 @@
 package typecasters.tower_of_words.Controller;
 
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
+import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Response.NoDataResponse;
 import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.SimulationParticipantsService;
@@ -38,12 +39,25 @@ public class SimulationParticipantsController {
         }
     }
 
-    @GetMapping("/view_by_id/{simulationParticipantsID}")
-    public ResponseEntity<Object> getSimulationParticipantsByID(@PathVariable int simulationParticipantsID) {
+    @GetMapping("/student_game_assessment/{simulationParticipantsID}")
+    public ResponseEntity<Object> studentGameAssessment(@PathVariable int simulationParticipantsID) {
         try {
             Optional<SimulationParticipantsEntity> participant = simulationParticipantsService.getParticipantById(simulationParticipantsID);
             return participant.map(value -> Response.response(HttpStatus.OK, "Participant retrieved successfully", value))
                     .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Participant not found"));
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @GetMapping("/words_progress/{simulationParticipantsID}")
+    public ResponseEntity<Object> wordsProgress(@PathVariable int simulationParticipantsID) {
+        try {
+            List<StudentWordProgressEntity> memberIds = simulationParticipantsService.wordsProgress(simulationParticipantsID);
+            if (memberIds.isEmpty()) {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No word progress found for the given participant ID");
+            }
+            return Response.response(HttpStatus.OK, "Word progress retrieved successfully", memberIds);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
@@ -67,5 +81,5 @@ public class SimulationParticipantsController {
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
-    }
+        }
 }

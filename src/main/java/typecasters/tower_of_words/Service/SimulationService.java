@@ -22,7 +22,7 @@ public class SimulationService {
     RoomRepository roomRepository;
 
 
-    public SimulationEntity insertSimulation(SimulationEntity simulation) {
+    public SimulationEntity createSimulation(SimulationEntity simulation) {
         Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID());
         if (room.isPresent()) {
             for(Integer i : room.get().getMembers()){
@@ -30,11 +30,7 @@ public class SimulationService {
                 user.setUserID(i.intValue());
                 simulation.addParticipants(user);
             }
-//            simulationRepository.save(simulation);
         }
-//        if (simulation.getWords().size() != 10) {
-//            throw new IllegalArgumentException("The number of words must be 10.");
-//        }
         return simulationRepository.save(simulation);
     }
 
@@ -44,15 +40,15 @@ public class SimulationService {
         return simulation;
     }
 
-    public List<SimulationEntity> viewSimulationsByRoomID(int roomID) {
+    public List<SimulationEntity> roomSimulations(int roomID) {
         return simulationRepository.findAllByRoomID(roomID);
     }
 
-    public Optional<SimulationEntity> viewSimulationByID(int simulationID) {
+    public Optional<SimulationEntity> simulationDetails(int simulationID) {
         return simulationRepository.findById(simulationID);
     }
 
-    public List<SimulationEntity> viewSimulationsByMember(Integer userID) {
+    public List<SimulationEntity> studentSimulations(Integer userID) {
         List<SimulationEntity> simulationList = new ArrayList<>();
         try {
             List<SimulationEntity> simulation = simulationRepository.findAll();
@@ -71,7 +67,22 @@ public class SimulationService {
         return simulationList;
     }
 
-    public SimulationEntity editSimulation(SimulationEntity simulation) {
+    public SimulationEntity renameSimulation(SimulationEntity simulation) {
+        SimulationEntity edit = new SimulationEntity();
+
+        try {
+            edit = simulationRepository.findById(simulation.getSimulationID()).get();
+
+            edit.setName(simulation.getName());
+
+        }catch(NoSuchElementException ex) {
+            throw new NoSuchElementException ("Simulation " + simulation.getSimulationID() + " does not exist");
+        }finally {
+            return simulationRepository.save(edit);
+        }
+    }
+
+    public SimulationEntity editDeadlineSimulation(SimulationEntity simulation) {
         SimulationEntity edit = new SimulationEntity();
 
         try {
@@ -87,17 +98,15 @@ public class SimulationService {
         }
     }
 
-    public SimulationEntity removeSimulation(int simulationID) {
-        SimulationEntity delete = new SimulationEntity();
+    public String removeSimulation(int simulationID) {
+        String msg = "";
 
-        try {
-            delete = simulationRepository.findById(simulationID).get();
+        if(simulationRepository.findById(simulationID).isPresent()) {
+            simulationRepository.deleteById(simulationID);
 
-            delete.setDeleted(true);
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Simulation " + simulationID + " does not exist!");
-        }finally {
-            return simulationRepository.save(delete);
+            msg = "Item " + simulationID + " is successfully deleted!";
         }
+
+        return msg;
     }
 }

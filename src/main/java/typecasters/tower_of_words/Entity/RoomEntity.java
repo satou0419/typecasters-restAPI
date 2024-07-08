@@ -30,8 +30,6 @@ public class RoomEntity {
     @Column(name = "user_id")
     private List<Integer> members = new ArrayList<>();
 
-    private boolean isDeleted = false;
-
     public void addMembers(Integer user) {
         this.members.add(user);
     }

@@ -1,9 +1,13 @@
 package typecasters.tower_of_words.Service;
 
 import typecasters.tower_of_words.Entity.RoomEntity;
+import typecasters.tower_of_words.Entity.SimulationEntity;
+import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
 import typecasters.tower_of_words.Repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import typecasters.tower_of_words.Repository.SimulationRepository;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,7 +18,10 @@ public class RoomService {
     @Autowired
     RoomRepository roomRepository;
 
-    public RoomEntity insertRoom(RoomEntity room) {
+    @Autowired
+    SimulationRepository simulationRepository;
+
+    public RoomEntity createRoom(RoomEntity room) {
         room.setCode(generateUniqueCode());
         return roomRepository.save(room);
     }
@@ -35,8 +42,9 @@ public class RoomService {
         return codeBuilder.toString();
     }
 
-    public RoomEntity insertMember(Integer userID, int roomID) {
+    public RoomEntity insertStudent(Integer userID, int roomID) {
         RoomEntity room = new RoomEntity();
+        List<SimulationEntity> simulations = simulationRepository.findAllByRoomID(roomID);
         try {
             room = roomRepository.findById(roomID).get();
             for(Integer i : room.getMembers()){
@@ -46,14 +54,21 @@ public class RoomService {
             }
             room.addMembers(userID);
 
+            for (SimulationEntity simulation : simulations) {
+                SimulationParticipantsEntity participant = new SimulationParticipantsEntity();
+                participant.setUserID(userID);
+                simulation.addParticipants(participant);
+                simulationRepository.save(simulation);
+            }
+
         }catch(NoSuchElementException ex) {
             throw new NoSuchElementException ("User " + userID + " does not exist");
-        }finally{
-            return roomRepository.save(room);
         }
+        return roomRepository.save(room);
+
     }
 
-    public RoomEntity insertMemberByCode(Integer userID, String code) {
+    public RoomEntity joinRoom(Integer userID, String code) {
         RoomEntity room = new RoomEntity();
 
         try {
@@ -76,15 +91,15 @@ public class RoomService {
         return roomRepository.findAllByCreatorID(creatorID);
     }
 
-    public RoomEntity viewRoomByCode(String code) {
+    public RoomEntity roomsDetailsByCode(String code) {
         return roomRepository.findByCode(code);
     }
 
-    public Optional<RoomEntity> viewRoomByID(int roomID) {
+    public Optional<RoomEntity> roomsDetailsByID(int roomID) {
         return roomRepository.findById(roomID);
     }
 
-    public List<RoomEntity> viewRoomByMember(Integer userID) {
+    public List<RoomEntity> studentRooms(Integer userID) {
         List<RoomEntity> roomList = new ArrayList<>();
         try {
             List<RoomEntity> room = roomRepository.findAll();
@@ -103,7 +118,12 @@ public class RoomService {
         return roomList;
     }
 
-    public RoomEntity editRoom(RoomEntity room) {
+    public List<Integer> roomStudents(int roomId) {
+        RoomEntity room = roomRepository.findById(roomId).orElseThrow(() -> new NoSuchElementException("Room " + roomId + " does not exist"));
+        return room.getMembers();
+    }
+
+    public RoomEntity renameRoom(RoomEntity room) {
         RoomEntity edit = new RoomEntity();
 
         try {
@@ -118,17 +138,15 @@ public class RoomService {
         }
     }
 
-    public RoomEntity removeRoom(int roomID) {
-        RoomEntity delete = new RoomEntity();
+    public String removeRoom(int roomID) {
+        String msg = "";
 
-        try {
-            delete = roomRepository.findById(roomID).get();
+        if(roomRepository.findById(roomID).isPresent()) {
+            roomRepository.deleteById(roomID);
 
-            delete.setDeleted(true);
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Room " + roomID + " does not exist!");
-        }finally {
-            return roomRepository.save(delete);
+            msg = "Item " + roomID + " is successfully deleted!";
         }
+
+        return msg;
     }
 }

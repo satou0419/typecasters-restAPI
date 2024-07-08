@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,8 +38,6 @@ public class SimulationEntity {
 
     private boolean numberOfAttempt;
 
-    private boolean isDeleted = false;
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "tbl_simulation_enemy",
@@ -54,6 +53,10 @@ public class SimulationEntity {
             inverseJoinColumns = @JoinColumn(name = "simulationParticipantsID")
     )
     private List<SimulationParticipantsEntity> participants = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "simulationWordAssessmentID")
+    private SimulationWordAssessmentEntity assessment;
 
     public void addWord(SimulationEnemyEntity enemy) {
         this.enemy.add(enemy);

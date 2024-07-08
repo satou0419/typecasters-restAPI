@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -19,11 +22,19 @@ public class SimulationParticipantsEntity {
 
     private int score;
 
-    private String time;
+    private String duration;
 
     private int attempts;
 
-    private int accuracy;
+    private double accuracy;
 
     private boolean isDone;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tbl_student_words_progress",
+            joinColumns = @JoinColumn(name = "simulationParticipantsID"),
+            inverseJoinColumns = @JoinColumn(name = "studentWordProgressID")
+    )
+    private List<StudentWordProgressEntity> wordsProgress = new ArrayList<>();
 }

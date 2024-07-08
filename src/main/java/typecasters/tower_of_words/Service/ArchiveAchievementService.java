@@ -71,17 +71,15 @@ public class ArchiveAchievementService {
         }
     }
 
-    public ArchiveAchievementEntity removeArchiveAchievement(int archiveAchievementID) {
-        ArchiveAchievementEntity delete = new ArchiveAchievementEntity();
+    public String removeArchiveAchievement(int archiveAchievementID) {
+        String msg = "";
 
-        try {
-            delete = archiveAchievementRepository.findById(archiveAchievementID).get();
+        if(archiveAchievementRepository.findById(archiveAchievementID).isPresent()) {
+            archiveAchievementRepository.deleteById(archiveAchievementID);
 
-            delete.setDeleted(true);
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException("Achievement " + archiveAchievementID + " does not exist!");
-        }finally {
-            return archiveAchievementRepository.save(delete);
+            msg = "Item " + archiveAchievementID + " is successfully deleted!";
         }
+
+        return msg;
     }
 }
