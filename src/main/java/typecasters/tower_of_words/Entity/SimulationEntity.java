@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,10 @@ public class SimulationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int simulationID;
 
-    private int roomID;
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private RoomEntity roomID;
 
     private String simulationType;
 

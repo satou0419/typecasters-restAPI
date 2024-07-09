@@ -23,7 +23,7 @@ public class SimulationService {
 
 
     public SimulationEntity createSimulation(SimulationEntity simulation) {
-        Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID());
+        Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID().getRoomID());
         if (room.isPresent()) {
             for(Integer i : room.get().getMembers()){
                 SimulationParticipantsEntity user = new SimulationParticipantsEntity();
@@ -41,7 +41,8 @@ public class SimulationService {
     }
 
     public List<SimulationEntity> roomSimulations(int roomID) {
-        return simulationRepository.findAllByRoomID(roomID);
+        RoomEntity room = roomRepository.findById(roomID).get();
+        return simulationRepository.findAllByRoomID(room);
     }
 
     public Optional<SimulationEntity> simulationDetails(int simulationID) {
