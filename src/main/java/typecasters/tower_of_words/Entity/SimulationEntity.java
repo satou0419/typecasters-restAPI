@@ -40,7 +40,7 @@ public class SimulationEntity {
 
     private boolean pronunciation;
 
-    private boolean numberOfAttempt;
+    private int numberOfAttempt;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -58,9 +58,8 @@ public class SimulationEntity {
     )
     private List<SimulationParticipantsEntity> participants = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "simulationWordAssessmentID")
-    private SimulationWordAssessmentEntity assessment;
+    @OneToMany(mappedBy = "simulationID", cascade = CascadeType.ALL)
+    private List<SimulationWordAssessmentEntity> assessment = new ArrayList<>();
 
     public void addWord(SimulationEnemyEntity enemy) {
         this.enemy.add(enemy);

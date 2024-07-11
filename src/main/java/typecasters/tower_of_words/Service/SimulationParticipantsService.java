@@ -46,7 +46,7 @@ public class SimulationParticipantsService {
             throw new NoSuchElementException ("Simulation " + participant.getSimulationParticipantsID() + " does not exist");
         }
 
-        return simulationParticipantsRepository.save(participant);
+        return simulationParticipantsRepository.save(edit);
     }
 
     public void deleteParticipant(int id) {
