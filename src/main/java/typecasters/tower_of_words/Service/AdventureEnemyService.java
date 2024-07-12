@@ -55,7 +55,7 @@ public class AdventureEnemyService {
 
     //Delete
     public String deleteEnemy(int enemy_id){
-        String msg = "enemy id does not exist";
+        String msg = "Enemy id does not exist";
 
         if(adventureEnemyRepository.findById(enemy_id).isPresent()){
             adventureEnemyRepository.deleteById(enemy_id);

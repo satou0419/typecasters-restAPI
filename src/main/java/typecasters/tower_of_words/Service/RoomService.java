@@ -43,10 +43,9 @@ public class RoomService {
     }
 
     public RoomEntity insertStudent(Integer userID, int roomID) {
-        RoomEntity room = new RoomEntity();
-        List<SimulationEntity> simulations = simulationRepository.findAllByRoomID(roomID);
+        RoomEntity room = roomRepository.findById(roomID).get();
+        List<SimulationEntity> simulations = simulationRepository.findAllByRoomID(room);
         try {
-            room = roomRepository.findById(roomID).get();
             for(Integer i : room.getMembers()){
                 if(i.equals(userID)){
                     throw new IllegalArgumentException("User " + userID + " already exists in the room");
@@ -97,6 +96,11 @@ public class RoomService {
 
     public Optional<RoomEntity> roomsDetailsByID(int roomID) {
         return roomRepository.findById(roomID);
+    }
+
+    public List<SimulationEntity> roomSimulations(int roomID) {
+        RoomEntity room = roomRepository.findById(roomID).orElseThrow(() -> new NoSuchElementException("Room " + roomID + " does not exist"));
+        return room.getSimulations();
     }
 
     public List<RoomEntity> studentRooms(Integer userID) {
