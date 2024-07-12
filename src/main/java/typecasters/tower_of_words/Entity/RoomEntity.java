@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,9 @@ public class RoomEntity {
     @CollectionTable(name = "tbl_room_members", joinColumns = @JoinColumn(name = "room_id"))
     @Column(name = "user_id")
     private List<Integer> members = new ArrayList<>();
+
+    @OneToMany(mappedBy = "roomID", cascade = CascadeType.ALL)
+    private List<SimulationEntity> simulations = new ArrayList<>();
 
     public void addMembers(Integer user) {
         this.members.add(user);

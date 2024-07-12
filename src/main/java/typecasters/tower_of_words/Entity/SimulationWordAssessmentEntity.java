@@ -15,6 +15,8 @@ public class SimulationWordAssessmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int simulationWordAssessmentID;
 
+    private int simulationID;
+
     private int simulationEnemyID;
 
     private int simulationWordID;

@@ -17,5 +17,7 @@ public class SimulationWordsEntity {
 
     private int creatorID;
 
+    private String word;
+
     private String silentIndex;
 }
