@@ -98,6 +98,11 @@ public class RoomService {
         return roomRepository.findById(roomID);
     }
 
+    public List<SimulationEntity> roomSimulations(int roomID) {
+        RoomEntity room = roomRepository.findById(roomID).orElseThrow(() -> new NoSuchElementException("Room " + roomID + " does not exist"));
+        return room.getSimulations();
+    }
+
     public List<RoomEntity> studentRooms(Integer userID) {
         List<RoomEntity> roomList = new ArrayList<>();
         try {

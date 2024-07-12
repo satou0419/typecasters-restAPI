@@ -1,6 +1,7 @@
 package typecasters.tower_of_words.Controller;
 
 import typecasters.tower_of_words.Entity.RoomEntity;
+import typecasters.tower_of_words.Entity.SimulationEntity;
 import typecasters.tower_of_words.Repository.RoomRepository;
 import typecasters.tower_of_words.Response.NoDataResponse;
 import typecasters.tower_of_words.Response.Response;
@@ -124,6 +125,12 @@ public class RoomController {
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
+    }
+
+    @GetMapping("/simulations/{roomID}")
+    public ResponseEntity<List<SimulationEntity>> roomSimulations(@PathVariable int roomID) {
+        List<SimulationEntity> simulations = roomService.roomSimulations(roomID);
+        return ResponseEntity.ok(simulations);
     }
 
     //UPDATE

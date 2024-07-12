@@ -1,6 +1,5 @@
 package typecasters.tower_of_words.Service;
 
-import typecasters.tower_of_words.Entity.RoomEntity;
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
 import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Repository.SimulationParticipantsRepository;
@@ -29,7 +28,7 @@ public class SimulationParticipantsService {
     }
 
     public List<StudentWordProgressEntity> wordsProgress(int simulationParticipantsID) {
-        SimulationParticipantsEntity participant = simulationParticipantsRepository.findById(simulationParticipantsID).orElseThrow(() -> new NoSuchElementException("Room " + simulationParticipantsID + " does not exist"));
+        SimulationParticipantsEntity participant = simulationParticipantsRepository.findById(simulationParticipantsID).orElseThrow(() -> new NoSuchElementException("Participant " + simulationParticipantsID + " does not exist"));
         return participant.getWordsProgress();
     }
 
