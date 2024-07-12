@@ -1,6 +1,7 @@
 package typecasters.tower_of_words.Controller;
 
 import typecasters.tower_of_words.Entity.RoomEntity;
+import typecasters.tower_of_words.Entity.SimulationEntity;
 import typecasters.tower_of_words.Repository.RoomRepository;
 import typecasters.tower_of_words.Service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +113,12 @@ public class RoomController {
     public ResponseEntity<List<Integer>> roomStudents(@PathVariable int roomId) {
         List<Integer> memberIds = roomService.roomStudents(roomId);
         return ResponseEntity.ok(memberIds);
+    }
+
+    @GetMapping("/simulations/{roomID}")
+    public ResponseEntity<List<SimulationEntity>> roomSimulations(@PathVariable int roomID) {
+        List<SimulationEntity> simulations = roomService.roomSimulations(roomID);
+        return ResponseEntity.ok(simulations);
     }
 
     //UPDATE
