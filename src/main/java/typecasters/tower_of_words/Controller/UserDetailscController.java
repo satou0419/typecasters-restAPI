@@ -48,6 +48,12 @@ public class UserDetailscController {
         }
     }
 
+    @PutMapping("/increment_floor")
+    public ResponseEntity<String> incrementUserFloorCount(@RequestParam int ud_id){
+        String result = ud_serv.incrementFloorCount(ud_id);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("/get_user_detail")
     public ResponseEntity<Object> getUserDetails(@RequestParam int user_id){
         try {

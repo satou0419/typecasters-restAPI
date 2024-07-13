@@ -97,6 +97,14 @@ public class UserDetailsService {
         return "achievement count incremented";
     }
 
+    public String incrementFloorCount(int user_id){
+        UserDetailsEntity userDetails = userDetailsRepository.findOneByUserId(user_id);
+        userDetails.setFloorCount(userDetails.getFloorCount()+1);
+        userDetailsRepository.save(userDetails);
+
+        return "word count incremented";
+    }
+
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {
 
         return userDetailsRepository.findCreditAmountByUserDetailsID(userDetailId);
