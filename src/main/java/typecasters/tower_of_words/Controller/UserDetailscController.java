@@ -25,6 +25,8 @@ public class UserDetailscController {
             return Response.response(HttpStatus.OK, "User credit updated successfully", result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }catch (Exception e){
+            return  NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR , e.getMessage());
         }
     }
 
@@ -35,6 +37,8 @@ public class UserDetailscController {
             return Response.response(HttpStatus.OK, "User word count incremented successfully", result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }catch (Exception e){
+            return  NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR , e.getMessage());
         }
     }
 
@@ -45,13 +49,24 @@ public class UserDetailscController {
             return Response.response(HttpStatus.OK, "User achievement count incremented successfully", result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }catch (Exception e){
+            return  NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR , e.getMessage());
         }
     }
 
     @PutMapping("/increment_floor")
-    public ResponseEntity<String> incrementUserFloorCount(@RequestParam int ud_id){
-        String result = ud_serv.incrementFloorCount(ud_id);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+    public ResponseEntity<Object> incrementUserFloorCount(@RequestParam int ud_id){
+
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+
+        try{
+            String result = ud_serv.incrementFloorCount(ud_id);
+            return Response.response(HttpStatus.OK, "Floor count incremented successfully!", result);
+        }catch (IllegalArgumentException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }catch (Exception e){
+            return  NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR , e.getMessage());
+        }
     }
 
     @GetMapping("/get_user_detail")

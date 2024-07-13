@@ -15,9 +15,9 @@ public class UserDetailsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userDetailsID;
     private int userID;
-    private int creditAmount ;
-    private int wordsCollected ;
-    private int achievementCount ;
+    private int creditAmount;
+    private int wordsCollected;
+    private int achievementCount;
     private int floorCount;
 
     @OneToOne(cascade = CascadeType.ALL)
