@@ -54,7 +54,7 @@ public class UserDetailscController {
         }
     }
 
-    @PutMapping("/increment_floor")
+    @PatchMapping("/increment_floor")
     public ResponseEntity<Object> incrementUserFloorCount(@RequestParam int ud_id){
 
 //        return ResponseEntity.status(HttpStatus.OK).body(result);

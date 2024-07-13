@@ -102,7 +102,7 @@ public class UserDetailsService {
         userDetails.setFloorCount(userDetails.getFloorCount()+1);
         userDetailsRepository.save(userDetails);
 
-        return "word count incremented";
+        return "floor count incremented";
     }
 
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {
