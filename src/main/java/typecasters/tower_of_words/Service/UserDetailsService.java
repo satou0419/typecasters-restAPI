@@ -27,7 +27,7 @@ public class UserDetailsService {
     //Initialized User Details
     public void initUserDetails(int user_id){
         UserProgressEntity towerProg = new UserProgressEntity(user_id, 0, 1);
-        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg);
+        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg, 0);
 
         userDetailsRepository.save(userDetails);
 
@@ -95,6 +95,14 @@ public class UserDetailsService {
         userDetailsRepository.save(userDetails);
 
         return "achievement count incremented";
+    }
+
+    public String incrementFloorCount(int user_id){
+        UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(user_id);
+        userDetails.setFloorCount(userDetails.getFloorCount()+1);
+        userDetailsRepository.save(userDetails);
+
+        return "floor count incremented";
     }
 
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {

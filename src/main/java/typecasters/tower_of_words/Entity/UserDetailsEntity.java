@@ -14,24 +14,22 @@ public class UserDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userDetailsID;
-
     private int userID;
-
     private int creditAmount;
-
     private int wordsCollected;
-
     private int achievementCount;
+    private int floorCount;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tower_progress_id")
     private UserProgressEntity userProgress;
 
-    public UserDetailsEntity(int userID, int creditAmount, int wordsCollected, int achievementCount, UserProgressEntity userProgress) {
+    public UserDetailsEntity(int userID, int creditAmount, int wordsCollected, int achievementCount, UserProgressEntity userProgress, int floorCount) {
         this.userID = userID;
         this.creditAmount = creditAmount;
         this.wordsCollected = wordsCollected;
         this.achievementCount = achievementCount;
         this.userProgress = userProgress;
+        this.floorCount = floorCount;
     }
 }
