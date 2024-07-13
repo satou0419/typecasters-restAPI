@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Service;
 
+import jakarta.transaction.Transactional;
 import typecasters.tower_of_words.Entity.*;
 import typecasters.tower_of_words.Repository.RoomRepository;
 import typecasters.tower_of_words.Repository.SimulationRepository;
@@ -21,16 +22,44 @@ public class SimulationService {
     @Autowired
     RoomRepository roomRepository;
 
+    @Autowired
+    SimulationWordAssessmentService simulationWordAssessmentService;
 
+    @Transactional
     public SimulationEntity createSimulation(SimulationEntity simulation) {
+
         Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID().getRoomID());
         if (room.isPresent()) {
-            for(Integer i : room.get().getMembers()){
+            for (Integer i : room.get().getMembers()) {
                 SimulationParticipantsEntity user = new SimulationParticipantsEntity();
-                user.setUserID(i.intValue());
+                user.setUserID(i);
                 simulation.addParticipants(user);
             }
         }
+
+        simulation = simulationRepository.save(simulation);
+
+        List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
+
+        for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
+            for (SimulationWordsEntity word : enemy.getWords()) {
+                SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
+                assessment.setSimulationID(simulation.getSimulationID());
+                assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());
+                assessment.setSimulationWordID(word.getSimulationWordsID());
+                assessment.setAccuracy(0);
+                assessment.setAttempts(0);
+                assessment.setScore(0);
+                assessment.setDuration(0);
+
+                assessments.add(assessment);
+            }
+        }
+
+        simulationWordAssessmentService.addWordAssessments(assessments);
+
+        simulation.getAssessment().addAll(assessments);
+
         return simulationRepository.save(simulation);
     }
 

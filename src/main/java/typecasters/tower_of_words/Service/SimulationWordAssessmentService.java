@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import typecasters.tower_of_words.Entity.SimulationWordAssessmentEntity;
@@ -26,6 +27,7 @@ public class SimulationWordAssessmentService {
         return simulationWordAssessmentRepository.findById(id);
     }
 
+    @Transactional
     public SimulationWordAssessmentEntity setWordAssessment(SimulationWordAssessmentEntity word) {
         SimulationWordAssessmentEntity edit = new SimulationWordAssessmentEntity();
         try {
@@ -41,6 +43,10 @@ public class SimulationWordAssessmentService {
         }
 
         return simulationWordAssessmentRepository.save(edit);
+    }
+
+    public List<SimulationWordAssessmentEntity> addWordAssessments(List<SimulationWordAssessmentEntity> words) {
+        return simulationWordAssessmentRepository.saveAll(words);
     }
 
     public void deleteWordAssessment(int id) {
