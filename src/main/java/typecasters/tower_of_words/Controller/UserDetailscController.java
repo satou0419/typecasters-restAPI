@@ -96,4 +96,28 @@ public class UserDetailscController {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
+    @PatchMapping("/update_equipped_character")
+    public ResponseEntity<Object> updateEquippedCharacter(@RequestParam int userDetailId, @RequestParam String newEquippedCharacter) {
+        try{
+            String equippedCharacterUpdate = ud_serv.updateEquippedCharacter(userDetailId, newEquippedCharacter);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, equippedCharacterUpdate);
+        }catch (RuntimeException e){
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PatchMapping("/update_badge_display")
+    public ResponseEntity<Object> updateBadgeDisplay(@RequestParam int userDetailId, @RequestParam String newBadgeDisplay) {
+        try{
+            String updatedBadgeDisplay = ud_serv.updateBadgeDisplay(userDetailId, newBadgeDisplay);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, updatedBadgeDisplay);
+        }catch (RuntimeException e){
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 }
