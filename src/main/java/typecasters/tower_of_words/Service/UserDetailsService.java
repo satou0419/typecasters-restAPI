@@ -27,7 +27,7 @@ public class UserDetailsService {
     //Initialized User Details
     public void initUserDetails(int user_id){
         UserProgressEntity towerProg = new UserProgressEntity(user_id, 0, 1);
-        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg, 0);
+        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg, 0, "&melee_sword-i19-a21", "");
 
         userDetailsRepository.save(userDetails);
 
@@ -40,6 +40,8 @@ public class UserDetailsService {
         userItemService.insertUserItem(userItem2);
         userItemService.insertUserItem(userItem3);
         userItemService.insertUserItem(userItem4);
+
+
     }
     private UserItemEntity createUserItem(int quantity, int userId, int itemId) {
         ItemEntity itemEntity = itemService.getItem(itemId);
@@ -108,5 +110,35 @@ public class UserDetailsService {
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {
 
         return userDetailsRepository.findCreditAmountByUserDetailsID(userDetailId);
+    }
+
+    public String updateEquippedCharacter(int userDetailId, String newEquippedCharacter) {
+        try {
+            UserDetailsEntity userDetails = userDetailsRepository.findById(userDetailId).orElse(null);
+            if (userDetails != null) {
+                userDetails.setEquipped_character(newEquippedCharacter);
+                userDetailsRepository.save(userDetails);
+                return "Equipped character updated.";
+            } else {
+                return "User details not found.";
+            }
+        } catch (RuntimeException e) {
+            return "An error occurred while updating the equipped character.";
+        }
+    }
+
+    public String updateBadgeDisplay(int userDetailId, String newBadgeDisplay) {
+        try {
+            UserDetailsEntity userDetails = userDetailsRepository.findById(userDetailId).orElse(null);
+            if (userDetails != null) {
+                userDetails.setBadge_display(newBadgeDisplay);
+                userDetailsRepository.save(userDetails);
+                return "Badge display updated.";
+            } else {
+                return "User details not found.";
+            }
+        } catch (RuntimeException e) {
+            return "An error occurred while updating the badge display.";
+        }
     }
 }
