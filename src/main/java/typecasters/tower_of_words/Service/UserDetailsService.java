@@ -27,7 +27,14 @@ public class UserDetailsService {
     //Initialized User Details
     public void initUserDetails(int user_id){
         UserProgressEntity towerProg = new UserProgressEntity(user_id, 0, 1);
-        UserDetailsEntity userDetails = new UserDetailsEntity(user_id, 0, 0, 0, towerProg, 0, "&melee_sword-i19-a21", "");
+        UserDetailsEntity userDetails = new UserDetailsEntity(user_id,
+                0,
+                0,
+                0,
+                towerProg,
+                0,
+                "&melee_sword-i19-a21",
+                "");
 
         userDetailsRepository.save(userDetails);
 

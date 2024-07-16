@@ -1,11 +1,12 @@
 package typecasters.tower_of_words.Controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import typecasters.tower_of_words.Entity.SimulationWordsEntity;
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.SimulationWordsService;
 
 import java.util.List;
@@ -18,33 +19,53 @@ public class SimulationWordsController {
     private SimulationWordsService simulationWordsService;
 
     @PostMapping("/insert")
-    public ResponseEntity<SimulationWordsEntity> addWord(@RequestBody SimulationWordsEntity word) {
-        SimulationWordsEntity insertedWord = simulationWordsService.addSimulationWord(word);
-        return new ResponseEntity<>(insertedWord, HttpStatus.OK);
+    public ResponseEntity<Object> addWord(@RequestBody SimulationWordsEntity word) {
+        try {
+            SimulationWordsEntity insertedWord = simulationWordsService.addSimulationWord(word);
+            return Response.response(HttpStatus.OK, "Word added successfully", insertedWord);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/view")
-    public ResponseEntity<List<SimulationWordsEntity>> getAllWords() {
-        List<SimulationWordsEntity> words = simulationWordsService.getAllSimulationWord();
-        return new ResponseEntity<>(words, HttpStatus.OK);
+    public ResponseEntity<Object> getAllWords() {
+        try {
+            List<SimulationWordsEntity> words = simulationWordsService.getAllSimulationWord();
+            return Response.response(HttpStatus.OK, "Words retrieved successfully", words);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/view/{wordID}")
-    public ResponseEntity<SimulationWordsEntity> getWordById(@PathVariable int wordID) {
-        Optional<SimulationWordsEntity> word = simulationWordsService.getSimulationWordById(wordID);
-        return word.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Object> getWordById(@PathVariable int wordID) {
+        try {
+            Optional<SimulationWordsEntity> word = simulationWordsService.getSimulationWordById(wordID);
+            return word.map(value -> Response.response(HttpStatus.OK, "Word retrieved successfully", value))
+                    .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Word not found"));
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<SimulationWordsEntity> updateWord(@RequestBody SimulationWordsEntity word) {
-        SimulationWordsEntity updatedWord = simulationWordsService.setIndex(word);
-        return new ResponseEntity<>(updatedWord, HttpStatus.OK);
+    public ResponseEntity<Object> updateWord(@RequestBody SimulationWordsEntity word) {
+        try {
+            SimulationWordsEntity updatedWord = simulationWordsService.setIndex(word);
+            return Response.response(HttpStatus.OK, "Word updated successfully", updatedWord);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @DeleteMapping("/remove/{wordID}")
-    public ResponseEntity<Void> deleteWord(@PathVariable int wordID) {
-        simulationWordsService.deleteSimulationWord(wordID);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> deleteWord(@PathVariable int wordID) {
+        try {
+            simulationWordsService.deleteSimulationWord(wordID);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Word deleted successfully");
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 }

@@ -19,5 +19,7 @@ public class CharacterEntity {
 
     private String imagePath;
 
+    private String description;
+
     private int price;
 }
