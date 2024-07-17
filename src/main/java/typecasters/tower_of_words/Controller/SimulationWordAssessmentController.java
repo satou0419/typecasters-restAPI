@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
 import typecasters.tower_of_words.Entity.SimulationWordAssessmentEntity;
+import typecasters.tower_of_words.Response.NoDataResponse;
+import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.SimulationWordAssessmentService;
 
 import java.util.List;
@@ -18,33 +19,53 @@ public class SimulationWordAssessmentController {
     SimulationWordAssessmentService simulationWordAssessmentService;
 
     @PostMapping("/insert")
-    public ResponseEntity<SimulationWordAssessmentEntity> addParticipant (@RequestBody SimulationWordAssessmentEntity word) {
-        SimulationWordAssessmentEntity insertWord = simulationWordAssessmentService.addWordAssessment(word);
-        return new ResponseEntity<>(insertWord, HttpStatus.OK);
+    public ResponseEntity<Object> addParticipant(@RequestBody SimulationWordAssessmentEntity word) {
+        try {
+            SimulationWordAssessmentEntity insertWord = simulationWordAssessmentService.addWordAssessment(word);
+            return Response.response(HttpStatus.OK, "Word assessment added successfully", insertWord);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/view")
-    public ResponseEntity<List<SimulationWordAssessmentEntity>> getAllWordAssessments() {
-        List<SimulationWordAssessmentEntity> assessments = simulationWordAssessmentService.getAllWordAssessment();
-        return new ResponseEntity<>(assessments, HttpStatus.OK);
+    public ResponseEntity<Object> getAllWordAssessments() {
+        try {
+            List<SimulationWordAssessmentEntity> assessments = simulationWordAssessmentService.getAllWordAssessment();
+            return Response.response(HttpStatus.OK, "Word assessments retrieved successfully", assessments);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @GetMapping("/view/{wordAssessmentID}")
-    public ResponseEntity<SimulationWordAssessmentEntity> getWordAssessmentById(@PathVariable int wordAssessmentID) {
-        Optional<SimulationWordAssessmentEntity> assessment = simulationWordAssessmentService.getWordAssessmentById(wordAssessmentID);
-        return assessment.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Object> getWordAssessmentById(@PathVariable int wordAssessmentID) {
+        try {
+            Optional<SimulationWordAssessmentEntity> assessment = simulationWordAssessmentService.getWordAssessmentById(wordAssessmentID);
+            return assessment.map(value -> Response.response(HttpStatus.OK, "Word assessment retrieved successfully", value))
+                    .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Word assessment not found"));
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<SimulationWordAssessmentEntity> updateWordAssessment(@RequestBody SimulationWordAssessmentEntity word) {
-        SimulationWordAssessmentEntity updatedWord = simulationWordAssessmentService.setWordAssessment(word);
-        return new ResponseEntity<>(updatedWord, HttpStatus.OK);
+    public ResponseEntity<Object> updateWordAssessment(@RequestBody SimulationWordAssessmentEntity word) {
+        try {
+            SimulationWordAssessmentEntity updatedWord = simulationWordAssessmentService.setWordAssessment(word);
+            return Response.response(HttpStatus.OK, "Word assessment updated successfully", updatedWord);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @DeleteMapping("/remove/{wordAssessmentID}")
-    public ResponseEntity<Void> deleteWordAssessment(@PathVariable int wordAssessmentID) {
-        simulationWordAssessmentService.deleteWordAssessment(wordAssessmentID);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Object> deleteWordAssessment(@PathVariable int wordAssessmentID) {
+        try {
+            simulationWordAssessmentService.deleteWordAssessment(wordAssessmentID);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Word assessment deleted successfully");
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 }

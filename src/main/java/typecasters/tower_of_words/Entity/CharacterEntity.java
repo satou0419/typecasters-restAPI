@@ -1,9 +1,12 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -22,4 +25,8 @@ public class CharacterEntity {
     private String description;
 
     private int price;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "characterID", cascade = CascadeType.ALL)
+    private List<UserCharacterEntity> userCharacters;
 }

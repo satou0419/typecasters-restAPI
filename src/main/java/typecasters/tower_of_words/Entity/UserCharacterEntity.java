@@ -19,5 +19,5 @@ public class UserCharacterEntity {
 
     @ManyToOne
     @JoinColumn(name = "character_id")
-    private ArchiveAchievementEntity characterID;
+    private CharacterEntity characterID;
 }
