@@ -59,12 +59,13 @@ public class UserItemController {
     public ResponseEntity<Object> buyItemAnyAmount(@PathVariable int userId, @PathVariable int itemId, @PathVariable int itemQuantity) {
         try {
             String buyResult = userItemService.butItemAnyAmount(userId, itemId, itemQuantity);
-            HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-            return ResponseEntity.status(status).body(buyResult);
-        } catch (InvalidItemQuantityException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (InsufficientCreditException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.OK, buyResult);
+        } catch (InvalidItemQuantityException | InsufficientCreditException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (NoSuchElementException e){
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -73,10 +74,13 @@ public class UserItemController {
     public ResponseEntity<Object> buyItemSingle(@PathVariable int userId, @PathVariable int itemId) {
         try {
             String buyResult = userItemService.buyItemSingle(userId, itemId);
-            HttpStatus status = buyResult.equals("Item bought successfully") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-            return ResponseEntity.status(status).body(buyResult);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, buyResult);
         } catch (InsufficientCreditException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (NoSuchElementException e){
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -86,7 +90,7 @@ public class UserItemController {
             String msg = userItemService.useUserItem(userId, itemId);
             return Response.response(HttpStatus.OK, "User item used successfully", msg);
         } catch (InvalidItemQuantityException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (NoSuchElementException e){
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -112,7 +116,7 @@ public class UserItemController {
         try {
             List<UserItemEntity> allUserItems = userItemService.getAllUserItem();
             if (allUserItems != null && !allUserItems.isEmpty()) {
-                return ResponseEntity.ok().body(allUserItems);
+                return Response.response(HttpStatus.OK, "All UserItems Retrieved Succesfully!", allUserItems);
             } else {
                 return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No user items found");
             }

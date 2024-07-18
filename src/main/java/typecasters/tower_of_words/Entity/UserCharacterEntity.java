@@ -17,7 +17,15 @@ public class UserCharacterEntity {
 
     private int userID;
 
+    private boolean isOwned;
+
     @ManyToOne
     @JoinColumn(name = "character_id")
     private CharacterEntity characterID;
+
+    public UserCharacterEntity(int userID, boolean isOwned, CharacterEntity characterID) {
+        this.userID = userID;
+        this.isOwned = isOwned;
+        this.characterID = characterID;
+    }
 }
