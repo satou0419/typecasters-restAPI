@@ -49,6 +49,12 @@ public class SimulationWordsController {
         }
     }
 
+    @GetMapping("/word_bank/{userID}")
+    public ResponseEntity<List<SimulationWordsEntity>> getSimulationWordsByCreatorID(@PathVariable int userID) {
+        List<SimulationWordsEntity> words = simulationWordsService.getSimulationWordsByCreatorID(userID);
+        return new ResponseEntity<>(words, HttpStatus.OK);
+    }
+
     @PutMapping("/edit")
     public ResponseEntity<Object> updateWord(@RequestBody SimulationWordsEntity word) {
         try {

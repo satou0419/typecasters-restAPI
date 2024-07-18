@@ -34,13 +34,15 @@ public class SimulationEntity {
 
     private int attackInterval;
 
+    private int studentLife;
+
+    private int numberOfAttempt;
+
     private boolean items;
 
     private boolean description;
 
     private boolean pronunciation;
-
-    private int numberOfAttempt;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
