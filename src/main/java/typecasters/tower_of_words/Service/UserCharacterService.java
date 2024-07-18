@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import typecasters.tower_of_words.Entity.CharacterEntity;
 import typecasters.tower_of_words.Entity.UserCharacterEntity;
 import typecasters.tower_of_words.Entity.UserDetailsEntity;
+import typecasters.tower_of_words.Exception.CharacterNotFoundException;
 import typecasters.tower_of_words.Exception.InsufficientCreditException;
 import typecasters.tower_of_words.Exception.UserCharacterAlreadyExistException;
+import typecasters.tower_of_words.Exception.UserCharacterNotFoundException;
 import typecasters.tower_of_words.Repository.UserCharacterRepository;
 import typecasters.tower_of_words.Repository.UserItemRepository;
 
@@ -134,9 +136,45 @@ public class UserCharacterService {
         }
 
     }
-//
-//    public String equipCharacter(int userID, int userCharacterID){
-//
-//    }
+
+    @Transactional
+    public String equipCharacter(int userID, int characterID){
+        try{
+            UserDetailsEntity userDetails = userDetailsService.getUserDetails(userID);
+            Optional<UserCharacterEntity> isExistUserCharacters = getUserCharacterByUserIDAndCharacterID(userID, characterID);
+            Optional<CharacterEntity> op_char = characterService.getCharacterByID(characterID);
+
+            if(op_char.isPresent()){
+                if(isExistUserCharacters.isPresent()){
+                    UserCharacterEntity existingUserCharacterObject = isExistUserCharacters.get();
+                    CharacterEntity character = op_char.get();
+
+                    int userDetailsID = userDetails.getUserDetailsID();
+
+                    if(existingUserCharacterObject.isOwned()){
+                        if(userDetails.getEquipped_character().equals(character.getImagePath())){
+                            throw new UserCharacterAlreadyExistException("You already equipped this character!");
+                        }else{
+                            userDetailsService.updateEquippedCharacter(userDetailsID, character.getImagePath());
+                        }
+                    }else{
+                        throw new IllegalArgumentException("You do not own this character!");
+                    }
+
+                }else{
+                    throw new UserCharacterNotFoundException("User Character does not Exist!");
+                }
+
+                return "User Character " + characterID + " equipped successfully to " + userID + ".";
+            }else{
+                throw new CharacterNotFoundException("Character does not exist!");
+            }
+        } catch(UserCharacterNotFoundException | IllegalArgumentException | UserCharacterAlreadyExistException | CharacterNotFoundException e){
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("An error occurred while processing the request.", e);
+        }
+    }
 
 }

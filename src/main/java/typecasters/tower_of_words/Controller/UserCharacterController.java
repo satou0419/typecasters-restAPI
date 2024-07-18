@@ -1,21 +1,19 @@
 package typecasters.tower_of_words.Controller;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import typecasters.tower_of_words.Entity.CharacterEntity;
 import typecasters.tower_of_words.Entity.UserCharacterEntity;
-import typecasters.tower_of_words.Entity.UserDetailsEntity;
+import typecasters.tower_of_words.Exception.CharacterNotFoundException;
 import typecasters.tower_of_words.Exception.InsufficientCreditException;
 import typecasters.tower_of_words.Exception.UserCharacterAlreadyExistException;
+import typecasters.tower_of_words.Exception.UserCharacterNotFoundException;
 import typecasters.tower_of_words.Response.NoDataResponse;
 import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.UserCharacterService;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -156,6 +154,20 @@ public class UserCharacterController {
             return Response.response(HttpStatus.OK, "User Characters owned by " + userID + " retrieved successfully!", userCharacters);
         }catch (IllegalArgumentException ex){
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }catch (Exception ex){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+    }
+
+    @GetMapping("/equip_character_by/{userID}/{characterID}")
+    public ResponseEntity<Object> equipCharacter(@PathVariable int userID, @PathVariable int characterID){
+        try{
+            String equipResult = userCharacterService.equipCharacter(userID, characterID);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, equipResult);
+        }catch (UserCharacterNotFoundException | CharacterNotFoundException e){
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (IllegalArgumentException | UserCharacterAlreadyExistException e){
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         }catch (Exception ex){
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }

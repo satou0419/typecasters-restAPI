@@ -1,10 +1,7 @@
 package typecasters.tower_of_words.Service;
 
 import org.springframework.context.annotation.Lazy;
-import typecasters.tower_of_words.Entity.ItemEntity;
-import typecasters.tower_of_words.Entity.UserItemEntity;
-import typecasters.tower_of_words.Entity.UserProgressEntity;
-import typecasters.tower_of_words.Entity.UserDetailsEntity;
+import typecasters.tower_of_words.Entity.*;
 import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +18,15 @@ public class UserDetailsService {
     ItemService itemService;
 
     @Autowired
+    CharacterService characterService;
+
+    @Autowired
     @Lazy
     UserItemService userItemService;
+
+    @Autowired
+    @Lazy
+    UserCharacterService userCharacterService;
 
     //Initialized User Details
     public void initUserDetails(int user_id){
@@ -48,11 +52,20 @@ public class UserDetailsService {
         userItemService.insertUserItem(userItem3);
         userItemService.insertUserItem(userItem4);
 
-
+        UserCharacterEntity userCharacter1 = createUserCharacter(user_id, true, 1);
+        UserCharacterEntity userCharacter2 = createUserCharacter(user_id, false, 2);
+        userCharacterService.insertUserCharacter(userCharacter1);
+        userCharacterService.insertUserCharacter(userCharacter2);
     }
+
     private UserItemEntity createUserItem(int quantity, int userId, int itemId) {
         ItemEntity itemEntity = itemService.getItem(itemId);
         return new UserItemEntity(quantity, userId, itemEntity);
+    }
+
+    private UserCharacterEntity createUserCharacter(int userID, boolean isOwned, int characterID){
+        CharacterEntity characterEntity = characterService.getCharacterByID(characterID).get();
+        return new UserCharacterEntity(userID, isOwned, characterEntity);
     }
 
 
