@@ -50,9 +50,16 @@ public class SimulationWordsController {
     }
 
     @GetMapping("/word_bank/{userID}")
-    public ResponseEntity<List<SimulationWordsEntity>> getSimulationWordsByCreatorID(@PathVariable int userID) {
-        List<SimulationWordsEntity> words = simulationWordsService.getSimulationWordsByCreatorID(userID);
-        return new ResponseEntity<>(words, HttpStatus.OK);
+    public ResponseEntity<Object> getSimulationWordsByCreatorID(@PathVariable int userID) {
+        try {
+            List<SimulationWordsEntity> words = simulationWordsService.getSimulationWordsByCreatorID(userID);
+            if (words.isEmpty()) {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No simulation words found for the given user ID");
+            }
+            return Response.response(HttpStatus.OK, "Simulation words retrieved successfully", words);
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @PutMapping("/edit")
