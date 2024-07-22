@@ -47,11 +47,13 @@ public class SimulationController {
     //READ
     @GetMapping("/room_simulations/{roomID}")
     public ResponseEntity<Object> roomSimulations(@PathVariable int roomID) {
-        List<SimulationEntity> simulations = simulationService.roomSimulations(roomID);
-        if (simulations.isEmpty()) {
-            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No simulations found for the given room ID");
+        try{
+            List<SimulationEntity> simulations = simulationService.roomSimulations(roomID);
+            return Response.response(HttpStatus.OK, "Simulations retrieved successfully", simulations);
+        }catch(Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        return Response.response(HttpStatus.OK, "Simulations retrieved successfully", simulations);
+
     }
 
     @GetMapping("/simulation_details/{simulationID}")
@@ -69,9 +71,6 @@ public class SimulationController {
     public ResponseEntity<Object> studentSimulations(@PathVariable int userID) {
         try {
             List<SimulationEntity> simulations = simulationService.studentSimulations(userID);
-            if (simulations.isEmpty()) {
-                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No simulations found for the given user ID");
-            }
             return Response.response(HttpStatus.OK, "Simulations retrieved successfully", simulations);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
