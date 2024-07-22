@@ -19,5 +19,5 @@ public class TowerFloorEntity {
 
     private int sectionFloor;
 
-    private int gameType;
+    private String gameType;
 }
