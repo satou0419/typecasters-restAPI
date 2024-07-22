@@ -69,7 +69,7 @@ public class RoomService {
 
     public RoomEntity joinRoom(Integer userID, String code) {
         RoomEntity room = new RoomEntity();
-
+        List<SimulationEntity> simulations = simulationRepository.findAllByRoomID(room);
         try {
             room = roomRepository.findByCode(code);
             for(Integer i : room.getMembers()){
@@ -78,6 +78,13 @@ public class RoomService {
                 }
             }
             room.addMembers(userID);
+
+            for (SimulationEntity simulation : simulations) {
+                SimulationParticipantsEntity participant = new SimulationParticipantsEntity();
+                participant.setUserID(userID);
+                simulation.addParticipants(participant);
+                simulationRepository.save(simulation);
+            }
 
         }catch(NoSuchElementException ex) {
             throw new NoSuchElementException ("User " + userID + " does not exist");
