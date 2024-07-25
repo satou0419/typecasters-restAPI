@@ -38,6 +38,23 @@ public class SimulationWordsController {
         }
     }
 
+    @GetMapping("/get_word_by/{simulationWordsID}")
+    public ResponseEntity<Object> getWordBySimulationWordsID(@PathVariable int simulationWordsID){
+        try{
+            Optional<String> word = simulationWordsService.getWordBySimulationWordsID(simulationWordsID);
+            if(word.isPresent()){
+                String wordObject = word.get();
+                return Response.response(HttpStatus.OK, "Word retrieved succesfully", wordObject);
+            }else {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Word does not exist for this id = " + simulationWordsID);
+            }
+        }catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }catch (Exception ex){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+    }
+
     @GetMapping("/view/{wordID}")
     public ResponseEntity<Object> getWordById(@PathVariable int wordID) {
         try {

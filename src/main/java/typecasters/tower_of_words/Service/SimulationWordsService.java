@@ -30,6 +30,10 @@ public class SimulationWordsService {
         return simulationWordsRepository.findAllByCreatorID(userID);
     }
 
+    public Optional<String> getWordBySimulationWordsID(int simulationWordsID){
+        return simulationWordsRepository.findWordBySimulationWordsID(simulationWordsID);
+    }
+
     public SimulationWordsEntity setIndex(SimulationWordsEntity word) {
         SimulationWordsEntity edit = new SimulationWordsEntity();
         try {
