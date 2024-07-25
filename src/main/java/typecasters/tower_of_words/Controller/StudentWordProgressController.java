@@ -39,6 +39,16 @@ public class StudentWordProgressController {
         }
     }
 
+    @GetMapping("/view_all_by/{studentID}")
+    public ResponseEntity<Object> getAllByStudentID(@PathVariable int studentID){
+        try{
+            List<StudentWordProgressEntity> studentWordProgressList = studentWordProgressService.getAllByStudentID(studentID);
+            return Response.response(HttpStatus.OK, "Student " + studentID + "'s progress list has been retrieved successfully!", studentWordProgressList);
+        }catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     @GetMapping("/view/{progressID}")
     public ResponseEntity<Object> getProgressById(@PathVariable int progressID) {
         try {

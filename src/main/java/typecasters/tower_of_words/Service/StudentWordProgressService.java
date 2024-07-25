@@ -28,6 +28,10 @@ public class StudentWordProgressService {
         return studentWordProgressRepository.findById(id);
     }
 
+    public List<StudentWordProgressEntity> getAllByStudentID(int studentID){
+        return studentWordProgressRepository.findAllByStudentID(studentID);
+    }
+
     public StudentWordProgressEntity setProgress(StudentWordProgressEntity progress) {
         StudentWordProgressEntity edit = new StudentWordProgressEntity();
         try {
