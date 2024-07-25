@@ -38,7 +38,7 @@ public class RoomController {
     }
 
     @PatchMapping("/{roomID}/insert_student/{userID}")
-    public ResponseEntity<Object> insertStudent(@PathVariable int userID, @PathVariable int roomID) {
+    public ResponseEntity<Object> insertStudent(@PathVariable int roomID, @PathVariable int userID) {
         try {
             roomService.insertStudent(userID, roomID);
             return NoDataResponse.noDataResponse(HttpStatus.OK, "Student added successfully");

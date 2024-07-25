@@ -68,15 +68,17 @@ public class RoomService {
     }
 
     public RoomEntity joinRoom(Integer userID, String code) {
-        RoomEntity room = new RoomEntity();
+        RoomEntity room = roomRepository.findByCode(code);
         List<SimulationEntity> simulations = simulationRepository.findAllByRoomID(room);
         try {
-            room = roomRepository.findByCode(code);
+
+//            room = roomRepository.findByCode(code);
             for(Integer i : room.getMembers()){
                 if(i.equals(userID)){
                     throw new IllegalArgumentException("User " + userID + " already exists in the room");
                 }
             }
+
             room.addMembers(userID);
 
             for (SimulationEntity simulation : simulations) {
