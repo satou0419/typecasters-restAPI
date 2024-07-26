@@ -139,4 +139,24 @@ public class SimulationService {
 
         return msg;
     }
+
+    public String decrementAttempts(int simulationID){
+        Optional<SimulationEntity> simulation = simulationRepository.findById(simulationID);
+
+        if(simulation.isPresent()){
+            SimulationEntity simulationObject = simulation.get();
+            if(simulationObject.getNumberOfAttempt() > 0){
+                simulationObject.setNumberOfAttempt(simulationObject.getNumberOfAttempt() - 1);
+
+                simulationRepository.save(simulationObject);
+                return "Number of attempts decremented!";
+            }else{
+                throw new IllegalArgumentException("You cannot decrement below 0");
+            }
+
+        }else{
+            throw new NoSuchElementException("This simulation doesn't exist!");
+        }
+
+    }
 }
