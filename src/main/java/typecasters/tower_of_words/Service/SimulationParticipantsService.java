@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Service;
 
+import typecasters.tower_of_words.Entity.SimulationEntity;
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
 import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Repository.SimulationParticipantsRepository;

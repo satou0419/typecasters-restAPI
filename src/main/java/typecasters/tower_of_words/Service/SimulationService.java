@@ -3,6 +3,7 @@ package typecasters.tower_of_words.Service;
 import jakarta.transaction.Transactional;
 import typecasters.tower_of_words.Entity.*;
 import typecasters.tower_of_words.Repository.RoomRepository;
+import typecasters.tower_of_words.Repository.SimulationAttemptsRepository;
 import typecasters.tower_of_words.Repository.SimulationRepository;
 import typecasters.tower_of_words.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,46 +22,125 @@ public class SimulationService {
     UserRepository userRepository;
     @Autowired
     RoomRepository roomRepository;
+    @Autowired
+    SimulationAttemptsRepository simulationAttemptsRepository;
 
     @Autowired
     SimulationWordAssessmentService simulationWordAssessmentService;
+
+//    @Transactional
+//    public SimulationEntity createSimulation(SimulationEntity simulation) {
+//
+//        Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID().getRoomID());
+//        if (room.isPresent()) {
+//            for (Integer i : room.get().getMembers()) {
+//                SimulationParticipantsEntity user = new SimulationParticipantsEntity();
+//                user.setUserID(i);
+//                simulation.addParticipants(user);
+//            }
+//        }
+//
+//        simulation = simulationRepository.save(simulation);
+//
+//        List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
+//
+//        for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
+//            for (SimulationWordsEntity word : enemy.getWords()) {
+//                SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
+//                assessment.setSimulationID(simulation.getSimulationID());
+//                assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());
+//                assessment.setSimulationWordID(word.getSimulationWordsID());
+//                assessment.setAccuracy(0);
+//                assessment.setAttempts(0);
+//                assessment.setScore(0);
+//                assessment.setDuration(0);
+//
+//                assessments.add(assessment);
+//            }
+//        }
+//
+//        simulationWordAssessmentService.addWordAssessments(assessments);
+//
+//        simulation.getAssessment().addAll(assessments);
+//
+//        return simulationRepository.save(simulation);
+//    }
 
     @Transactional
     public SimulationEntity createSimulation(SimulationEntity simulation) {
 
         Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID().getRoomID());
         if (room.isPresent()) {
+            // Add participants to the simulation
             for (Integer i : room.get().getMembers()) {
                 SimulationParticipantsEntity user = new SimulationParticipantsEntity();
                 user.setUserID(i);
                 simulation.addParticipants(user);
             }
-        }
 
-        simulation = simulationRepository.save(simulation);
+            // Save the simulation entity
+            simulation = simulationRepository.save(simulation);
 
-        List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
+            // Create and save SimulationWordAssessmentEntity records
+            List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
 
-        for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
-            for (SimulationWordsEntity word : enemy.getWords()) {
-                SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
-                assessment.setSimulationID(simulation.getSimulationID());
-                assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());
-                assessment.setSimulationWordID(word.getSimulationWordsID());
-                assessment.setAccuracy(0);
-                assessment.setAttempts(0);
-                assessment.setScore(0);
-                assessment.setDuration(0);
+            for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
+                for (SimulationWordsEntity word : enemy.getWords()) {
+                    SimulationWordAssessmentEntity assessment = getSimulationWordAssessmentEntity(simulation, enemy, word);
 
-                assessments.add(assessment);
+                    assessments.add(assessment);
+                }
             }
+
+            simulationWordAssessmentService.addWordAssessments(assessments);
+            simulation.getAssessment().addAll(assessments);
+
+            // Save the updated simulation with assessments
+            simulation = simulationRepository.save(simulation);
+
+            // Add SimulationAttempts for each participant
+            int numberOfAttempts = simulation.getNumberOfAttempt();
+            for (SimulationParticipantsEntity participant : simulation.getParticipants()) {
+                for (int attemptNumber = 1; attemptNumber <= numberOfAttempts; attemptNumber++) {
+                    SimulationAttemptsEntity attempt = getSimulationAttemptsEntity(simulation, participant, attemptNumber);
+
+                    simulationAttemptsRepository.save(attempt);
+                }
+            }
+
+            return simulation;
+        } else {
+            throw new NoSuchElementException("Room with ID " + simulation.getRoomID().getRoomID() + " does not exist");
         }
+    }
 
-        simulationWordAssessmentService.addWordAssessments(assessments);
+    private static SimulationAttemptsEntity getSimulationAttemptsEntity(SimulationEntity simulation, SimulationParticipantsEntity participant, int attemptNumber) {
+        SimulationAttemptsEntity attempt = new SimulationAttemptsEntity();
+        attempt.setSimulationID(simulation.getSimulationID());
+        attempt.setSimulationParticipantsID(participant.getUserID());
+        attempt.setCurrentAttempts(attemptNumber);
+        attempt.setCurrentAccuracy(0);
+        attempt.setCurrentScore(0);
+        attempt.setCurrentDuration(0);
+        attempt.setCurrentMistakes(0);
+        attempt.setDone(false);
+        return attempt;
+    }
 
-        simulation.getAssessment().addAll(assessments);
+    private static SimulationWordAssessmentEntity getSimulationWordAssessmentEntity(SimulationEntity simulation, SimulationEnemyEntity enemy, SimulationWordsEntity word) {
+        SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
+        assessment.setSimulationID(simulation.getSimulationID());
+        assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());
+        assessment.setSimulationWordID(word.getSimulationWordsID());
+        assessment.setAccuracy(0);
+        assessment.setAttempts(0);
+        assessment.setScore(0);
+        assessment.setDuration(0);
+        return assessment;
+    }
 
-        return simulationRepository.save(simulation);
+    public Optional<SimulationEntity> findByID(int simulationID){
+        return simulationRepository.findById(simulationID);
     }
 
     public SimulationEntity insertWord(SimulationEntity simulation, SimulationEnemyEntity word) {

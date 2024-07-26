@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,9 +23,11 @@ public class SimulationParticipantsEntity {
 
     private int score;
 
-    private String duration;
+    private double duration;
 
-    private int attempts;
+    private int attempts; // mistake :<
+
+    private int mistakes;
 
     private double accuracy;
 
