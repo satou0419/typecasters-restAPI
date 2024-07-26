@@ -129,6 +129,22 @@ public class SimulationAttemptsController {
         }
     }
 
+    @GetMapping("/get_all_by/simulation/{simulationID}/participant/{participantID}")
+    public ResponseEntity<Object> getAttemptsBySimulationIDAndParticipantID(
+            @PathVariable int simulationID,
+            @PathVariable int participantID) {
+        try {
+            List<SimulationAttemptsEntity> attempts = simulationAttemptsService.getBySimulationIDAndSimulationParticipantsID(simulationID, participantID);
+            if (attempts.isEmpty()) {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No simulation attempts found for the given simulation ID and participant ID");
+            }
+            return Response.response(HttpStatus.OK, "Simulation attempts retrieved successfully!", attempts);
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+
     @DeleteMapping("/remove/{attemptID}")
     public ResponseEntity<Object> deleteAttempt(@PathVariable int attemptID) {
         try {

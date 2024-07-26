@@ -7,6 +7,7 @@ import typecasters.tower_of_words.Entity.SimulationAttemptsEntity;
 import typecasters.tower_of_words.Entity.SimulationEntity;
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,4 +18,9 @@ public interface SimulationAttemptsRepository extends JpaRepository<SimulationAt
             int simulationID,
             int simulationParticipantsID,
             int currentAttempts);
+
+    @Query("SELECT sa FROM SimulationAttemptsEntity sa WHERE sa.simulationID = ?1 AND sa.simulationParticipantsID = ?2")
+    List<SimulationAttemptsEntity> findBySimulationIDAndSimulationParticipantsID(
+            int simulationID,
+            int simulationParticipantsID);
 }

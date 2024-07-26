@@ -49,6 +49,13 @@ public class SimulationAttemptsService {
         return simulationAttemptsRepository.findById(simulationAttemptsID);
     }
 
+    public List<SimulationAttemptsEntity> getBySimulationIDAndSimulationParticipantsID(
+            int simulationID,
+            int simulationParticipantsID)
+    {
+        return simulationAttemptsRepository.findBySimulationIDAndSimulationParticipantsID(simulationID, simulationParticipantsID);
+    }
+
     public Optional<SimulationAttemptsEntity> findOneBySimulationIDAndSimulationParticipantsID(
             int simulationID,
             int simulationParticipantsID,
