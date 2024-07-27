@@ -37,7 +37,7 @@ public class StudentWordProgressService {
         try {
             edit = studentWordProgressRepository.findById(progress.getStudentWordProgressID()).get();
 
-            edit.setNumberOfAttempts(progress.getNumberOfAttempts());
+            edit.setMistake(progress.getMistake());
             edit.setCorrect(progress.isCorrect());
             edit.setScore(progress.getScore());
             edit.setDuration(progress.getDuration());

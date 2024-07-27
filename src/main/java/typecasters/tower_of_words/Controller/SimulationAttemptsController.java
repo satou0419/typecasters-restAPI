@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import typecasters.tower_of_words.Entity.SimulationAttemptsEntity;
 import typecasters.tower_of_words.Entity.SimulationEntity;
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
+import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Response.NoDataResponse;
 import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.SimulationAttemptsService;
@@ -94,6 +95,19 @@ public class SimulationAttemptsController {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
 
+    }
+
+    @GetMapping("/words_progress/{simulationParticipantsID}")
+    public ResponseEntity<Object> wordsProgress(@PathVariable int simulationParticipantsID) {
+        try {
+            List<StudentWordProgressEntity> memberIds = simulationAttemptsService.wordsProgress(simulationParticipantsID);
+            if (memberIds.isEmpty()) {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No word progress found for the given participant ID");
+            }
+            return Response.response(HttpStatus.OK, "Word progress retrieved successfully", memberIds);
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @PutMapping("/update_attempt_by/{attemptID}")

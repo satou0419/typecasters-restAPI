@@ -50,19 +50,6 @@ public class SimulationParticipantsController {
         }
     }
 
-    @GetMapping("/words_progress/{simulationParticipantsID}")
-    public ResponseEntity<Object> wordsProgress(@PathVariable int simulationParticipantsID) {
-        try {
-            List<StudentWordProgressEntity> memberIds = simulationParticipantsService.wordsProgress(simulationParticipantsID);
-            if (memberIds.isEmpty()) {
-                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No word progress found for the given participant ID");
-            }
-            return Response.response(HttpStatus.OK, "Word progress retrieved successfully", memberIds);
-        } catch (IllegalArgumentException ex) {
-            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-        }
-    }
-
     @PutMapping("/edit")
     public ResponseEntity<Object> updateSimulationParticipant(@RequestBody SimulationParticipantsEntity participant) {
         try {

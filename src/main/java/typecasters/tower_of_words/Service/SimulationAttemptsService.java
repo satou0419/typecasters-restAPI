@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import typecasters.tower_of_words.Entity.SimulationAttemptsEntity;
 import typecasters.tower_of_words.Entity.SimulationEntity;
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
+import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Repository.SimulationAttemptsRepository;
 
 import java.util.List;
@@ -73,6 +74,11 @@ public class SimulationAttemptsService {
                 currentAttempts);
     }
 
+    public List<StudentWordProgressEntity> wordsProgress(int simulationParticipantsID) {
+        SimulationAttemptsEntity attempts = simulationAttemptsRepository.findById(simulationParticipantsID).orElseThrow(() -> new NoSuchElementException("Participant " + simulationParticipantsID + " does not exist"));
+        return attempts.getWordsProgress();
+    }
+
     @Transactional
     public SimulationAttemptsEntity updateAttemptByID(int simulationAttemptsID, SimulationAttemptsEntity attempts) {
         SimulationAttemptsEntity existingAttempt = simulationAttemptsRepository.findById(simulationAttemptsID)
@@ -80,7 +86,6 @@ public class SimulationAttemptsService {
 
         existingAttempt.setCurrentAccuracy(attempts.getCurrentAccuracy());
         existingAttempt.setCurrentDuration(attempts.getCurrentDuration());
-        existingAttempt.setCurrentMistakes(attempts.getCurrentMistakes());
         existingAttempt.setCurrentScore(attempts.getCurrentScore());
         existingAttempt.setDone(attempts.isDone());
 

@@ -18,6 +18,8 @@ public class SimulationEnemyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int simulationEnemyID;
 
+    private String name;
+
     private String imagePath;
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -28,11 +28,6 @@ public class SimulationParticipantsService {
         return simulationParticipantsRepository.findById(id);
     }
 
-    public List<StudentWordProgressEntity> wordsProgress(int simulationParticipantsID) {
-        SimulationParticipantsEntity participant = simulationParticipantsRepository.findById(simulationParticipantsID).orElseThrow(() -> new NoSuchElementException("Participant " + simulationParticipantsID + " does not exist"));
-        return participant.getWordsProgress();
-    }
-
     public SimulationParticipantsEntity updateParticipant(SimulationParticipantsEntity participant) {
         SimulationParticipantsEntity edit = new SimulationParticipantsEntity();
         try {

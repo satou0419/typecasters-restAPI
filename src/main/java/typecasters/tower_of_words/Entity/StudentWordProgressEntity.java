@@ -19,7 +19,7 @@ public class StudentWordProgressEntity {
 
     private int studentID;
 
-    private int numberOfAttempts;
+    private int mistake;
 
     private boolean isCorrect;
 

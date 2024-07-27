@@ -21,23 +21,23 @@ public class SimulationParticipantsEntity {
 
     private int userID;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tbl_attempts",
+            joinColumns = @JoinColumn(name = "simulationParticipantsID"),
+            inverseJoinColumns = @JoinColumn(name = "simulationAttemptsID")
+    )
+    private List<SimulationAttemptsEntity> attempts;
+
+    private int currentAttempts;
+
+    private int mistakes;
+
     private int score;
 
     private double duration;
 
-    private int attempts; // mistake :<
-
-    private int mistakes;
-
     private double accuracy;
 
     private boolean isDone;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "tbl_student_words_progress",
-            joinColumns = @JoinColumn(name = "simulationParticipantsID"),
-            inverseJoinColumns = @JoinColumn(name = "studentWordProgressID")
-    )
-    private List<StudentWordProgressEntity> wordsProgress = new ArrayList<>();
 }

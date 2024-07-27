@@ -127,7 +127,6 @@ public class RoomService {
         attempt.setCurrentAccuracy(0);
         attempt.setCurrentScore(0);
         attempt.setCurrentDuration(0);
-        attempt.setCurrentMistakes(0);
         attempt.setDone(false);
         return attempt;
     }
