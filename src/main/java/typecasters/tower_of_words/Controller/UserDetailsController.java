@@ -13,15 +13,15 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("user_details")
-public class UserDetailscController {
+public class UserDetailsController {
 
     @Autowired
-    UserDetailsService ud_serv;
+    UserDetailsService userDetailsService;
 
     @PatchMapping("/update_user_credit/{ud_id}/{s_credit}")
     public ResponseEntity<Object> updateUserCredit(@PathVariable int ud_id, @PathVariable int s_credit){
         try {
-            String result = ud_serv.updateUserCredit(ud_id, s_credit);
+            String result = userDetailsService.updateUserCredit(ud_id, s_credit);
             return Response.response(HttpStatus.OK, "User credit updated successfully", result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -33,7 +33,7 @@ public class UserDetailscController {
     @PatchMapping("/increment_word")
     public ResponseEntity<Object> incrementUserWordCount(@RequestParam int ud_id){
         try {
-            String result = ud_serv.incrementUserDetailWords(ud_id);
+            String result = userDetailsService.incrementUserDetailWords(ud_id);
             return Response.response(HttpStatus.OK, "User word count incremented successfully", result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -45,7 +45,7 @@ public class UserDetailscController {
     @PatchMapping("/increment_achievement")
     public ResponseEntity<Object> incrementUserAchievementCount(@RequestParam int ud_id){
         try {
-            String result = ud_serv.incrementUserAchievementCount(ud_id);
+            String result = userDetailsService.incrementUserAchievementCount(ud_id);
             return Response.response(HttpStatus.OK, "User achievement count incremented successfully", result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -56,11 +56,8 @@ public class UserDetailscController {
 
     @PatchMapping("/increment_floor")
     public ResponseEntity<Object> incrementUserFloorCount(@RequestParam int ud_id){
-
-//        return ResponseEntity.status(HttpStatus.OK).body(result);
-
         try{
-            String result = ud_serv.incrementFloorCount(ud_id);
+            String result = userDetailsService.incrementFloorCount(ud_id);
             return Response.response(HttpStatus.OK, "Floor count incremented successfully!", result);
         }catch (IllegalArgumentException e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -72,7 +69,7 @@ public class UserDetailscController {
     @GetMapping("/get_user_detail")
     public ResponseEntity<Object> getUserDetails(@RequestParam int user_id){
         try {
-            UserDetailsEntity userDetails = ud_serv.getUserDetails(user_id);
+            UserDetailsEntity userDetails = userDetailsService.getUserDetails(user_id);
             if (userDetails != null) {
                 return Response.response(HttpStatus.OK, "User details retrieved successfully", userDetails);
             } else {
@@ -86,7 +83,7 @@ public class UserDetailscController {
     @GetMapping("/get_credit_amount")
     public ResponseEntity<Object> getCreditAmountByUserDetailsId(@RequestParam int userDetailId){
         try {
-            Optional<Integer> creditAmount = ud_serv.getCreditAmountByUserDetailId(userDetailId);
+            Optional<Integer> creditAmount = userDetailsService.getCreditAmountByUserDetailId(userDetailId);
             if (creditAmount.isPresent()) {
                 return Response.response(HttpStatus.OK, "Credit amount retrieved successfully", creditAmount.get());
             } else {
@@ -100,7 +97,7 @@ public class UserDetailscController {
     @PatchMapping("/update_equipped_character")
     public ResponseEntity<Object> updateEquippedCharacter(@RequestParam int userDetailId, @RequestParam String newEquippedCharacter) {
         try{
-            String equippedCharacterUpdate = ud_serv.updateEquippedCharacter(userDetailId, newEquippedCharacter);
+            String equippedCharacterUpdate = userDetailsService.updateEquippedCharacter(userDetailId, newEquippedCharacter);
             return NoDataResponse.noDataResponse(HttpStatus.OK, equippedCharacterUpdate);
         }catch (RuntimeException e){
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -112,7 +109,7 @@ public class UserDetailscController {
     @PatchMapping("/update_badge_display")
     public ResponseEntity<Object> updateBadgeDisplay(@RequestParam int userDetailId, @RequestParam String newBadgeDisplay) {
         try{
-            String updatedBadgeDisplay = ud_serv.updateBadgeDisplay(userDetailId, newBadgeDisplay);
+            String updatedBadgeDisplay = userDetailsService.updateBadgeDisplay(userDetailId, newBadgeDisplay);
             return NoDataResponse.noDataResponse(HttpStatus.OK, updatedBadgeDisplay);
         }catch (RuntimeException e){
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
