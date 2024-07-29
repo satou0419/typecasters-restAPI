@@ -83,6 +83,10 @@ public class StudentWordProgressService {
         simulationAttemptsRepository.findById(simulationAttemptID)
                 .orElseThrow(() -> new NoSuchElementException("Current Simulation Attempt ID " + simulationAttemptID + " does not exist!"));
 
+        UserEntity user = userRepository.findById(progress.getStudentID())
+                        .orElseThrow(() -> new NoSuchElementException("Current Student " + progress.getStudentID() + " doesn't exist!"));
+
+
         existingProgress.setMistake(progress.getMistake());
         existingProgress.setAccuracy(progress.getAccuracy());
         existingProgress.setScore(progress.getScore());
