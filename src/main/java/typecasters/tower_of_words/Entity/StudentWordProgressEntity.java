@@ -28,4 +28,27 @@ public class StudentWordProgressEntity {
     private int duration;
 
     private double accuracy;
+
+    @ManyToOne
+    @JoinColumn(name = "simulationAttemptsID")
+    private SimulationAttemptsEntity simulationAttemptsID;
+
+    public StudentWordProgressEntity(
+            int simulationWordsID,
+            int studentID,
+            int mistake,
+            boolean isCorrect,
+            int score,
+            int duration,
+            double accuracy,
+            SimulationAttemptsEntity simulationAttemptsID) {
+        this.simulationWordsID = simulationWordsID;
+        this.studentID = studentID;
+        this.mistake = mistake;
+        this.isCorrect = isCorrect;
+        this.score = score;
+        this.duration = duration;
+        this.accuracy = accuracy;
+        this.simulationAttemptsID = simulationAttemptsID;
+    }
 }

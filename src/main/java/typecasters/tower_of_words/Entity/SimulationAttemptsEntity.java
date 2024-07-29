@@ -1,6 +1,7 @@
 package typecasters.tower_of_words.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class SimulationAttemptsEntity {
 
     private int simulationParticipantsID;
 
-    private int currentAttempts;
+    private int currentAttempt;
 
     private double currentAccuracy;
 
@@ -34,11 +35,25 @@ public class SimulationAttemptsEntity {
 
     private boolean isDone;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "tbl_student_words_progress",
-            joinColumns = @JoinColumn(name = "simulationParticipantsID"),
-            inverseJoinColumns = @JoinColumn(name = "studentWordProgressID")
-    )
+    @JsonIgnore
+    @OneToMany(mappedBy = "simulationAttemptsID", cascade = CascadeType.ALL)
     private List<StudentWordProgressEntity> wordsProgress = new ArrayList<>();
+
+    public SimulationAttemptsEntity(
+            int simulationID,
+            int simulationParticipantsID,
+            int currentAttempt,
+            double currentAccuracy,
+            int currentScore,
+            double currentDuration,
+            boolean isDone)
+    {
+        this.simulationID = simulationID;
+        this.simulationParticipantsID = simulationParticipantsID;
+        this.currentAttempt = currentAttempt;
+        this.currentAccuracy = currentAccuracy;
+        this.currentScore = currentScore;
+        this.currentDuration = currentDuration;
+        this.isDone = isDone;
+    }
 }
