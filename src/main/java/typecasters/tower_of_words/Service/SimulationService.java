@@ -40,28 +40,28 @@ public class SimulationService {
             }
         }
 
-//        simulation = simulationRepository.save(simulation);
-//
-//        List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
-//
-//        for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
-//            for (SimulationWordsEntity word : enemy.getWords()) {
-//                SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
-//                assessment.setSimulationID(simulation.getSimulationID());
-//                assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());
-//                assessment.setSimulationWordID(word.getSimulationWordsID());
-//                assessment.setAccuracy(0);
-//                assessment.setAttempts(0);
-//                assessment.setScore(0);
-//                assessment.setDuration(0);
-//
-//                assessments.add(assessment);
-//            }
-//        }
-//
-//        simulationWordAssessmentService.addWordAssessments(assessments);
-//
-//        simulation.getAssessment().addAll(assessments);
+        simulation = simulationRepository.save(simulation);
+
+        List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
+
+        for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
+            for (SimulationWordsEntity word : enemy.getWords()) {
+                SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
+                assessment.setSimulationID(simulation.getSimulationID());
+                assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());
+                assessment.setSimulationWordID(word.getSimulationWordsID());
+                assessment.setAccuracy(0);
+                assessment.setAttempts(0);
+                assessment.setScore(0);
+                assessment.setDuration(0);
+
+                assessments.add(assessment);
+            }
+        }
+
+        simulationWordAssessmentService.addWordAssessments(assessments);
+
+        simulation.getAssessment().addAll(assessments);
 
         return simulationRepository.save(simulation);
     }
