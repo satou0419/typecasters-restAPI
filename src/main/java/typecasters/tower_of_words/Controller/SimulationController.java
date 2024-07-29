@@ -29,6 +29,8 @@ public class SimulationController {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+        } catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
