@@ -23,7 +23,9 @@ public class SimulationAttemptsEntity {
 
     private int simulationID;
 
-    private int simulationParticipantsID;
+    @ManyToOne
+    @JoinColumn(name = "simulationParticipantsID")
+    private SimulationParticipantsEntity simulationParticipantsID;
 
     private int currentAttempt;
 
@@ -41,7 +43,7 @@ public class SimulationAttemptsEntity {
 
     public SimulationAttemptsEntity(
             int simulationID,
-            int simulationParticipantsID,
+            SimulationParticipantsEntity simulationParticipantsID,
             int currentAttempt,
             double currentAccuracy,
             int currentScore,

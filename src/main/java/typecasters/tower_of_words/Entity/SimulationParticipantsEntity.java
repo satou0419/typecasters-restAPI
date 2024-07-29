@@ -21,12 +21,8 @@ public class SimulationParticipantsEntity {
 
     private int userID;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "tbl_attempts",
-            joinColumns = @JoinColumn(name = "simulationParticipantsID"),
-            inverseJoinColumns = @JoinColumn(name = "simulationAttemptsID")
-    )
+    @JsonIgnore
+    @OneToMany(mappedBy = "simulationParticipantsID", cascade = CascadeType.ALL)
     private List<SimulationAttemptsEntity> attempts;
 
     private int currentAttempts;

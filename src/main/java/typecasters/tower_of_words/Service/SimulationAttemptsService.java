@@ -29,13 +29,19 @@ public class SimulationAttemptsService {
         this.simulationParticipantsService = simulationParticipantsService;
     }
 
+    @Transactional
+    public List<SimulationAttemptsEntity> saveAllAttempts(List<SimulationAttemptsEntity> attempts) {
+        return simulationAttemptsRepository.saveAll(attempts);
+    }
+
     public SimulationAttemptsEntity insertNewAttempt(SimulationAttemptsEntity newAttempt, int simulationID, int simulationParticipantsID) {
         Optional<SimulationEntity> simulation = simulationService.findByID(simulationID);
         Optional<SimulationParticipantsEntity> participant = simulationParticipantsService.getParticipantById(simulationParticipantsID);
 
         if (simulation.isPresent() && participant.isPresent()) {
+            SimulationParticipantsEntity participantObject = participant.get();
             newAttempt.setSimulationID(simulationID);
-            newAttempt.setSimulationParticipantsID(simulationParticipantsID);
+            newAttempt.setSimulationParticipantsID(participantObject);
             return simulationAttemptsRepository.save(newAttempt);
         } else {
             throw new NoSuchElementException("Simulation or participant does not exist!");

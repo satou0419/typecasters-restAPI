@@ -28,6 +28,10 @@ public class StudentWordProgressService {
         return studentWordProgressRepository.findById(id);
     }
 
+    public List<StudentWordProgressEntity> addProgress(List<StudentWordProgressEntity> progressList) {
+        return studentWordProgressRepository.saveAll(progressList);
+    }
+
     public List<StudentWordProgressEntity> getAllByStudentID(int studentID){
         return studentWordProgressRepository.findAllByStudentID(studentID);
     }

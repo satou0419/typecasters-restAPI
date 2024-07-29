@@ -28,4 +28,22 @@ public class SimulationWordAssessmentEntity {
     private int score;
 
     private int duration;
+
+    public SimulationWordAssessmentEntity(
+            int simulationID,
+            int simulationEnemyID,
+            int simulationWordID,
+            double accuracy,
+            int attempts,
+            int score,
+            int duration)
+    {
+        this.simulationID = simulationID;
+        this.simulationEnemyID = simulationEnemyID;
+        this.simulationWordID = simulationWordID;
+        this.accuracy = accuracy;
+        this.attempts = attempts;
+        this.score = score;
+        this.duration = duration;
+    }
 }
