@@ -67,9 +67,9 @@ public class UserDetailsController {
     }
 
     @GetMapping("/get_user_detail")
-    public ResponseEntity<Object> getUserDetails(@RequestParam int userDetailsID){
+    public ResponseEntity<Object> getUserDetails(@RequestParam int userID){
         try {
-            UserDetailsEntity userDetails = userDetailsService.getUserDetails(userDetailsID);
+            UserDetailsEntity userDetails = userDetailsService.getUserDetails(userID);
             if (userDetails != null) {
                 return Response.response(HttpStatus.OK, "User details retrieved successfully", userDetails);
             } else {
