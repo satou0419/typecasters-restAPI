@@ -15,7 +15,16 @@ public class SimulationWordsService {
     SimulationWordsRepository simulationWordsRepository;
 
     public SimulationWordsEntity addSimulationWord(SimulationWordsEntity word) {
-        return simulationWordsRepository.save(word);
+
+        Optional<SimulationWordsEntity> checkWordIfExist = simulationWordsRepository.findOneByCreatorIDAndWord(word.getCreatorID(), word.getWord());
+
+        if(checkWordIfExist.isPresent()){
+            throw new IllegalArgumentException("Word already exist!");
+        }else{
+            return simulationWordsRepository.save(word);
+        }
+
+
     }
 
     public List<SimulationWordsEntity> getAllSimulationWord() {

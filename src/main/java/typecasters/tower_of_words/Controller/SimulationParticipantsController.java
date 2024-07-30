@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Controller;
 
+import typecasters.tower_of_words.Entity.SimulationEntity;
 import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
 import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
 import typecasters.tower_of_words.Response.NoDataResponse;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -39,6 +42,27 @@ public class SimulationParticipantsController {
         }
     }
 
+    @GetMapping("/get_simulation_participants_id_by/{userID}/{simulation}")
+    public ResponseEntity<Object> getSimulationParticipantsIDIDByUserIDAndSimulationID(@PathVariable Integer userID, @PathVariable Integer simulation) {
+        try {
+            Optional<Integer> participant = simulationParticipantsService.getSimulationParticipantsIDIDByUserIDAndSimulationID(userID, simulation);
+
+            if(participant.isPresent()){
+                return Response.response(HttpStatus.OK, "Simulation Participants ID retrieved successfully",
+                        Map.of("simulationParticipantsID", participant.get()));
+            } else {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Simulation Participants ID " + simulation + " not found!");
+            }
+
+        } catch(NoSuchElementException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (Exception ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+    }
+
     @GetMapping("/student_game_assessment/{simulationParticipantsID}")
     public ResponseEntity<Object> studentGameAssessment(@PathVariable int simulationParticipantsID) {
         try {
@@ -50,10 +74,10 @@ public class SimulationParticipantsController {
         }
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<Object> updateSimulationParticipant(@RequestBody SimulationParticipantsEntity participant) {
+    @PutMapping("/edit/simulation/{simulationID}")
+    public ResponseEntity<Object> updateSimulationParticipant(@RequestBody SimulationParticipantsEntity participant, @PathVariable  int simulationID) {
         try {
-            SimulationParticipantsEntity updatedParticipant = simulationParticipantsService.updateParticipant(participant);
+            SimulationParticipantsEntity updatedParticipant = simulationParticipantsService.updateParticipant(participant, simulationID);
             return Response.response(HttpStatus.OK, "Participant updated successfully", updatedParticipant);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());

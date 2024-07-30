@@ -44,6 +44,7 @@ public class SimulationService {
             for (Integer i : room.get().getMembers()) {
                 SimulationParticipantsEntity user = new SimulationParticipantsEntity();
                 user.setUserID(i);
+                user.setSimulationID(simulation);
                 simulation.addParticipants(user);
             }
         }

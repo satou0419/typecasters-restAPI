@@ -36,4 +36,8 @@ public class SimulationParticipantsEntity {
     private double accuracy;
 
     private boolean isDone;
+
+    @ManyToOne
+    @JoinColumn(name = "simulationID")
+    private SimulationEntity simulationID;
 }

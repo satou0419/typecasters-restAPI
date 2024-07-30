@@ -1,11 +1,10 @@
 package typecasters.tower_of_words.Service;
 
-import typecasters.tower_of_words.Entity.SimulationEntity;
-import typecasters.tower_of_words.Entity.SimulationParticipantsEntity;
-import typecasters.tower_of_words.Entity.StudentWordProgressEntity;
+import typecasters.tower_of_words.Entity.*;
 import typecasters.tower_of_words.Repository.SimulationParticipantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import typecasters.tower_of_words.Repository.SimulationRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -15,6 +14,9 @@ import java.util.Optional;
 public class SimulationParticipantsService {
     @Autowired
     SimulationParticipantsRepository simulationParticipantsRepository;
+
+    @Autowired
+    SimulationRepository simulationRepository;
 
     public SimulationParticipantsEntity addParticipant(SimulationParticipantsEntity participant) {
         return simulationParticipantsRepository.save(participant);
@@ -28,20 +30,31 @@ public class SimulationParticipantsService {
         return simulationParticipantsRepository.findById(id);
     }
 
-    public SimulationParticipantsEntity updateParticipant(SimulationParticipantsEntity participant) {
-        SimulationParticipantsEntity edit = new SimulationParticipantsEntity();
-        try {
-            edit = simulationParticipantsRepository.findById(participant.getSimulationParticipantsID()).get();
+    public Optional<Integer> getSimulationParticipantsIDIDByUserIDAndSimulationID(Integer userID, Integer simulation) {
+        SimulationEntity simulationObject = simulationRepository.findById(simulation)
+                .orElseThrow(() -> new NoSuchElementException("Simulation " + simulation + " doesn't exist!"));
 
-            edit.setDuration(participant.getDuration());
-            edit.setScore(participant.getScore());
-            edit.setDone(participant.isDone());
+        return simulationParticipantsRepository.findSimulationParticipantsIDByUserIDAndSimulationID(userID, simulationObject);
+    }
 
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Simulation " + participant.getSimulationParticipantsID() + " does not exist");
-        }
+    public Optional<SimulationParticipantsEntity> getOneBySimulationParticipantsIDAndSimulationID(int simulationParticipantsID, int simulation){
 
-        return simulationParticipantsRepository.save(edit);
+        SimulationEntity simulationObject = simulationRepository.findById(simulation)
+                .orElseThrow(() -> new NoSuchElementException("Simulation " + simulation + " doesn't exist!"));
+
+        return simulationParticipantsRepository.findOneBySimulationParticipantsIDAndSimulationID(simulationParticipantsID, simulationObject);
+    }
+
+
+    public SimulationParticipantsEntity updateParticipant(SimulationParticipantsEntity participant, int simulationID) {
+        SimulationParticipantsEntity simulationAttempt = getOneBySimulationParticipantsIDAndSimulationID(participant.getSimulationParticipantsID(), simulationID)
+                .orElseThrow(() -> new NoSuchElementException("Simulation doesn't exist!"));
+
+        simulationAttempt.setDuration(participant.getDuration());
+        simulationAttempt.setScore(participant.getScore());
+        simulationAttempt.setAccuracy(participant.getScore());
+
+        return simulationParticipantsRepository.save(simulationAttempt);
     }
 
     public void deleteParticipant(int id) {
