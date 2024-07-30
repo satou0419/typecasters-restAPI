@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class SimulationParticipantsEntity {
 
     private boolean isDone;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "simulationID")
     private SimulationEntity simulationID;

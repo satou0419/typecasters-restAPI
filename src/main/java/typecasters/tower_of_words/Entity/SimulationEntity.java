@@ -23,7 +23,7 @@ public class SimulationEntity {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "roomID")
     private RoomEntity roomID;
 
     private String simulationType;

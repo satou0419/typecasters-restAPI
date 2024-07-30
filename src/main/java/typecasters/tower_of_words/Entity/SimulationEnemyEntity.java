@@ -18,8 +18,6 @@ public class SimulationEnemyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int simulationEnemyID;
 
-    private String name;
-
     private String imagePath;
 
     @CollectionTable(name = "tbl_simulation_enemy_words", joinColumns = @JoinColumn(name = "simulationEnemyID"))

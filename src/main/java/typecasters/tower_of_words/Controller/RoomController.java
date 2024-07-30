@@ -67,9 +67,6 @@ public class RoomController {
     public ResponseEntity<Object> viewCreatedRooms(@PathVariable int creatorID) {
         try {
             List<RoomEntity> createdRooms = roomService.viewCreatedRooms(creatorID);
-            if (createdRooms.isEmpty()) {
-                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No rooms found for the given creator ID");
-            }
             return Response.response(HttpStatus.OK, "Rooms retrieved successfully", createdRooms);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -92,12 +89,9 @@ public class RoomController {
     public ResponseEntity<Object> roomsDetailsByID(@PathVariable int roomID) {
         try {
             Optional<RoomEntity> roomOptional = roomService.roomsDetailsByID(roomID);
-            return roomOptional.map(room -> Response.response(HttpStatus.OK, "Room details retrieved successfully", room))
-                    .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Room not found"));
+            return Response.response(HttpStatus.OK, "Room details retrieved successfully", roomOptional);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-        } catch (NoSuchElementException | NullPointerException ex) {
-            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
 
@@ -105,9 +99,6 @@ public class RoomController {
     public ResponseEntity<Object> studentRooms(@PathVariable int userID) {
         try {
             List<RoomEntity> memberRooms = roomService.studentRooms(userID);
-            if (memberRooms.isEmpty()) {
-                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No rooms found for the given user ID");
-            }
             return Response.response(HttpStatus.OK, "Rooms retrieved successfully", memberRooms);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -115,12 +106,9 @@ public class RoomController {
     }
 
     @GetMapping("/students/{roomID}")
-    public ResponseEntity<Object> roomStudents(@PathVariable int roomId) {
+    public ResponseEntity<Object> roomStudents(@PathVariable int roomID) {
         try {
-            List<Integer> memberIds = roomService.roomStudents(roomId);
-            if (memberIds.isEmpty()) {
-                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No students found for the given room ID");
-            }
+            List<Integer> memberIds = roomService.roomStudents(roomID);
             return Response.response(HttpStatus.OK, "Students retrieved successfully", memberIds);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
