@@ -2,12 +2,9 @@ package typecasters.tower_of_words.Service;
 
 import jakarta.transaction.Transactional;
 import typecasters.tower_of_words.Entity.*;
-import typecasters.tower_of_words.Repository.RoomRepository;
+import typecasters.tower_of_words.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import typecasters.tower_of_words.Repository.SimulationAttemptsRepository;
-import typecasters.tower_of_words.Repository.SimulationParticipantsRepository;
-import typecasters.tower_of_words.Repository.SimulationRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,6 +33,9 @@ public class RoomService {
 
     @Autowired
     SimulationParticipantsService simulationParticipantsService;
+
+    @Autowired
+    SimulationWordsRepository simulationWordsRepository;
 
     public RoomEntity createRoom(RoomEntity room) {
         room.setCode(generateUniqueCode());
@@ -109,7 +109,8 @@ public class RoomService {
         // Generate SimulationWordAssessment
         List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
         for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
-            for (SimulationWordsEntity word : enemy.getWords()) {
+            for (Integer ID : enemy.getWords()) {
+                SimulationWordsEntity word = simulationWordsRepository.findById(ID).get();
                 SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
                 assessment.setSimulationID(simulation.getSimulationID());
                 assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());

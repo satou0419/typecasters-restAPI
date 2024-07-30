@@ -14,12 +14,12 @@ import typecasters.tower_of_words.Response.Response;
 public class UserProgressController {
 
     @Autowired
-    UserProgressService tp_serv;
+    UserProgressService userProgressService;
 
     @PutMapping("/update_user_progress")
-    public ResponseEntity<Object> updateUserProgress(@RequestBody UserProgressEntity updatedProgress, @RequestParam int user_prog_id) {
+    public ResponseEntity<Object> updateUserProgress(@RequestBody UserProgressEntity updatedProgress, @RequestParam int userProgressID) {
         try {
-            String result = tp_serv.updateTowerProgress(updatedProgress, user_prog_id);
+            String result = userProgressService.updateTowerProgress(updatedProgress, userProgressID);
             return Response.response(HttpStatus.OK, "User progress updated successfully", result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());

@@ -22,11 +22,8 @@ public class SimulationEnemyEntity {
 
     private String imagePath;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "tbl_simulation_enemy_words",
-            joinColumns = @JoinColumn(name = "simulationEnemyID"),
-            inverseJoinColumns = @JoinColumn(name = "simulationWordsID")
-    )
-    private List<SimulationWordsEntity> words = new ArrayList<>();
+    @CollectionTable(name = "tbl_simulation_enemy_words", joinColumns = @JoinColumn(name = "simulationEnemyID"))
+    @Column(name = "simulationWordsID")
+    private List<Integer> words = new ArrayList<>();
+
 }

@@ -16,13 +16,13 @@ import java.util.Optional;
 @RequestMapping("/floor")
 public class TowerFloorController {
     @Autowired
-    private TowerFloorService tf_serv;
+    private TowerFloorService towerFloorService;
 
     // Insert
     @PostMapping("/add_floor")
     public ResponseEntity<Object> insertFloor(@RequestBody TowerFloorEntity floor) {
         try {
-            TowerFloorEntity insertedFloor = tf_serv.createFloor(floor);
+            TowerFloorEntity insertedFloor = towerFloorService.createFloor(floor);
             return Response.response(HttpStatus.OK, "Floor inserted successfully", insertedFloor);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -33,7 +33,7 @@ public class TowerFloorController {
     @GetMapping("/get_all_floors")
     public ResponseEntity<Object> getAllFloors() {
         try {
-            List<TowerFloorEntity> floors = tf_serv.getAllFloors();
+            List<TowerFloorEntity> floors = towerFloorService.getAllFloors();
             return Response.response(HttpStatus.OK, "All floors retrieved successfully", floors);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -41,10 +41,10 @@ public class TowerFloorController {
     }
 
     // Read One
-    @GetMapping("/get_floor_by_id/{floor_id}")
-    public ResponseEntity<Object> getFloorById(@PathVariable int floor_id) {
+    @GetMapping("/get_floor_by_id/{towerFloorID}")
+    public ResponseEntity<Object> getFloorById(@PathVariable int towerFloorID) {
         try {
-            Optional<TowerFloorEntity> floor = tf_serv.getFloorById(floor_id);
+            Optional<TowerFloorEntity> floor = towerFloorService.getFloorById(towerFloorID);
             return floor.map(value -> Response.response(HttpStatus.OK, "Floor retrieved successfully", value))
                     .orElseGet(() -> NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Floor not found"));
         } catch (IllegalArgumentException ex) {
@@ -53,10 +53,10 @@ public class TowerFloorController {
     }
 
     // Update
-    @PutMapping("/update_floor/{floor_id}")
-    public ResponseEntity<Object> updateFloor(@PathVariable int floor_id, @RequestBody TowerFloorEntity newFloorDetails) {
+    @PutMapping("/update_floor/{towerFloorID}")
+    public ResponseEntity<Object> updateFloor(@PathVariable int towerFloorID, @RequestBody TowerFloorEntity newFloorDetails) {
         try {
-            TowerFloorEntity updatedFloor = tf_serv.updateFloor(floor_id, newFloorDetails);
+            TowerFloorEntity updatedFloor = towerFloorService.updateFloor(towerFloorID, newFloorDetails);
             return Response.response(HttpStatus.OK, "Floor updated successfully", updatedFloor);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -64,10 +64,10 @@ public class TowerFloorController {
     }
 
     // Delete
-    @DeleteMapping("/delete_floor/{floor_id}")
-    public ResponseEntity<Object> deleteFloor(@PathVariable int floor_id) {
+    @DeleteMapping("/delete_floor/{towerFloorID}")
+    public ResponseEntity<Object> deleteFloor(@PathVariable int towerFloorID) {
         try {
-            String result = tf_serv.deleteFloor(floor_id);
+            String result = towerFloorService.deleteFloor(towerFloorID);
             return NoDataResponse.noDataResponse(HttpStatus.OK, result);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());

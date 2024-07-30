@@ -70,9 +70,9 @@ public class UserCharacterController {
     }
 
     @PatchMapping("update_user_character_is_owned/{userCharacterID}")
-    public ResponseEntity<Object> updateUserCharacter (@PathVariable int userCharacterId, @RequestBody UserCharacterEntity newUserItemDetails){
+    public ResponseEntity<Object> updateUserCharacter (@PathVariable int userCharacterID, @RequestBody UserCharacterEntity newUserItemDetails){
         try{
-            UserCharacterEntity updatedUserCharacter = userCharacterService.updateUserCharacter(userCharacterId, newUserItemDetails);
+            UserCharacterEntity updatedUserCharacter = userCharacterService.updateUserCharacter(userCharacterID, newUserItemDetails);
             if(updatedUserCharacter != null){
                 return Response.response(HttpStatus.OK, "User character updated successfully", updatedUserCharacter);
             } else {
@@ -132,8 +132,6 @@ public class UserCharacterController {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
     }
-
-    /////////////////////
 
     @PostMapping("/buy_character_by/{userID}/{characterID}")
     public ResponseEntity<Object> buyCharacter(@PathVariable int userID, @PathVariable int characterID){

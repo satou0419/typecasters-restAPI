@@ -14,12 +14,11 @@ public class UserProgressService {
     UserProgressRepository userProgressRepository;
 
     //Update tower progress
-    public String updateTowerProgress(UserProgressEntity towerProgUpdate, int userProgId){
+    public String updateTowerProgress(UserProgressEntity towerProgUpdate, int userProgressID){
         String message = "User Progress Updated!";
 
         try{
-            UserProgressEntity towerProgress = userProgressRepository.findById(userProgId).get();
-
+            UserProgressEntity towerProgress = userProgressRepository.findById(userProgressID).get();
 
             towerProgress.setTowerSectionProgress(towerProgUpdate.getTowerSectionProgress());
             towerProgress.setFloorID(towerProgUpdate.getFloorID());

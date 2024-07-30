@@ -23,9 +23,6 @@ public class UserItemController {
     @Autowired
     UserItemService userItemService;
 
-    @Autowired
-    UserDetailsService userDetailsService;
-
 
     //Create
     @PostMapping("/insert_user_item")
@@ -39,10 +36,10 @@ public class UserItemController {
     }
 
     //For Inventory
-    @GetMapping("/get_user_items_by/{userId}")
-    public ResponseEntity<Object> getUserItemById(@PathVariable int userId) {
+    @GetMapping("/get_user_items_by/{userID}")
+    public ResponseEntity<Object> getUserItemById(@PathVariable int userID) {
         try {
-            List<UserItemEntity> userItems = userItemService.getUserItemByUserId(userId);
+            List<UserItemEntity> userItems = userItemService.getUserItemByUserId(userID);
             if (userItems != null && !userItems.isEmpty()) {
                 return Response.response(HttpStatus.OK, "User items retrieved successfully", userItems);
             } else {
@@ -55,10 +52,10 @@ public class UserItemController {
 
 
     //Buy Item at Any Amount
-    @PostMapping("/buy_item_any_amount/{userId}/{itemId}/{itemQuantity}")
-    public ResponseEntity<Object> buyItemAnyAmount(@PathVariable int userId, @PathVariable int itemId, @PathVariable int itemQuantity) {
+    @PostMapping("/buy_item_any_amount/{userID}/{itemID}/{itemQuantity}")
+    public ResponseEntity<Object> buyItemAnyAmount(@PathVariable int userID, @PathVariable int itemID, @PathVariable int itemQuantity) {
         try {
-            String buyResult = userItemService.butItemAnyAmount(userId, itemId, itemQuantity);
+            String buyResult = userItemService.butItemAnyAmount(userID, itemID, itemQuantity);
             return NoDataResponse.noDataResponse(HttpStatus.OK, buyResult);
         } catch (InvalidItemQuantityException | InsufficientCreditException e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -70,10 +67,10 @@ public class UserItemController {
     }
 
     //Buy Item one at a time
-    @PostMapping("/buy_item_single/{userId}/{itemId}")
-    public ResponseEntity<Object> buyItemSingle(@PathVariable int userId, @PathVariable int itemId) {
+    @PostMapping("/buy_item_single/{userID}/{itemID}")
+    public ResponseEntity<Object> buyItemSingle(@PathVariable int userID, @PathVariable int itemID) {
         try {
-            String buyResult = userItemService.buyItemSingle(userId, itemId);
+            String buyResult = userItemService.buyItemSingle(userID, itemID);
             return NoDataResponse.noDataResponse(HttpStatus.OK, buyResult);
         } catch (InsufficientCreditException e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -84,10 +81,10 @@ public class UserItemController {
         }
     }
 
-    @PutMapping("/use_item/{userId}/{itemId}")
-    public ResponseEntity<Object> useUserItem(@PathVariable int userId, @PathVariable int itemId) {
+    @PutMapping("/use_item/{userID}/{itemID}")
+    public ResponseEntity<Object> useUserItem(@PathVariable int userID, @PathVariable int itemID) {
         try {
-            String msg = userItemService.useUserItem(userId, itemId);
+            String msg = userItemService.useUserItem(userID, itemID);
             return Response.response(HttpStatus.OK, "User item used successfully", msg);
         } catch (InvalidItemQuantityException e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -96,12 +93,12 @@ public class UserItemController {
         }
     }
 
-    @GetMapping("/get_user_item_id_by/{userId}/{itemId}")
-    public ResponseEntity<Object> getUserItemIdByUserIdAndItemId(@PathVariable int userId,@PathVariable int itemId){
+    @GetMapping("/get_user_item_id_by/{userID}/{itemID}")
+    public ResponseEntity<Object> getUserItemIdByUserIdAndItemId(@PathVariable int userID,@PathVariable int itemID){
         try {
-            Optional<Integer> userItemId = userItemService.getUserItemIdByUserIdAndItemId(userId, itemId);
-            if(userItemId.isPresent()){
-                return Response.response(HttpStatus.OK, "User item ID retrieved successfully", userItemId.get());
+            Optional<Integer> userItemID = userItemService.getUserItemIdByUserIdAndItemId(userID, itemID);
+            if(userItemID.isPresent()){
+                return Response.response(HttpStatus.OK, "User item ID retrieved successfully", userItemID.get());
             } else {
                 return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "User item ID not found");
             }
@@ -126,10 +123,10 @@ public class UserItemController {
     }
 
     //Update
-    @PutMapping("/update_user_item/{user_item_id}")
-    public ResponseEntity<Object> updateUserItem(@PathVariable int user_item_id, @RequestBody UserItemEntity new_user_item_details) {
+    @PutMapping("/update_user_item/{userItemID}")
+    public ResponseEntity<Object> updateUserItem(@PathVariable int userItemID, @RequestBody UserItemEntity newUserItemDetails) {
         try {
-            UserItemEntity updatedUserItem = userItemService.updateUserItem(user_item_id, new_user_item_details);
+            UserItemEntity updatedUserItem = userItemService.updateUserItem(userItemID, newUserItemDetails);
             if (updatedUserItem != null) {
                 return Response.response(HttpStatus.OK, "User item updated successfully", updatedUserItem);
             } else {
@@ -141,10 +138,10 @@ public class UserItemController {
     }
 
     //Delete
-    @DeleteMapping("/delete_user_item/{user_item_id}")
-    public ResponseEntity<Object> deleteUserItem(@PathVariable int user_item_id) {
+    @DeleteMapping("/delete_user_item/{userItemID}")
+    public ResponseEntity<Object> deleteUserItem(@PathVariable int userItemID) {
         try {
-            String deletionResult = userItemService.deleteUserItem(user_item_id);
+            String deletionResult = userItemService.deleteUserItem(userItemID);
             if (deletionResult.equals("User item deleted successfully")) {
                 return ResponseEntity.ok().body(deletionResult);
             } else {

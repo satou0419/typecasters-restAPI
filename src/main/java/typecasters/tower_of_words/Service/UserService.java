@@ -21,19 +21,19 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     @Autowired
-    UserRepository urepo;
+    UserRepository userRepository;
 
     @Autowired
-    UserDetailsRepository ud_repo;
+    UserDetailsRepository userDetailsRepository;
 
     @Autowired
-    UserDetailsService ud_serv;
+    UserDetailsService userDetailsService;
 
 
     @Transactional
     public String registerUser(UserEntity user) {
         try {
-            if (urepo.findOneByUsername(user.getUsername()) != null) {
+            if (userRepository.findOneByUsername(user.getUsername()) != null) {
                 throw new IllegalArgumentException("Username already exists");
             }else if(!isValidUsername(user.getUsername())) {
                 throw new IllegalArgumentException("Username must be at least 3 characters long and may optionally contain a dot (.) or underscore (_) followed by one or more lowercase letters.");
@@ -41,15 +41,14 @@ public class UserService {
                 throw new IllegalArgumentException("Password must be at least 8 characters and have at least one lowercase letter, one uppercase letter, one digit, and one special character");
             }else{
                 user.setIsLoggedIn(false);  // Ensure isLoggedIn is set to false
-                int userId = urepo.save(user).getUserID();
-                ud_serv.initUserDetails(userId);
+                int userId = userRepository.save(user).getUserID();
+                userDetailsService.initUserDetails(userId);
 
                 return "Registration Successful";
             }
 
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
-            // Catch the exception and return the error message
             return ex.getMessage();
         }
     }
@@ -69,27 +68,9 @@ public class UserService {
         return password.length() >= 8 && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d\\s]).+$");
     }
 
-
-    // Login
-//    @SuppressWarnings("finally")
-//    public int login(LoginRequest logReq) {
-//
-//
-//        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
-//        if (user == null) {
-//            throw new UsernameNotFoundException("Username cannot be found!");
-//        }
-//
-//        if (!user.getPassword().equals(logReq.getPassword())) {
-//            throw new IncorrectPasswordException("Incorrect password.");
-//        }
-//        user.setIsLoggedIn(true);
-//        return user.getUserID();
-//    }
-
     @Transactional
     public LoginResponse login(LoginRequest logReq) {
-        UserEntity user = urepo.findOneByUsername(logReq.getUsername());
+        UserEntity user = userRepository.findOneByUsername(logReq.getUsername());
         if (user == null) {
             throw new UsernameNotFoundException("Username cannot be found!");
         }
@@ -98,29 +79,29 @@ public class UserService {
             throw new IncorrectPasswordException("Incorrect password.");
         }
         user.setIsLoggedIn(true);
-        urepo.save(user);
+        userRepository.save(user);
         return new LoginResponse(user.getUserID(), user.getIsLoggedIn());
     }
 
     @Transactional
     public void logout(int userId) {
-        UserEntity user = urepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
         user.setIsLoggedIn(false);
 
         if(user.getIsLoggedIn() == false){
             throw new LoggedOutException("User is already logged out!");
         }
-        urepo.save(user);
+        userRepository.save(user);
     }
 
     //Account Edit
     @Transactional
     public void editAccount(UserEntity newUserInfo, int uid) {
         try {
-            if (!urepo.existsById(uid)) {
+            if (!userRepository.existsById(uid)) {
                 throw new NoSuchElementException("User id does not exist");
             } else {
-                urepo.updateUserInfo(newUserInfo.getFirstname(), newUserInfo.getLastname(), uid);
+                userRepository.updateUserInfo(newUserInfo.getFirstname(), newUserInfo.getLastname(), uid);
             }
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException(e);
@@ -131,7 +112,7 @@ public class UserService {
         UserEntity user = new UserEntity();
 
         try{
-            user = urepo.findById(user_id).get();
+            user = userRepository.findById(user_id).get();
 
             if(user == null){
                 throw new NoSuchElementException("User id doest not exist");
@@ -144,7 +125,7 @@ public class UserService {
     }
 
     public int findUserIdByUsername(String username) {
-        UserEntity user = urepo.findOneByUsername(username);
+        UserEntity user = userRepository.findOneByUsername(username);
         if (user == null) {
             throw new NoSuchElementException("User not found");
         }
@@ -155,8 +136,8 @@ public class UserService {
         UserEntity user = new UserEntity();
         UserDetailsEntity userDetails = new UserDetailsEntity();
         try{
-            user = urepo.findById(userId).get();
-            userDetails = ud_repo.findOneByUserID(userId);
+            user = userRepository.findById(userId).get();
+            userDetails = userDetailsRepository.findOneByUserID(userId);
 
             return new UserInfoAndDetails(
                     user.getUserType(),
@@ -176,7 +157,7 @@ public class UserService {
         UserEntity user = new UserEntity();
 
         try{
-            user = urepo.findById(userId).get();
+            user = userRepository.findById(userId).get();
 
             if(user.getPassword().equals(oldPassword)){
                 if (!isValidPassword(newPassword)) {
@@ -184,7 +165,7 @@ public class UserService {
                 }
 
                 user.setPassword(newPassword);
-                urepo.save(user);
+                userRepository.save(user);
                 return true;
             }else{
                 return false;
@@ -197,28 +178,10 @@ public class UserService {
 
     //findTest
     public UserEntity testFind(String username){
-        return urepo.findOneByUsername(username);
+        return userRepository.findOneByUsername(username);
     }
 
     public boolean checkUserIfExist(String username) {
-        return urepo.findByUsername(username).isPresent();
+        return userRepository.findByUsername(username).isPresent();
     }
-
-//    public String deleteItem(int item_id) {
-//        String msg = "";
-//
-//        if(itemRepository.findById(item_id).isPresent()) {
-//            itemRepository.deleteById(item_id);
-//
-//            msg = "Item " + item_id + " is successfully deleted!";
-//        }
-//
-//        return msg;
-//    }
-
-//    public String deleteUser(int user_id){
-//        String msg = "";
-//
-//
-//    }
 }

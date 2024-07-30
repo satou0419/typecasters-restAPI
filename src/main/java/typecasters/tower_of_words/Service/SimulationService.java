@@ -3,10 +3,7 @@ package typecasters.tower_of_words.Service;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import typecasters.tower_of_words.Entity.*;
-import typecasters.tower_of_words.Repository.RoomRepository;
-import typecasters.tower_of_words.Repository.SimulationAttemptsRepository;
-import typecasters.tower_of_words.Repository.SimulationRepository;
-import typecasters.tower_of_words.Repository.UserRepository;
+import typecasters.tower_of_words.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +33,8 @@ public class SimulationService {
     @Autowired
     @Lazy
     private StudentWordProgressService studentWordProgressService;
+    @Autowired
+    private SimulationWordsRepository simulationWordsRepository;
 
     @Transactional
     public SimulationEntity createSimulation(SimulationEntity simulation) {
@@ -54,7 +53,8 @@ public class SimulationService {
         // Generate SimulationWordAssessment
         List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
         for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
-            for (SimulationWordsEntity word : enemy.getWords()) {
+            for (Integer ID : enemy.getWords()) {
+                SimulationWordsEntity word = simulationWordsRepository.findById(ID).get();
                 SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
                 assessment.setSimulationID(simulation.getSimulationID());
                 assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());

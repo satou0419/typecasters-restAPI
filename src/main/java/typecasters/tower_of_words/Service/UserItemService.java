@@ -38,44 +38,44 @@ public class UserItemService {
         return userItemRepository.findById(userItemId);
     }
 
-    public Optional<Integer> getUserItemIdByUserIdAndItemId(int userId, int itemId){
+    public Optional<Integer> getUserItemIdByUserIdAndItemId(int userID, int itemID){
         ItemEntity itemEntity = new ItemEntity();
-        itemEntity.setItemID(itemId);
-        return userItemRepository.findUserItemIDByUserIDAndItemID(userId, itemEntity);
+        itemEntity.setItemID(itemID);
+        return userItemRepository.findUserItemIDByUserIDAndItemID(userID, itemEntity);
     }
 
-    public List<UserItemEntity> getUserItemByUserId(int userId) {
-        return userItemRepository.findAllByUserID(userId);
+    public List<UserItemEntity> getUserItemByUserId(int userID) {
+        return userItemRepository.findAllByUserID(userID);
     }
 
-    public Optional <UserItemEntity> getUserItemByUserIdAndItemId(int userId, int itemId){
+    public Optional <UserItemEntity> getUserItemByUserIdAndItemId(int userID, int itemID){
         ItemEntity itemEntity = new ItemEntity();
-        itemEntity.setItemID(itemId);
-        return userItemRepository.findOneByUserIDAndItemID(userId, itemEntity);
+        itemEntity.setItemID(itemID);
+        return userItemRepository.findOneByUserIDAndItemID(userID, itemEntity);
     }
 
     @SuppressWarnings({"finally", "ReturnInsideFinallyBlock"})
-    public UserItemEntity updateUserItem(int userItemId, UserItemEntity newUserItemDetails){
+    public UserItemEntity updateUserItem(int userItemID, UserItemEntity newUserItemDetails){
 
         UserItemEntity user_item = new UserItemEntity();
 
         try {
-            user_item = userItemRepository.findById(userItemId).get();
+            user_item = userItemRepository.findById(userItemID).get();
 
             user_item.setQuantity(newUserItemDetails.getQuantity());
         } catch (NoSuchElementException ex){
-            throw new NoSuchElementException ("User Item " + userItemId + " does not exist.");
+            throw new NoSuchElementException ("User Item " + userItemID + " does not exist.");
         }finally {
             return  userItemRepository.save(user_item);
         }
     }
 
-    public String deleteUserItem(int user_item_id){
+    public String deleteUserItem(int userItemID){
         String msg = "";
 
-        if(userItemRepository.findById(user_item_id).isPresent()){
-            userItemRepository.deleteById(user_item_id);
-            msg = "Item "+ user_item_id + "is successfully deleted!";
+        if(userItemRepository.findById(userItemID).isPresent()){
+            userItemRepository.deleteById(userItemID);
+            msg = "Item "+ userItemID + "is successfully deleted!";
         }
 
         return msg;
@@ -83,26 +83,25 @@ public class UserItemService {
 
     // Buy item At Any Amount ( 1 to * )
     @Transactional
-    public String butItemAnyAmount(int userId, int itemId, int itemQuantity) {
+    public String butItemAnyAmount(int userID, int itemID, int itemQuantity) {
         UserDetailsEntity userDetails = null;
         ItemEntity item = null;
 
         try {
-            userDetails = userDetailsService.getUserDetails(userId);
-            item = itemService.getItem(itemId);
+            userDetails = userDetailsService.getUserDetails(userID);
+            item = itemService.getItem(itemID);
             int totalAmountOfItemPurchased = getTotalAmountOfItemPurchased(itemQuantity, item, userDetails);
 
             userDetailsService.updateUserCredit(userDetails.getUserDetailsID(), -(totalAmountOfItemPurchased));
 
-            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
+            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userID, itemID);
 
             if (existingUserItemObject.isPresent()) {
                 UserItemEntity existingUserItem = existingUserItemObject.get();
                 int newQuantity = existingUserItem.getQuantity() + itemQuantity;
                 existingUserItem.setQuantity(newQuantity);
-//                userItemRepository.saveAndFlush(existingUserItem);
             } else {
-                UserItemEntity userItem = new UserItemEntity(itemQuantity, userId, item);
+                UserItemEntity userItem = new UserItemEntity(itemQuantity, userID, item);
                 insertUserItem(userItem);
             }
 
@@ -118,10 +117,10 @@ public class UserItemService {
     }
 
     @Transactional
-    public String buyItemSingle(int userId, int itemId) {
+    public String buyItemSingle(int userID, int itemID) {
         try {
-            UserDetailsEntity userDetails = userDetailsService.getUserDetails(userId);
-            ItemEntity item = itemService.getItem(itemId);
+            UserDetailsEntity userDetails = userDetailsService.getUserDetails(userID);
+            ItemEntity item = itemService.getItem(itemID);
             int itemPrice = item.getPrice();
 
             if (userDetails.getCreditAmount() < itemPrice) {
@@ -130,13 +129,13 @@ public class UserItemService {
 
             userDetailsService.updateUserCredit(userDetails.getUserDetailsID(), -itemPrice);
 
-            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
+            Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userID, itemID);
             if (existingUserItemObject.isPresent()) {
                 UserItemEntity existingUserItem = existingUserItemObject.get();
                 existingUserItem.setQuantity(existingUserItem.getQuantity() + 1);
                 userItemRepository.save(existingUserItem);
             } else {
-                UserItemEntity userItem = new UserItemEntity(1, userId, item);
+                UserItemEntity userItem = new UserItemEntity(1, userID, item);
                 insertUserItem(userItem);
             }
 
@@ -166,8 +165,8 @@ public class UserItemService {
     }
 
 
-    public String useUserItem(int userId, int itemId){
-        Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userId, itemId);
+    public String useUserItem(int userID, int itemID){
+        Optional<UserItemEntity> existingUserItemObject = getUserItemByUserIdAndItemId(userID, itemID);
         if(existingUserItemObject.isPresent()){
 
             UserItemEntity existingUserItem = existingUserItemObject.get();

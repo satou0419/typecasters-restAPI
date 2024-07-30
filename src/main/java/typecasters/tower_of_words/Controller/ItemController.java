@@ -42,10 +42,10 @@ public class ItemController {
     }
 
     // Read One
-    @GetMapping("/get_item_by_id/{itemId}")
-    public ResponseEntity<Object> getItem(@PathVariable int itemId) {
+    @GetMapping("/get_item_by_id/{itemID}")
+    public ResponseEntity<Object> getItem(@PathVariable int itemID) {
         try {
-            ItemEntity item = itemServ.getItem(itemId);
+            ItemEntity item = itemServ.getItem(itemID);
             return Response.response(HttpStatus.OK, "Item retrieved successfully", item);
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Item not found");
@@ -55,10 +55,10 @@ public class ItemController {
     }
 
     // Update
-    @PutMapping("/update_item/{item_id}")
-    public ResponseEntity<Object> updateItem(@PathVariable int item_id, @RequestBody ItemEntity newItemDetails) {
+    @PutMapping("/update_item/{itemID}")
+    public ResponseEntity<Object> updateItem(@PathVariable int itemID, @RequestBody ItemEntity newItemDetails) {
         try {
-            ItemEntity updatedItem = itemServ.updateItem(item_id, newItemDetails);
+            ItemEntity updatedItem = itemServ.updateItem(itemID, newItemDetails);
             return Response.response(HttpStatus.OK, "Item updated successfully", updatedItem);
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Item not found");
@@ -68,10 +68,10 @@ public class ItemController {
     }
 
     // Delete
-    @DeleteMapping("/delete_item/{item_id}")
-    public ResponseEntity<Object> deleteItem(@PathVariable int item_id) {
+    @DeleteMapping("/delete_item/{itemID}")
+    public ResponseEntity<Object> deleteItem(@PathVariable int itemID) {
         try {
-            String message = itemServ.deleteItem(item_id);
+            String message = itemServ.deleteItem(itemID);
             return NoDataResponse.noDataResponse(HttpStatus.OK, message);
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Item not found");
