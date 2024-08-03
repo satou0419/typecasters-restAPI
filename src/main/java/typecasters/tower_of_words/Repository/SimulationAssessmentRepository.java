@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface SimulationAssessmentRepository extends JpaRepository<SimulationAssessmentEntity, Integer> {
 
     @Query("SELECT sa FROM SimulationAssessmentEntity sa WHERE simulationID = ?1")
-    SimulationAssessmentEntity findOneBySimulationID(int simulationID);
+    Optional<SimulationAssessmentEntity> findOneBySimulationID(int simulationID);
 
     @Query("SELECT sa FROM SimulationAssessmentEntity sa WHERE simulationID = ?1 AND simulationAssessmentID = ?2")
     Optional<SimulationAssessmentEntity> findOneBySimulationIDANDSimulationAssessmentID(int simulationID, int simulationAssessmentID);

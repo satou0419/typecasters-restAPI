@@ -40,7 +40,7 @@ public class SimulationAssessmentService {
         return simulationAssessmentRepository.findById(simulationAssessmentID);
     }
 
-    public SimulationAssessmentEntity getSimulationAssessmentBySimulationID(int simulationID){
+    public Optional<SimulationAssessmentEntity> getSimulationAssessmentBySimulationID(int simulationID){
         SimulationEntity simulation = simulationRepository.findById(simulationID)
                 .orElseThrow(() -> new NoSuchElementException("Simulation with this ID = " + simulationID + " does not exist!"));
 
