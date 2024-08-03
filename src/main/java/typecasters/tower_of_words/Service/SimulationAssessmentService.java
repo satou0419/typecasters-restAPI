@@ -67,11 +67,10 @@ public class SimulationAssessmentService {
 
     public void deleteSimulationAssessment(int simulationAssessmentID) {
         if (getSimulationAssessmentByID(simulationAssessmentID).isPresent()){
-        simulationAssessmentRepository.deleteById(simulationAssessmentID);
+            simulationAssessmentRepository.deleteById(simulationAssessmentID);
         }else{
             throw new NoSuchElementException("Simulation Assessment ID#" + simulationAssessmentID + " does not exist!");
         }
     }
-
 }
 
