@@ -49,6 +49,18 @@ public class SimulationWordAssessmentController {
         }
     }
 
+    @GetMapping("/view_all_word_assessment_by/simulation/{simulationID}")
+    public ResponseEntity<Object> getAllBySimulationID(@PathVariable int simulationID){
+        try{
+            List<SimulationWordAssessmentEntity> assessment = simulationWordAssessmentService.getAllBySimulationID(simulationID);
+            return Response.response(HttpStatus.OK, "List of Word Assessment by Simulation ID " + simulationID + "!", assessment);
+        }catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }catch (Exception e){
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     @PutMapping("/edit")
     public ResponseEntity<Object> updateWordAssessment(@RequestBody SimulationWordAssessmentEntity word) {
         try {

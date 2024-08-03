@@ -27,6 +27,10 @@ public class SimulationWordAssessmentService {
         return simulationWordAssessmentRepository.findById(id);
     }
 
+    public List<SimulationWordAssessmentEntity> getAllBySimulationID(int simulationID){
+        return simulationWordAssessmentRepository.findAllBySimulationID(simulationID);
+    }
+
     @Transactional
     public SimulationWordAssessmentEntity setWordAssessment(SimulationWordAssessmentEntity word) {
         SimulationWordAssessmentEntity edit = new SimulationWordAssessmentEntity();

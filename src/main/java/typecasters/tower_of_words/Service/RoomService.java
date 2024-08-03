@@ -119,25 +119,7 @@ public class RoomService {
         simulation.addParticipants(participant);
         simulationRepository.save(simulation);
 
-        // Generate SimulationWordAssessment
-        List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
-        for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
-            for (Integer wordID : enemy.getWords()) {
-                SimulationWordsEntity word = simulationWordsRepository.findById(wordID)
-                        .orElseThrow(() -> new NoSuchElementException("Word " + wordID + " does not exist!"));
-
-                assessments.add(new SimulationWordAssessmentEntity(
-                        simulation.getSimulationID(),
-                        enemy.getSimulationEnemyID(),
-                        word.getSimulationWordsID(),
-                        0,  // Accuracy
-                        0,  // Attempts
-                        0,  // Score
-                        0   // Duration
-                ));
-            }
-        }
-        simulationWordAssessmentService.addWordAssessments(assessments);
+        List<SimulationWordAssessmentEntity> assessments = simulationWordAssessmentService.getAllBySimulationID(simulation.getSimulationID());
 
         // Generate StudentWordProgress
         List<StudentWordProgressEntity> progressList = new ArrayList<>();
