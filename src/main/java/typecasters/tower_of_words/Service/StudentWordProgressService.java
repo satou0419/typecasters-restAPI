@@ -1,14 +1,9 @@
 package typecasters.tower_of_words.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import typecasters.tower_of_words.Entity.*;
-import typecasters.tower_of_words.Repository.SimulationAttemptsRepository;
-import typecasters.tower_of_words.Repository.SimulationWordsRepository;
-import typecasters.tower_of_words.Repository.StudentWordProgressRepository;
-import typecasters.tower_of_words.Repository.UserRepository;
+import typecasters.tower_of_words.Repository.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,20 +15,18 @@ public class StudentWordProgressService {
     StudentWordProgressRepository studentWordProgressRepository;
 
     @Autowired
-    @Lazy
-    SimulationAttemptsRepository simulationAttemptsRepository;
+    SimulationRepository simulationRepository;
 
     @Autowired
     UserRepository userRepository;
 
-    public StudentWordProgressEntity addProgress(StudentWordProgressEntity progress, int simulationAttemptID) {
-        Optional<SimulationAttemptsEntity> attempt = simulationAttemptsRepository.findById(simulationAttemptID);
-        if(attempt.isPresent()){
-            SimulationAttemptsEntity attemptObject = attempt.get();
-            progress.setSimulationAttemptsID(attemptObject);
+    public StudentWordProgressEntity addProgress(StudentWordProgressEntity progress, int simulationID) {
+        Optional<SimulationEntity> ifExistSimulation = simulationRepository.findById(simulationID);
+        if(ifExistSimulation.isPresent()){
+            progress.setSimulationID(simulationID);
             return studentWordProgressRepository.save(progress);
         }else{
-            throw new NoSuchElementException("SimulationAttempt doesn't exist!");
+            throw new NoSuchElementException("Simulation doesn't exist!");
         }
 
     }
@@ -50,38 +43,38 @@ public class StudentWordProgressService {
         return studentWordProgressRepository.saveAll(progressList);
     }
 
-    public List<StudentWordProgressEntity> getAllByStudentIDAndSimulationAttemptsID(
+    public List<StudentWordProgressEntity> getAllByStudentIDAndSimulationID(
             int studentID,
-            int simulationAttemptsID)
+            int simulationID)
     {
-        SimulationAttemptsEntity attempt = simulationAttemptsRepository.findById(simulationAttemptsID)
-                .orElseThrow(() -> new NoSuchElementException("Current Simulation Attempt ID " + simulationAttemptsID + " does not exist!"));
+        SimulationEntity simulation = simulationRepository.findById(simulationID)
+                .orElseThrow(() -> new NoSuchElementException("Current Simulation ID " + simulationID + " does not exist!"));
 
         UserEntity user = userRepository.findById(studentID)
                 .orElseThrow(() -> new NoSuchElementException("Student " + studentID + " doesn't exist!"));
 
-        return studentWordProgressRepository.findAllByStudentIDAndSimulationAttemptsID(studentID, attempt);
+        return studentWordProgressRepository.findAllByStudentIDAndSimulationID(studentID, simulationID);
     }
 
-    public List<StudentWordProgressEntity> getAllBySimulationAttemptsID(
-            int simulationAttemptsID)
+    public List<StudentWordProgressEntity> getAllBySimulationID(
+            int simulationID)
     {
-        SimulationAttemptsEntity attempt = simulationAttemptsRepository.findById(simulationAttemptsID)
-                .orElseThrow(() -> new NoSuchElementException("Current Simulation Attempt ID " + simulationAttemptsID + " does not exist!"));
+        SimulationEntity simulation = simulationRepository.findById(simulationID)
+                .orElseThrow(() -> new NoSuchElementException("Current Simulation ID " + simulationID + " does not exist!"));
 
-        return studentWordProgressRepository.findAllBySimulationAttemptsID(attempt);
+        return studentWordProgressRepository.findAllBySimulationID(simulationID);
     }
 
     public List<StudentWordProgressEntity> getAllByStudentID(int studentID){
         return studentWordProgressRepository.findAllByStudentID(studentID);
     }
 
-    public StudentWordProgressEntity updateProgress(StudentWordProgressEntity progress, int simulationAttemptID) {
+    public StudentWordProgressEntity updateProgress(StudentWordProgressEntity progress, int simulationID) {
         StudentWordProgressEntity existingProgress = studentWordProgressRepository.findById(progress.getStudentWordProgressID())
                 .orElseThrow(() -> new NoSuchElementException("Current Student " + progress.getStudentID() + " Word Progress " + progress.getStudentWordProgressID() + " does not exist!"));
 
-        simulationAttemptsRepository.findById(simulationAttemptID)
-                .orElseThrow(() -> new NoSuchElementException("Current Simulation Attempt ID " + simulationAttemptID + " does not exist!"));
+        SimulationEntity simulation = simulationRepository.findById(simulationID)
+                .orElseThrow(() -> new NoSuchElementException("Current Simulation ID " + simulationID + " does not exist!"));
 
         UserEntity user = userRepository.findById(progress.getStudentID())
                         .orElseThrow(() -> new NoSuchElementException("Current Student " + progress.getStudentID() + " doesn't exist!"));

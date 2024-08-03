@@ -23,9 +23,9 @@ public class SimulationAttemptsEntity {
 
     private int simulationID;
 
-    @ManyToOne
-    @JoinColumn(name = "simulationParticipantsID")
-    private SimulationParticipantsEntity simulationParticipantsID;
+//    @ManyToOne
+//    @JoinColumn(name = "simulationParticipantsID")
+//    private SimulationParticipantsEntity simulationParticipantsID;
 
     private int currentAttempt;
 
@@ -37,25 +37,25 @@ public class SimulationAttemptsEntity {
 
     private boolean isDone;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "simulationAttemptsID", cascade = CascadeType.ALL)
-    private List<StudentWordProgressEntity> wordsProgress = new ArrayList<>();
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "simulationAttemptsID", cascade = CascadeType.ALL)
+//    private List<StudentWordProgressEntity> wordsProgress = new ArrayList<>();
 
-    public SimulationAttemptsEntity(
-            int simulationID,
-            SimulationParticipantsEntity simulationParticipantsID,
-            int currentAttempt,
-            double currentAccuracy,
-            int currentScore,
-            double currentDuration,
-            boolean isDone)
-    {
-        this.simulationID = simulationID;
-        this.simulationParticipantsID = simulationParticipantsID;
-        this.currentAttempt = currentAttempt;
-        this.currentAccuracy = currentAccuracy;
-        this.currentScore = currentScore;
-        this.currentDuration = currentDuration;
-        this.isDone = isDone;
-    }
+//    public SimulationAttemptsEntity(
+//            int simulationID,
+////            SimulationParticipantsEntity simulationParticipantsID,
+//            int currentAttempt,
+//            double currentAccuracy,
+//            int currentScore,
+//            double currentDuration,
+//            boolean isDone)
+//    {
+//        this.simulationID = simulationID;
+////        this.simulationParticipantsID = simulationParticipantsID;
+//        this.currentAttempt = currentAttempt;
+//        this.currentAccuracy = currentAccuracy;
+//        this.currentScore = currentScore;
+//        this.currentDuration = currentDuration;
+//        this.isDone = isDone;
+//    }
 }

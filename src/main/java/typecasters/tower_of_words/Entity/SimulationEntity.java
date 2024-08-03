@@ -36,7 +36,7 @@ public class SimulationEntity {
 
     private int studentLife;
 
-    private int numberOfAttempt;
+//    private int numberOfAttempt;
 
     private boolean items;
 

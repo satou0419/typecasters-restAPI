@@ -17,7 +17,9 @@ public class StudentWordProgressEntity {
 
     private int simulationWordsID;
 
-    private int studentID;
+    private int studentID; //This is assigned to simulationParticipantID
+
+    private int simulationID; //This is for identifier to which simulation it is assigned.
 
     private int mistake;
 
@@ -29,26 +31,26 @@ public class StudentWordProgressEntity {
 
     private double accuracy;
 
-    @ManyToOne
-    @JoinColumn(name = "simulationAttemptsID")
-    private SimulationAttemptsEntity simulationAttemptsID;
+//    @ManyToOne
+//    @JoinColumn(name = "simulationAttemptsID")
+//    private SimulationAttemptsEntity simulationAttemptsID;
 
     public StudentWordProgressEntity(
             int simulationWordsID,
             int studentID,
+            int simulationID,
             int mistake,
             boolean isCorrect,
             int score,
             int duration,
-            double accuracy,
-            SimulationAttemptsEntity simulationAttemptsID) {
+            double accuracy) {
         this.simulationWordsID = simulationWordsID;
         this.studentID = studentID;
+        this.simulationID = simulationID;
         this.mistake = mistake;
         this.isCorrect = isCorrect;
         this.score = score;
         this.duration = duration;
         this.accuracy = accuracy;
-        this.simulationAttemptsID = simulationAttemptsID;
     }
 }

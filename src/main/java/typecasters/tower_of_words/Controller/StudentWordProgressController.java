@@ -22,12 +22,12 @@ public class StudentWordProgressController {
     @Autowired
     private StudentWordProgressService studentWordProgressService;
 
-    @PostMapping("/insert/{simulationAttemptID}")
+    @PostMapping("/insert/{simulationID}")
     public ResponseEntity<Object> addProgress(
             @RequestBody StudentWordProgressEntity progress,
-            @PathVariable int simulationAttemptID) {
+            @PathVariable int simulationID) {
         try {
-            StudentWordProgressEntity insertedProgress = studentWordProgressService.addProgress(progress, simulationAttemptID);
+            StudentWordProgressEntity insertedProgress = studentWordProgressService.addProgress(progress, simulationID);
             return Response.response(HttpStatus.OK, "Progress added successfully", insertedProgress);
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -68,13 +68,13 @@ public class StudentWordProgressController {
         }
     }
 
-    @GetMapping("/view_all_by/student/{studentID}/simulationAttempt/{simulationAttemptsID}")
-    public ResponseEntity<Object> getAllByStudentIDAndSimulationAttemptsID(
+    @GetMapping("/view_all_by/student/{studentID}/simulation/{simulationID}")
+    public ResponseEntity<Object> getAllByStudentIDAndSimulationID(
             @PathVariable int studentID,
-            @PathVariable int simulationAttemptsID)
+            @PathVariable int simulationID)
     {
         try{
-            List<StudentWordProgressEntity> wordProgress = studentWordProgressService.getAllByStudentIDAndSimulationAttemptsID(studentID, simulationAttemptsID);
+            List<StudentWordProgressEntity> wordProgress = studentWordProgressService.getAllByStudentIDAndSimulationID(studentID, simulationID);
             return Response.response(HttpStatus.OK, "Progress retrieved successfully!", wordProgress);
         }catch (NoSuchElementException ex){
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -83,12 +83,12 @@ public class StudentWordProgressController {
         }
     }
 
-    @GetMapping("/view_all_by/simulationAttempt/{simulationAttemptsID}")
-    public ResponseEntity<Object> getAllBySimulationAttemptsID(
-            @PathVariable int simulationAttemptsID)
+    @GetMapping("/view_all_by/simulation/{simulationID}")
+    public ResponseEntity<Object> getAllBySimulationID(
+            @PathVariable int simulationID)
     {
         try{
-            List<StudentWordProgressEntity> wordProgress = studentWordProgressService.getAllBySimulationAttemptsID(simulationAttemptsID);
+            List<StudentWordProgressEntity> wordProgress = studentWordProgressService.getAllBySimulationID(simulationID);
             return Response.response(HttpStatus.OK,"Progress retrieved successfully!", wordProgress);
         }catch (NoSuchElementException ex){
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -97,12 +97,12 @@ public class StudentWordProgressController {
         }
     }
 
-    @PutMapping("/edit/{simulationAttemptID}")
+    @PutMapping("/edit/{simulationID}")
     public ResponseEntity<Object> updateProgress(
             @RequestBody StudentWordProgressEntity progress,
-            @PathVariable int simulationAttemptID) {
+            @PathVariable int simulationID) {
         try {
-            StudentWordProgressEntity updatedProgress = studentWordProgressService.updateProgress(progress, simulationAttemptID);
+            StudentWordProgressEntity updatedProgress = studentWordProgressService.updateProgress(progress, simulationID);
             return Response.response(HttpStatus.OK, "Progress updated successfully", updatedProgress);
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());

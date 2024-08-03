@@ -25,8 +25,8 @@ public class RoomService {
     @Autowired
     SimulationWordAssessmentService simulationWordAssessmentService;
 
-    @Autowired
-    SimulationAttemptsService simulationAttemptsService;
+//    @Autowired
+//    SimulationAttemptsService simulationAttemptsService;
 
     @Autowired
     StudentWordProgressService studentWordProgressService;
@@ -81,6 +81,11 @@ public class RoomService {
     @Transactional
     public RoomEntity joinRoom(Integer userID, String code) {
         RoomEntity room = roomRepository.findByCode(code);
+
+        if (room == null) {
+            throw new NoSuchElementException("Room with code " + code + " does not exist");
+        }
+
         List<SimulationEntity> simulations = simulationRepository.findAllByRoomID(room);
         LocalDateTime now = LocalDateTime.now();
 
@@ -99,9 +104,17 @@ public class RoomService {
     }
 
     private void addStudentToSimulation(Integer userID, SimulationEntity simulation) {
-        SimulationParticipantsEntity participant = new SimulationParticipantsEntity();
-        participant.setUserID(userID);
-        participant.setSimulationID(simulation);
+        SimulationParticipantsEntity participant = new SimulationParticipantsEntity(
+                userID, // userID
+                0, // currentAttempts
+                0, // mistakes
+                0, // score
+                0, // duration
+                0, // accuracy
+                false, // isDone
+                simulation
+        );
+
         participant = simulationParticipantsService.addParticipant(participant); // Ensure participant is saved before use
         simulation.addParticipants(participant);
         simulationRepository.save(simulation);
@@ -109,48 +122,40 @@ public class RoomService {
         // Generate SimulationWordAssessment
         List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
         for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
-            for (Integer ID : enemy.getWords()) {
-                SimulationWordsEntity word = simulationWordsRepository.findById(ID).get();
-                SimulationWordAssessmentEntity assessment = new SimulationWordAssessmentEntity();
-                assessment.setSimulationID(simulation.getSimulationID());
-                assessment.setSimulationEnemyID(enemy.getSimulationEnemyID());
-                assessment.setSimulationWordID(word.getSimulationWordsID());
-                assessment.setAccuracy(0);
-                assessment.setAttempts(0);
-                assessment.setScore(0);
-                assessment.setDuration(0);
-                assessments.add(assessment);
+            for (Integer wordID : enemy.getWords()) {
+                SimulationWordsEntity word = simulationWordsRepository.findById(wordID)
+                        .orElseThrow(() -> new NoSuchElementException("Word " + wordID + " does not exist!"));
+
+                assessments.add(new SimulationWordAssessmentEntity(
+                        simulation.getSimulationID(),
+                        enemy.getSimulationEnemyID(),
+                        word.getSimulationWordsID(),
+                        0,  // Accuracy
+                        0,  // Attempts
+                        0,  // Score
+                        0   // Duration
+                ));
             }
         }
         simulationWordAssessmentService.addWordAssessments(assessments);
 
-        // Generate SimulationAttempts
-        List<SimulationAttemptsEntity> attemptsList = new ArrayList<>();
-        for (int i = 1; i <= simulation.getNumberOfAttempt(); i++) {
-            SimulationAttemptsEntity attempt = new SimulationAttemptsEntity();
-            attempt.setSimulationID(simulation.getSimulationID());
-            attempt.setSimulationParticipantsID(participant); // Use saved participant
-            attempt.setCurrentAttempt(i);
-            attemptsList.add(attempt);
-        }
-        simulationAttemptsService.saveAllAttempts(attemptsList);
-
         // Generate StudentWordProgress
         List<StudentWordProgressEntity> progressList = new ArrayList<>();
-        for (SimulationAttemptsEntity attempt : attemptsList) {
-            for (SimulationWordAssessmentEntity assessment : assessments) {
-                StudentWordProgressEntity progress = new StudentWordProgressEntity();
-                progress.setSimulationAttemptsID(attempt);
-                progress.setMistake(0);  // Default values
-                progress.setCorrect(false); // Default values
-                progress.setScore(0); // Default values
-                progress.setDuration(0); // Default values
-                progress.setAccuracy(0); // Default values
-                progressList.add(progress);
-            }
+        for (SimulationWordAssessmentEntity assessment : assessments) {
+            progressList.add(new StudentWordProgressEntity(
+                    assessment.getSimulationWordID(),
+                    userID, // studentID
+                    simulation.getSimulationID(),
+                    0, // Mistake
+                    false, // Correct
+                    0, // Score
+                    0, // Duration
+                    0  // Accuracy
+            ));
         }
         studentWordProgressService.addProgress(progressList);
     }
+
 
     public List<RoomEntity> viewCreatedRooms(int creatorID) {
         return roomRepository.findAllByCreatorID(creatorID);

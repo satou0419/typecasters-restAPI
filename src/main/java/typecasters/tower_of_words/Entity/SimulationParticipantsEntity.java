@@ -22,9 +22,9 @@ public class SimulationParticipantsEntity {
 
     private int userID;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "simulationParticipantsID", cascade = CascadeType.ALL)
-    private List<SimulationAttemptsEntity> attempts;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "simulationParticipantsID", cascade = CascadeType.ALL)
+//    private List<SimulationAttemptsEntity> attempts;
 
     private int currentAttempts;
 
@@ -42,4 +42,23 @@ public class SimulationParticipantsEntity {
     @ManyToOne
     @JoinColumn(name = "simulationID")
     private SimulationEntity simulationID;
+
+    public SimulationParticipantsEntity(
+            int userID,
+            int currentAttempts,
+            int mistakes,
+            int score,
+            double duration,
+            double accuracy,
+            boolean isDone,
+            SimulationEntity simulationID) {
+        this.userID = userID;
+        this.currentAttempts = currentAttempts;
+        this.mistakes = mistakes;
+        this.score = score;
+        this.duration = duration;
+        this.accuracy = accuracy;
+        this.isDone = isDone;
+        this.simulationID = simulationID;
+    }
 }

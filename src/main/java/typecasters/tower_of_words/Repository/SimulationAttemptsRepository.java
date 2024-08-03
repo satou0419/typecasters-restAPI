@@ -11,14 +11,14 @@ import java.util.Optional;
 @Repository
 public interface SimulationAttemptsRepository extends JpaRepository<SimulationAttemptsEntity, Integer> {
 
-    @Query("SELECT sa FROM SimulationAttemptsEntity sa WHERE sa.simulationID = ?1 AND sa.simulationParticipantsID = ?2 AND sa.currentAttempt = ?3")
-    Optional<SimulationAttemptsEntity> findOneBySimulationIDAndSimulationParticipantsID(
-            int simulationID,
-            int simulationParticipantsID,
-            int currentAttempt);
-
-    @Query("SELECT sa FROM SimulationAttemptsEntity sa WHERE sa.simulationID = ?1 AND sa.simulationParticipantsID = ?2")
-    List<SimulationAttemptsEntity> findBySimulationIDAndSimulationParticipantsID(
-            int simulationID,
-            int simulationParticipantsID);
+//    @Query("SELECT sa FROM SimulationAttemptsEntity sa WHERE sa.simulationID = ?1 AND sa.simulationParticipantsID = ?2 AND sa.currentAttempt = ?3")
+//    Optional<SimulationAttemptsEntity> findOneBySimulationIDAndSimulationParticipantsID(
+//            int simulationID,
+//            int simulationParticipantsID,
+//            int currentAttempt);
+//
+//    @Query("SELECT sa FROM SimulationAttemptsEntity sa WHERE sa.simulationID = ?1 AND sa.simulationParticipantsID = ?2")
+//    List<SimulationAttemptsEntity> findBySimulationIDAndSimulationParticipantsID(
+//            int simulationID,
+//            int simulationParticipantsID);
 }

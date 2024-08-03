@@ -117,17 +117,17 @@ public class SimulationController {
         }
     }
 
-    @GetMapping("/decrement_num_of_attempts_by/{simulationID}")
-    public ResponseEntity<Object> decrementAttempts(@PathVariable int simulationID){
-        try{
-            String attempt = simulationService.decrementAttempts(simulationID);
-            return NoDataResponse.noDataResponse(HttpStatus.OK, attempt);
-        }catch (NoSuchElementException ex){
-            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
-        }catch (IllegalArgumentException ex){
-            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-        }catch (Exception ex){
-            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-        }
-    }
+//    @GetMapping("/decrement_num_of_attempts_by/{simulationID}")
+//    public ResponseEntity<Object> decrementAttempts(@PathVariable int simulationID){
+//        try{
+//            String attempt = simulationService.decrementAttempts(simulationID);
+//            return NoDataResponse.noDataResponse(HttpStatus.OK, attempt);
+//        }catch (NoSuchElementException ex){
+//            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+//        }catch (IllegalArgumentException ex){
+//            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+//        }catch (Exception ex){
+//            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+//        }
+//    }
 }
