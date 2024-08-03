@@ -14,7 +14,7 @@ public class SimulationWeightedSettingsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int simulationWeightedID;
+    private int simulationWeightedSettingsID;
 
     private int creatorID; // teacherID
 

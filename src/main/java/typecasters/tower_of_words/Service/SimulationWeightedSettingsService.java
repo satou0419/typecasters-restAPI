@@ -54,8 +54,8 @@ public class SimulationWeightedSettingsService {
         return simulationWeightedSettingsRepository.findAll();
     }
 
-    public Optional<SimulationWeightedSettingsEntity> getSimulationWeightedSettingsByID(int simulationWeightedID){
-        return simulationWeightedSettingsRepository.findById(simulationWeightedID);
+    public Optional<SimulationWeightedSettingsEntity> getSimulationWeightedSettingsByID(int simulationWeightedSettingsID){
+        return simulationWeightedSettingsRepository.findById(simulationWeightedSettingsID);
     }
 
     public Optional<SimulationWeightedSettingsEntity> getSimulationWeightedSettingsByCreatorIDAndSimulationID(
@@ -87,11 +87,11 @@ public class SimulationWeightedSettingsService {
         return simulationWeightedSettingsRepository.save(existingSimulationWeightedSettings);
     }
 
-    public void deleteSimulationWeightedSettings(int simulationWeightedID){
-        if(getSimulationWeightedSettingsByID(simulationWeightedID).isPresent()){
-            simulationWeightedSettingsRepository.deleteById(simulationWeightedID);
+    public void deleteSimulationWeightedSettings(int simulationWeightedScoreID){
+        if(getSimulationWeightedSettingsByID(simulationWeightedScoreID).isPresent()){
+            simulationWeightedSettingsRepository.deleteById(simulationWeightedScoreID);
         }else{
-            throw new NoSuchElementException("Simulation Weighted Settings ID# " + simulationWeightedID + " does not exist!");
+            throw new NoSuchElementException("Simulation Weighted Settings ID# " + simulationWeightedScoreID + " does not exist!");
         }
     }
 }
