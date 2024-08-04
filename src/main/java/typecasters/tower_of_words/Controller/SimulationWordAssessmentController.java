@@ -61,10 +61,10 @@ public class SimulationWordAssessmentController {
         }
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<Object> updateWordAssessment(@RequestBody SimulationWordAssessmentEntity word) {
+    @PutMapping("/edit_by/simulation/{simulationID}/word/{wordID}")
+    public ResponseEntity<Object> updateWordAssessment(@RequestBody SimulationWordAssessmentEntity word, @PathVariable int simulationID, @PathVariable int wordID) {
         try {
-            SimulationWordAssessmentEntity updatedWord = simulationWordAssessmentService.setWordAssessment(word);
+            SimulationWordAssessmentEntity updatedWord = simulationWordAssessmentService.setWordAssessment(word, simulationID, wordID);
             return Response.response(HttpStatus.OK, "Word assessment updated successfully", updatedWord);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());

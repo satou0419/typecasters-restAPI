@@ -34,11 +34,11 @@ public class SimulationController {
         }
     }
 
-    @PostMapping("/clone_simulation")
-    public ResponseEntity<Object> cloneSimulation(@RequestBody SimulationEntity simulation) {
+    @PostMapping("/clone_simulation/simulation/{simulationID}/room/{roomID}")
+    public ResponseEntity<Object> cloneSimulation(@PathVariable int simulationID, @PathVariable int roomID) {
         try {
-            SimulationEntity createdSimulation = simulationService.createSimulation(simulation);
-            return Response.response(HttpStatus.OK, "Simulation cloned successfully", createdSimulation);
+            SimulationEntity createdSimulation = simulationService.cloneSimulation(simulationID, roomID);
+            return Response.response(HttpStatus.OK, "Simulation cloned successfully!", createdSimulation);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (NoSuchElementException | NullPointerException ex) {

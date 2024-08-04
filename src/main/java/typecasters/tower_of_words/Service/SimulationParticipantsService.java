@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Service;
 
+import jakarta.transaction.Transactional;
 import typecasters.tower_of_words.Entity.*;
 import typecasters.tower_of_words.Repository.SimulationParticipantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class SimulationParticipantsService {
     @Autowired
     RoomService roomService;
 
-
+    @Transactional
     public SimulationParticipantsEntity addParticipant(SimulationParticipantsEntity participant) {
         return simulationParticipantsRepository.save(participant);
     }
@@ -57,7 +58,7 @@ public class SimulationParticipantsService {
         return simulationParticipantsRepository.findOneBySimulationParticipantsIDAndSimulationID(simulationParticipantsID, simulationObject);
     }
 
-
+    @Transactional
     public SimulationParticipantsEntity updateParticipant(SimulationParticipantsEntity participant, int simulationID) {
         SimulationParticipantsEntity simulationAttempt = getOneBySimulationParticipantsIDAndSimulationID(participant.getSimulationParticipantsID(), simulationID)
                 .orElseThrow(() -> new NoSuchElementException("Simulation doesn't exist!"));
@@ -70,6 +71,7 @@ public class SimulationParticipantsService {
         return simulationParticipantsRepository.save(simulationAttempt);
     }
 
+    @Transactional
     public SimulationParticipantsEntity updateParticipantAttribute(int simulationParticipantID, int simulationID) {
         SimulationParticipantsEntity simulationParticipant = getOneBySimulationParticipantsIDAndSimulationID(simulationParticipantID, simulationID)
                 .orElseThrow(() -> new NoSuchElementException("Simulation Participant doesn't exist!"));
@@ -85,6 +87,7 @@ public class SimulationParticipantsService {
         return simulationParticipantsRepository.save(simulationParticipant);
     }
 
+    @Transactional
     private void updateSimulationParticipantFromProgress(SimulationParticipantsEntity participant, List<StudentWordProgressEntity> progressList, int creatorID) {
         int totalWords = progressList.size();
 

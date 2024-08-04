@@ -109,7 +109,9 @@ public class RoomService {
         return roomRepository.save(room);
     }
 
-    private void addStudentToSimulation(Integer userID, SimulationEntity simulation) {
+    private void addStudentToSimulation(Integer userID, SimulationEntity simulation)
+
+    {
         SimulationParticipantsEntity participant = new SimulationParticipantsEntity(
                 userID, // userID
                 0, // currentAttempts

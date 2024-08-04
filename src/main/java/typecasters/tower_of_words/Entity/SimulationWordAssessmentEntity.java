@@ -23,7 +23,7 @@ public class SimulationWordAssessmentEntity {
 
     private double accuracy;
 
-    private int attempts;
+    private double mistake;
 
     private int score;
 
@@ -34,7 +34,7 @@ public class SimulationWordAssessmentEntity {
             int simulationEnemyID,
             int simulationWordID,
             double accuracy,
-            int attempts,
+            double mistake,
             int score,
             int duration)
     {
@@ -42,7 +42,7 @@ public class SimulationWordAssessmentEntity {
         this.simulationEnemyID = simulationEnemyID;
         this.simulationWordID = simulationWordID;
         this.accuracy = accuracy;
-        this.attempts = attempts;
+        this.mistake = mistake;
         this.score = score;
         this.duration = duration;
     }
