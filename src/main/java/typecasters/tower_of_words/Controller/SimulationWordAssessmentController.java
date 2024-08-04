@@ -80,4 +80,14 @@ public class SimulationWordAssessmentController {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
+    @PatchMapping("/update_assessment_average/{simulationID}")
+    public ResponseEntity<Object> updateAssessmentAverage(@PathVariable int simulationID) {
+        try {
+            simulationWordAssessmentService.updateAssessmentAggregates(simulationID);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "Assessment average updated successfully!");
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }
