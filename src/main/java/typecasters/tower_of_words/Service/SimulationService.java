@@ -29,6 +29,9 @@ public class SimulationService {
     SimulationWordAssessmentService simulationWordAssessmentService;
 
     @Autowired
+    SimulationParticipantsRepository simulationParticipantsRepository;
+
+    @Autowired
     @Lazy
     private SimulationAttemptsService simulationAttemptsService;
 
@@ -57,6 +60,8 @@ public class SimulationService {
                0, // accuracy
                false, // isDone
                simulation);
+
+               user = simulationParticipantsRepository.save(user);
 
                simulation.addParticipants(user);
            }
