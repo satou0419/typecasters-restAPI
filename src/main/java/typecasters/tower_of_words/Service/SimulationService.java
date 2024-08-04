@@ -51,7 +51,6 @@ public class SimulationService {
            for (Integer i : room.get().getMembers()) {
                SimulationParticipantsEntity user = new SimulationParticipantsEntity(
                i, // userID
-               0, // currentAttempts
                0, // mistakes
                0, // score
                0, // duration

@@ -112,9 +112,9 @@ public class RoomService {
     private void addStudentToSimulation(Integer userID, SimulationEntity simulation)
 
     {
+
         SimulationParticipantsEntity participant = new SimulationParticipantsEntity(
                 userID, // userID
-                0, // currentAttempts
                 0, // mistakes
                 0, // score
                 0, // duration
