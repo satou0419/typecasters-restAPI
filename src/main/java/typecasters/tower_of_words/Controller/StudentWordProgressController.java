@@ -97,13 +97,29 @@ public class StudentWordProgressController {
         }
     }
 
-    @PutMapping("/edit/{simulationID}")
+    @PatchMapping("/edit/wordProgress/{studentWordProgressID}")
     public ResponseEntity<Object> updateProgress(
             @RequestBody StudentWordProgressEntity progress,
-            @PathVariable int simulationID) {
+            @PathVariable int studentWordProgressID) {
         try {
-            StudentWordProgressEntity updatedProgress = studentWordProgressService.updateProgress(progress, simulationID);
+            StudentWordProgressEntity updatedProgress = studentWordProgressService.updateProgress(progress, studentWordProgressID);
             return Response.response(HttpStatus.OK, "Progress updated successfully", updatedProgress);
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/view_one_by/student/{studentID}/simulation/{simulationID}/word/{simulationWordsID}")
+    public ResponseEntity<Object> getProgress(@PathVariable int studentID, @PathVariable int simulationID, @PathVariable int simulationWordsID) {
+        try {
+            Optional<StudentWordProgressEntity> progress = studentWordProgressService.getOneByStudentIDAndSimulationIDAndSimulationWordsID(studentID, simulationID, simulationWordsID);
+            if (progress.isPresent()) {
+                return Response.response(HttpStatus.OK, "Progress retrieved successfully", progress.get());
+            } else {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "No progress found for the given IDs");
+            }
+        } catch (NoSuchElementException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         }
