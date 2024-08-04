@@ -25,10 +25,10 @@ public class SimulationParticipantsEntity {
 //    @JsonIgnore
 //    @OneToMany(mappedBy = "simulationParticipantsID", cascade = CascadeType.ALL)
 //    private List<SimulationAttemptsEntity> attempts;
+//
+//    private int currentAttempts;
 
-    private int currentAttempts;
-
-    private int mistakes;
+    private double mistakes;
 
     private int score;
 
@@ -45,15 +45,13 @@ public class SimulationParticipantsEntity {
 
     public SimulationParticipantsEntity(
             int userID,
-            int currentAttempts,
-            int mistakes,
+            double mistakes,
             int score,
             double duration,
             double accuracy,
             boolean isDone,
             SimulationEntity simulationID) {
         this.userID = userID;
-        this.currentAttempts = currentAttempts;
         this.mistakes = mistakes;
         this.score = score;
         this.duration = duration;

@@ -1,6 +1,7 @@
 package typecasters.tower_of_words.Service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Lazy;
 import typecasters.tower_of_words.Entity.*;
 import typecasters.tower_of_words.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class RoomService {
     StudentWordProgressService studentWordProgressService;
 
     @Autowired
+    @Lazy
     SimulationParticipantsService simulationParticipantsService;
 
     @Autowired
@@ -76,6 +78,10 @@ public class RoomService {
         }
 
         return roomRepository.save(room);
+    }
+
+    public Optional<RoomEntity> findRoomBySimulationIDAndUserID(int simulationID, int userID) {
+        return roomRepository.findOneBySimulationIDAndUserID(simulationID, userID);
     }
 
     @Transactional

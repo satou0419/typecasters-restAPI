@@ -17,7 +17,7 @@ public class StudentWordProgressEntity {
 
     private int simulationWordsID;
 
-    private int studentID; //This is assigned to simulationParticipantID
+    private int studentID; //This is assigned to userID
 
     private int simulationID; //This is for identifier to which simulation it is assigned.
 

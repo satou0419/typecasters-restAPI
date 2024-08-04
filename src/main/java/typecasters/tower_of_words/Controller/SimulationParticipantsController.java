@@ -74,7 +74,7 @@ public class SimulationParticipantsController {
         }
     }
 
-    @PutMapping("/edit/simulation/{simulationID}")
+    @PatchMapping("/edit/simulation/{simulationID}")
     public ResponseEntity<Object> updateSimulationParticipant(@RequestBody SimulationParticipantsEntity participant, @PathVariable  int simulationID) {
         try {
             SimulationParticipantsEntity updatedParticipant = simulationParticipantsService.updateParticipant(participant, simulationID);
@@ -84,6 +84,22 @@ public class SimulationParticipantsController {
         }
     }
 
+
+    @PatchMapping("/update_average/participant/{participantID}/simulation/{simulationID}")
+    public ResponseEntity<Object> updateParticipantAttribute(
+            @PathVariable int participantID,
+            @PathVariable int simulationID) {
+        try {
+            SimulationParticipantsEntity updatedParticipant = simulationParticipantsService.updateParticipantAttribute(participantID, simulationID);
+            return Response.response(HttpStatus.OK, "Simulation participant updated successfully", updatedParticipant);
+        } catch (NoSuchElementException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+
     @DeleteMapping("/remove/{simulationParticipantsID}")
     public ResponseEntity<Object> deleteSimulationParticipant(@PathVariable int simulationParticipantsID) {
         try {
@@ -92,5 +108,7 @@ public class SimulationParticipantsController {
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
-        }
+    }
+
+
 }
