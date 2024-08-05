@@ -39,6 +39,9 @@ public class RoomService {
     @Autowired
     SimulationWordsRepository simulationWordsRepository;
 
+    @Autowired
+    SimulationAssessmentRepository simulationAssessmentRepository;
+
     public RoomEntity createRoom(RoomEntity room) {
         room.setCode(generateUniqueCode());
         return roomRepository.save(room);
@@ -77,6 +80,23 @@ public class RoomService {
             }
         }
 
+        for (SimulationEntity simulation : simulations) {
+            if (simulation.getDeadline() != null && now.isBefore(simulation.getDeadline())) {
+                SimulationAssessmentEntity assessment = simulationAssessmentRepository.findOneBySimulationID(simulation.getSimulationID())
+                        .orElse(new SimulationAssessmentEntity(
+                                simulation.getSimulationID(),
+                                0,  // totalParticipants
+                                0,  // numberOfParticipants
+                                0,  // missedTakers
+                                0.0, // simulationAccuracyRate
+                                0.0  // simulationDurationAverage
+                        ));
+                assessment.setTotalParticipants(assessment.getTotalParticipants() + 1);
+                simulationAssessmentRepository.save(assessment);
+            }
+        }
+
+
         return roomRepository.save(room);
     }
 
@@ -103,6 +123,22 @@ public class RoomService {
         for (SimulationEntity simulation : simulations) {
             if (simulation.getDeadline() != null && now.isBefore(simulation.getDeadline())) {
                 addStudentToSimulation(userID, simulation);
+            }
+        }
+
+        for (SimulationEntity simulation : simulations) {
+            if (simulation.getDeadline() != null && now.isBefore(simulation.getDeadline())) {
+                SimulationAssessmentEntity assessment = simulationAssessmentRepository.findOneBySimulationID(simulation.getSimulationID())
+                        .orElse(new SimulationAssessmentEntity(
+                                simulation.getSimulationID(),
+                                0,  // totalParticipants
+                                0,  // numberOfParticipants
+                                0,  // missedTakers
+                                0.0, // simulationAccuracyRate
+                                0.0  // simulationDurationAverage
+                        ));
+                assessment.setTotalParticipants(assessment.getTotalParticipants() + 1);
+                simulationAssessmentRepository.save(assessment);
             }
         }
 

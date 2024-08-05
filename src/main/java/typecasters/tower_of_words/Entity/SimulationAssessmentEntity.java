@@ -24,8 +24,23 @@ public class SimulationAssessmentEntity {
 
     private int missedTakers; // totalParticipants - numberOfParticipants
 
-    private int simulationAccuracyRate; // game accuracy rate
+    private double simulationAccuracyRate; // game accuracy rate
 
-    private int simulationDurationAverage; // game duration average
+    private double simulationDurationAverage; // game duration average
 
+    public SimulationAssessmentEntity(
+            int simulationID,
+            int totalParticipants,
+            int numberOfParticipants,
+            int missedTakers,
+            double simulationAccuracyRate,
+            double simulationDurationAverage)
+    {
+        this.simulationID = simulationID;
+        this.totalParticipants = totalParticipants;
+        this.numberOfParticipants = numberOfParticipants;
+        this.missedTakers = missedTakers;
+        this.simulationAccuracyRate = simulationAccuracyRate;
+        this.simulationDurationAverage = simulationDurationAverage;
+    }
 }

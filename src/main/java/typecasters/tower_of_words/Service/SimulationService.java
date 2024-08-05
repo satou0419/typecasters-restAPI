@@ -38,8 +38,12 @@ public class SimulationService {
     @Autowired
     @Lazy
     private StudentWordProgressService studentWordProgressService;
+
     @Autowired
     private SimulationWordsRepository simulationWordsRepository;
+
+    @Autowired
+    private SimulationAssessmentRepository simulationAssessmentRepository;
 
     @Transactional
     public SimulationEntity createSimulation(SimulationEntity simulation) {
@@ -51,23 +55,40 @@ public class SimulationService {
         }
 
         if (room.isPresent()) {
-           for (Integer i : room.get().getMembers()) {
-               SimulationParticipantsEntity user = new SimulationParticipantsEntity(
-               i, // userID
-               0, // mistakes
-               0, // score
-               0, // duration
-               0, // accuracy
-               false, // isDone
-               simulation);
+            // Save the simulation first to get the simulationID
+            simulation = simulationRepository.save(simulation);
 
-               user = simulationParticipantsRepository.save(user);
+            for (Integer i : room.get().getMembers()) {
+                SimulationParticipantsEntity user = new SimulationParticipantsEntity(
+                        i, // userID
+                        0, // mistakes
+                        0, // score
+                        0, // duration
+                        0, // accuracy
+                        false, // isDone
+                        simulation
+                );
 
-               simulation.addParticipants(user);
-           }
+                user = simulationParticipantsRepository.save(user);
+                simulation.addParticipants(user);
+
+                SimulationAssessmentEntity simulationAssessment = new SimulationAssessmentEntity(
+                        simulation.getSimulationID(),
+                        0,  // initial totalParticipants
+                        0,  // initial numberOfParticipants
+                        0,  // initial missedTakers
+                        0.0, // initial simulationAccuracyRate
+                        0.0  // initial simulationDurationAverage
+                );
+
+                SimulationAssessmentEntity existingAssessment = simulationAssessmentRepository.findOneBySimulationID(simulation.getSimulationID())
+                        .orElse(simulationAssessment);
+                existingAssessment.setTotalParticipants(existingAssessment.getTotalParticipants() + 1);
+                simulationAssessmentRepository.save(existingAssessment);
+            }
+        } else {
+            throw new NoSuchElementException("Room does not exist!");
         }
-
-        simulation = simulationRepository.save(simulation);
 
         // Generate SimulationWordAssessment
         List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
@@ -107,9 +128,20 @@ public class SimulationService {
         }
         studentWordProgressService.addProgress(progressList);
 
-        return simulationRepository.save(simulation);
-    }
+        SimulationAssessmentEntity simulationAssessment = simulationAssessmentRepository.findOneBySimulationID(simulation.getSimulationID())
+                .orElse(new SimulationAssessmentEntity(
+                        simulation.getSimulationID(),
+                        simulation.getParticipants().size(), // totalParticipants
+                        0, // numberOfParticipants
+                        0, // missedTakers
+                        0.0, // simulationAccuracyRate
+                        0.0  // simulationDurationAverage
+                ));
+        simulationAssessment.setTotalParticipants(simulation.getParticipants().size());
+        simulationAssessmentRepository.save(simulationAssessment);
 
+        return simulation;
+    }
 
     public Optional<SimulationEntity> findByID(int simulationID){
         return simulationRepository.findById(simulationID);
@@ -186,16 +218,18 @@ public class SimulationService {
 
         return msg;
     }
+
     @Transactional
-    public SimulationEntity cloneSimulation(int simulationID, int roomID) {
+    public SimulationEntity cloneSimulation(int simulationID, int targetRoomID) {
+
         SimulationEntity originalSimulation = simulationRepository.findById(simulationID)
                 .orElseThrow(() -> new NoSuchElementException("Simulation not found with ID: " + simulationID));
 
-        RoomEntity room = roomRepository.findById(roomID)
-                .orElseThrow(() -> new NoSuchElementException("Room not found with ID: " + roomID));
+        RoomEntity targetRoom = roomRepository.findById(targetRoomID)
+                .orElseThrow(() -> new NoSuchElementException("Room not found with ID: " + targetRoomID));
 
         SimulationEntity clonedSimulation = new SimulationEntity();
-        clonedSimulation.setRoomID(room);
+        clonedSimulation.setRoomID(targetRoom);
         clonedSimulation.setSimulationType(originalSimulation.getSimulationType());
         clonedSimulation.setName(originalSimulation.getName() + " - Clone");
         clonedSimulation.setDeadline(originalSimulation.getDeadline());
@@ -212,9 +246,10 @@ public class SimulationService {
             clonedSimulation.addWord(clonedEnemy);
         }
 
-        for (SimulationParticipantsEntity participant : originalSimulation.getParticipants()) {
-            SimulationParticipantsEntity clonedParticipant = new SimulationParticipantsEntity(
-                    participant.getUserID(),
+        List<SimulationParticipantsEntity> newParticipants = new ArrayList<>();
+        for (Integer userID : targetRoom.getMembers()) {
+            SimulationParticipantsEntity newParticipant = new SimulationParticipantsEntity(
+                    userID,
                     0, // mistakes
                     0, // score
                     0, // duration
@@ -222,8 +257,9 @@ public class SimulationService {
                     false, // isDone
                     clonedSimulation
             );
-            clonedSimulation.addParticipants(clonedParticipant);
+            newParticipants.add(newParticipant);
         }
+        clonedSimulation.setParticipants(newParticipants);
 
         clonedSimulation = simulationRepository.save(clonedSimulation);
 
@@ -263,8 +299,17 @@ public class SimulationService {
         }
         studentWordProgressService.addProgress(progressList);
 
-        return simulationRepository.save(clonedSimulation);
-    }
+        SimulationAssessmentEntity simulationAssessment = new SimulationAssessmentEntity(
+                clonedSimulation.getSimulationID(),
+                clonedSimulation.getParticipants().size(), // totalParticipants
+                0, // numberOfParticipants
+                0, // missedTakers
+                0.0, // simulationAccuracyRate
+                0.0  // simulationDurationAverage
+        );
+        simulationAssessmentRepository.save(simulationAssessment);
 
+        return clonedSimulation;
+    }
 
 }
