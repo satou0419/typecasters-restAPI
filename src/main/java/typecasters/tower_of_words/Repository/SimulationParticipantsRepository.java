@@ -23,4 +23,7 @@ public interface SimulationParticipantsRepository extends JpaRepository<Simulati
     @Query("SELECT sp FROM SimulationParticipantsEntity sp WHERE sp.simulationID = ?1")
     List<SimulationParticipantsEntity> findAllBySimulationID(SimulationEntity simulationID);
 
+    @Query("SELECT sp FROM SimulationParticipantsEntity sp WHERE sp.userID = ?1 AND sp.simulationID = ?2")
+    Optional<SimulationParticipantsEntity> findOneByUserIDAndSimulationID(int userID, SimulationEntity simulationID);
+
 }

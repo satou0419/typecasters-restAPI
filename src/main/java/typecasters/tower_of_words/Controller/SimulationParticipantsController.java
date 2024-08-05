@@ -127,4 +127,22 @@ public class SimulationParticipantsController {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @GetMapping("/view_simulation_participant_by/user/{userID}/simulation/{simulationID}")
+    public ResponseEntity<Object> getOneByUserIDAndSimulationID(
+            @PathVariable Integer userID,
+            @PathVariable Integer simulationID) {
+        try {
+            Optional<SimulationParticipantsEntity> participant = simulationParticipantsService.getOneByUserIDAndSimulationID(userID, simulationID);
+            if (participant.isPresent()) {
+                return Response.response(HttpStatus.OK, "Simulation Participant retrieved successfully", participant.get());
+            } else {
+                return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, "Simulation Participant not found");
+            }
+        } catch (NoSuchElementException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }

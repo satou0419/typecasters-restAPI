@@ -1,13 +1,11 @@
 package typecasters.tower_of_words.Service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Query;
 import typecasters.tower_of_words.Entity.*;
-import typecasters.tower_of_words.Repository.SimulationParticipantsRepository;
+import typecasters.tower_of_words.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import typecasters.tower_of_words.Repository.SimulationRepository;
-import typecasters.tower_of_words.Repository.SimulationWordsRepository;
-import typecasters.tower_of_words.Repository.StudentWordProgressRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,6 +24,9 @@ public class SimulationParticipantsService {
 
     @Autowired
     SimulationWordsRepository simulationWordsRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     RoomService roomService;
@@ -47,7 +48,20 @@ public class SimulationParticipantsService {
         SimulationEntity simulationObject = simulationRepository.findById(simulation)
                 .orElseThrow(() -> new NoSuchElementException("Simulation " + simulation + " doesn't exist!"));
 
+        UserEntity user = userRepository.findById(userID)
+                .orElseThrow(() -> new NoSuchElementException("User " + userID + " doesn't exist!"));
+
         return simulationParticipantsRepository.findSimulationParticipantsIDByUserIDAndSimulationID(userID, simulationObject);
+    }
+
+    public Optional<SimulationParticipantsEntity> getOneByUserIDAndSimulationID(Integer userID, Integer simulationID){
+        SimulationEntity simulationObject = simulationRepository.findById(simulationID)
+                .orElseThrow(() -> new NoSuchElementException("Simulation " + simulationID + " doesn't exist!"));
+
+        UserEntity user = userRepository.findById(userID)
+                .orElseThrow(() -> new NoSuchElementException("User " + userID + " doesn't exist!"));
+
+        return simulationParticipantsRepository.findOneByUserIDAndSimulationID(userID, simulationObject);
     }
 
     public Optional<SimulationParticipantsEntity> getOneBySimulationParticipantsIDAndSimulationID(int simulationParticipantsID, int simulation){
