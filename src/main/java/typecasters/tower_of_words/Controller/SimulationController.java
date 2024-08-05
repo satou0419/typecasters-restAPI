@@ -92,10 +92,10 @@ public class SimulationController {
         }
     }
 
-    @PutMapping("/edit_deadline")
-    public ResponseEntity<Object> editDeadlineSimulation(@RequestBody SimulationEntity simulation) {
+    @PatchMapping("/edit_deadline/simulation/{simulationID}")
+    public ResponseEntity<Object> editDeadlineSimulation(@RequestBody SimulationEntity simulation, @PathVariable int simulationID) {
         try {
-            SimulationEntity editedSimulation = simulationService.editDeadlineSimulation(simulation);
+            SimulationEntity editedSimulation = simulationService.editDeadlineSimulation(simulation, simulationID);
             return Response.response(HttpStatus.OK, "Simulation deadline edited successfully", editedSimulation);
         } catch (IllegalArgumentException ex) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -105,7 +105,7 @@ public class SimulationController {
     }
 
     //DELETE
-    @PutMapping("/remove/{simulationID}")
+    @DeleteMapping("/remove/{simulationID}")
     public ResponseEntity<Object> removeSimulation(@PathVariable int simulationID) {
         try {
             simulationService.removeSimulation(simulationID);

@@ -164,20 +164,15 @@ public class SimulationService {
         }
     }
 
-    public SimulationEntity editDeadlineSimulation(SimulationEntity simulation) {
-        SimulationEntity edit = new SimulationEntity();
-
-        try {
-            edit = simulationRepository.findById(simulation.getSimulationID()).get();
+    public SimulationEntity editDeadlineSimulation(SimulationEntity simulation, int simulationID) {
+        SimulationEntity edit = findByID(simulationID)
+                .orElseThrow(() -> new NoSuchElementException("Simulation doesn't exist!"));
 
             edit.setName(simulation.getName());
             edit.setDeadline(simulation.getDeadline());
 
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Simulation " + simulation.getSimulationID() + " does not exist");
-        }finally {
             return simulationRepository.save(edit);
-        }
+
     }
 
     public String removeSimulation(int simulationID) {

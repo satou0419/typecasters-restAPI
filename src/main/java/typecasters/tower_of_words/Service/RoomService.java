@@ -189,18 +189,13 @@ public class RoomService {
     }
 
     public RoomEntity renameRoom(RoomEntity room) {
-        RoomEntity edit = new RoomEntity();
+        RoomEntity edit = roomRepository.findById(room.getRoomID())
+                        .orElseThrow(() -> new NoSuchElementException("Room doesn't exist!"));
 
-        try {
-            edit = roomRepository.findById(room.getRoomID()).get();
+        edit.setName(room.getName());
 
-            edit.setName(room.getName());
+        return roomRepository.save(edit);
 
-        }catch(NoSuchElementException ex) {
-            throw new NoSuchElementException ("Room " + room.getRoomID() + " does not exist");
-        }finally {
-            return roomRepository.save(edit);
-        }
     }
 
     public String removeRoom(int roomID) {
