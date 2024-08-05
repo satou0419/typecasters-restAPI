@@ -92,7 +92,7 @@ public class SimulationController {
         }
     }
 
-    @PatchMapping("/edit_deadline/simulation/{simulationID}")
+    @PatchMapping("/edit_simulation/simulation/{simulationID}")
     public ResponseEntity<Object> editDeadlineSimulation(@RequestBody SimulationEntity simulation, @PathVariable int simulationID) {
         try {
             SimulationEntity editedSimulation = simulationService.editDeadlineSimulation(simulation, simulationID);
