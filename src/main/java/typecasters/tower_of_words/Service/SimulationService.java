@@ -45,6 +45,9 @@ public class SimulationService {
     @Autowired
     private SimulationAssessmentRepository simulationAssessmentRepository;
 
+    @Autowired
+    private SimulationWeightedSettingsService simulationWeightedSettingsService;
+
     @Transactional
     public SimulationEntity createSimulation(SimulationEntity simulation) {
         Optional<RoomEntity> room = roomRepository.findById(simulation.getRoomID().getRoomID());
@@ -55,7 +58,7 @@ public class SimulationService {
         }
 
         if (room.isPresent()) {
-            // Save the simulation first to get the simulationID
+
             simulation = simulationRepository.save(simulation);
 
             for (Integer i : room.get().getMembers()) {
@@ -90,7 +93,6 @@ public class SimulationService {
             throw new NoSuchElementException("Room does not exist!");
         }
 
-        // Generate SimulationWordAssessment
         List<SimulationWordAssessmentEntity> assessments = new ArrayList<>();
         for (SimulationEnemyEntity enemy : simulation.getEnemy()) {
             for (Integer wordID : enemy.getWords()) {
@@ -110,7 +112,6 @@ public class SimulationService {
         }
         simulationWordAssessmentService.addWordAssessments(assessments);
 
-        // Generate StudentWordProgress
         List<StudentWordProgressEntity> progressList = new ArrayList<>();
         for (SimulationWordAssessmentEntity assessment : assessments) {
             for (SimulationParticipantsEntity participant : simulation.getParticipants()) {
@@ -127,6 +128,26 @@ public class SimulationService {
             }
         }
         studentWordProgressService.addProgress(progressList);
+
+        Optional<SimulationWeightedSettingsEntity> optionalWeightedSettings = simulationWeightedSettingsService.getSimulationWeightedSettingsByCreatorIDAndSimulationID(
+                room.get().getCreatorID(), simulation.getSimulationID());
+
+        SimulationWeightedSettingsEntity simulationWeightedSettings;
+
+        if (optionalWeightedSettings.isPresent()) {
+            simulationWeightedSettings = optionalWeightedSettings.get();
+        } else {
+            // Create a new SimulationWeightedSettingsEntity if not present
+            simulationWeightedSettings = new SimulationWeightedSettingsEntity(
+                    simulation.getSimulationID(),
+                    room.get().getCreatorID(),
+                    0.25,
+                    0.25,
+                    0.25,
+                    0.25
+            );
+            simulationWeightedSettingsService.insertSimulationWeightedSettings(simulationWeightedSettings, simulation.getSimulationID(), room.get().getCreatorID());
+        }
 
         SimulationAssessmentEntity simulationAssessment = simulationAssessmentRepository.findOneBySimulationID(simulation.getSimulationID())
                 .orElse(new SimulationAssessmentEntity(
@@ -308,6 +329,27 @@ public class SimulationService {
                 0.0  // simulationDurationAverage
         );
         simulationAssessmentRepository.save(simulationAssessment);
+
+        Optional<SimulationWeightedSettingsEntity> originalWeightedSettingsOpt = simulationWeightedSettingsService.getSimulationWeightedSettingsByCreatorIDAndSimulationID(
+                originalSimulation.getRoomID().getCreatorID(), originalSimulation.getSimulationID());
+
+        if (originalWeightedSettingsOpt.isPresent()) {
+            SimulationWeightedSettingsEntity originalWeightedSettings = originalWeightedSettingsOpt.get();
+            SimulationWeightedSettingsEntity clonedWeightedSettings = new SimulationWeightedSettingsEntity(
+                    clonedSimulation.getSimulationID(),
+                    targetRoom.getCreatorID(),
+                    originalWeightedSettings.getWeightedAccuracyRate(),
+                    originalWeightedSettings.getWeightedDurationAverage(),
+                    originalWeightedSettings.getWeightedTotalCorrect(),
+                    originalWeightedSettings.getWeightedTotalAttempts()
+            );
+
+            simulationWeightedSettingsService.insertSimulationWeightedSettings(
+                    clonedWeightedSettings,
+                    clonedSimulation.getSimulationID(),
+                    targetRoom.getCreatorID());
+
+        }
 
         return clonedSimulation;
     }

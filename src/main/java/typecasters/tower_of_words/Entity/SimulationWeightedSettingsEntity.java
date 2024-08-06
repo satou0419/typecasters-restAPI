@@ -31,4 +31,19 @@ public class SimulationWeightedSettingsEntity {
 
     @Column(name = "weightedTotalAttempts", nullable = false, columnDefinition = "DOUBLE DEFAULT 0.25")
     private double weightedTotalAttempts = 0.25;
+
+    public SimulationWeightedSettingsEntity(
+            int creatorID,
+            int simulationID,
+            double weightedAccuracyRate,
+            double weightedDurationAverage,
+            double weightedTotalCorrect,
+            double weightedTotalAttempts) {
+        this.creatorID = creatorID;
+        this.simulationID = simulationID;
+        this.weightedAccuracyRate = weightedAccuracyRate;
+        this.weightedDurationAverage = weightedDurationAverage;
+        this.weightedTotalCorrect = weightedTotalCorrect;
+        this.weightedTotalAttempts = weightedTotalAttempts;
+    }
 }
