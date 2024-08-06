@@ -84,7 +84,17 @@ public class SimulationWeightedSettingsService {
         existingSimulationWeightedSettings.setWeightedTotalCorrect(simulationWeightedSettings.getWeightedTotalCorrect());
         existingSimulationWeightedSettings.setWeightedTotalAttempts(simulationWeightedSettings.getWeightedTotalAttempts());
 
-        return simulationWeightedSettingsRepository.save(existingSimulationWeightedSettings);
+        if(
+                (existingSimulationWeightedSettings.getWeightedAccuracyRate()
+                        + existingSimulationWeightedSettings.getWeightedTotalAttempts()
+                        + existingSimulationWeightedSettings.getWeightedTotalCorrect()
+                        + existingSimulationWeightedSettings.getWeightedDurationAverage()) != 1.0)
+        {
+            throw new IllegalArgumentException("The sum of the attributes must be equal to 1.0 or 100%");
+        }else{
+            return simulationWeightedSettingsRepository.save(existingSimulationWeightedSettings);
+        }
+
     }
 
     public void deleteSimulationWeightedSettings(int simulationWeightedScoreID){
