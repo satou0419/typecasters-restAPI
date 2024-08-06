@@ -85,12 +85,12 @@ public class SimulationParticipantsController {
     }
 
 
-    @PatchMapping("/update_average/participant/{participantID}/simulation/{simulationID}")
+    @PatchMapping("/update_average/user/{userID}/simulation/{simulationID}")
     public ResponseEntity<Object> updateParticipantAttribute(
-            @PathVariable int participantID,
+            @PathVariable int userID,
             @PathVariable int simulationID) {
         try {
-            SimulationParticipantsEntity updatedParticipant = simulationParticipantsService.updateParticipantAttribute(participantID, simulationID);
+            SimulationParticipantsEntity updatedParticipant = simulationParticipantsService.updateParticipantAttribute(userID, simulationID);
             return Response.response(HttpStatus.OK, "Simulation participant updated successfully", updatedParticipant);
         } catch (NoSuchElementException e) {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());

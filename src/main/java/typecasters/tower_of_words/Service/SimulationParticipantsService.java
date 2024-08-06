@@ -86,8 +86,8 @@ public class SimulationParticipantsService {
     }
 
     @Transactional
-    public SimulationParticipantsEntity updateParticipantAttribute(int simulationParticipantID, int simulationID) {
-        SimulationParticipantsEntity simulationParticipant = getOneBySimulationParticipantsIDAndSimulationID(simulationParticipantID, simulationID)
+    public SimulationParticipantsEntity updateParticipantAttribute(int userID, int simulationID) {
+        SimulationParticipantsEntity simulationParticipant = getOneByUserIDAndSimulationID(userID, simulationID)
                 .orElseThrow(() -> new NoSuchElementException("Simulation Participant doesn't exist!"));
 
         RoomEntity room = roomService.findRoomBySimulationIDAndUserID(simulationID, simulationParticipant.getUserID())

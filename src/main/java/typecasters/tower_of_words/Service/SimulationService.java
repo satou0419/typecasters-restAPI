@@ -137,7 +137,7 @@ public class SimulationService {
         if (optionalWeightedSettings.isPresent()) {
             simulationWeightedSettings = optionalWeightedSettings.get();
         } else {
-            // Create a new SimulationWeightedSettingsEntity if not present
+
             simulationWeightedSettings = new SimulationWeightedSettingsEntity(
                     simulation.getSimulationID(),
                     room.get().getCreatorID(),
@@ -218,8 +218,15 @@ public class SimulationService {
     }
 
     public SimulationEntity editDeadlineSimulation(SimulationEntity simulation, int simulationID) {
+
+        LocalDateTime now = LocalDateTime.now();
+
         SimulationEntity edit = findByID(simulationID)
                 .orElseThrow(() -> new NoSuchElementException("Simulation doesn't exist!"));
+
+        if (simulation.getDeadline() == null || !now.isBefore(simulation.getDeadline())) {
+            throw new SimulationNotAvailableException("Simulation cannot be created before the deadline or if the deadline is null.");
+        }
 
             edit.setName(simulation.getName());
             edit.setDeadline(simulation.getDeadline());
