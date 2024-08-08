@@ -121,7 +121,7 @@ public class SimulationParticipantsService {
         participant.setMistakes((((double) totalMistakes / (participant.getSimulationID().getStudentLife() * totalWords)) * 100));
         participant.setScore((int) Math.round(totalScore / totalWords));
         participant.setDuration(totalDuration / totalWords);
-        participant.setAccuracy(Math.round(totalAccuracy / totalWords));
+        participant.setAccuracy(Math.round(totalAccuracy));
         System.out.println("Check result for accuracy: ");
         participant.setDone(true);
     }
