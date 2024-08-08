@@ -76,7 +76,7 @@ public class UserDetailsService {
         userDetails.setFloor_count(userDetails.getFloor_count()+1);
         ud_repo.save(userDetails);
 
-        return "word count incremented";
+        return "floor count incremented";
     }
 
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailId) {
