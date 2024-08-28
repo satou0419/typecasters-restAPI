@@ -3,6 +3,8 @@ package typecasters.tower_of_words.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -22,4 +24,10 @@ public class ArchiveAchievementEntity {
     private String imagePath;
 
     private boolean isChecked = false;
+
+    private Date unlockedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "achievementID")
+    private AchievementEntity achievementID;
 }
