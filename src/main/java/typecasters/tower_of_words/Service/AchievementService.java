@@ -39,6 +39,7 @@ public class AchievementService {
         existingAchievementEntity.setName(newAchievementDetails.getName());
         existingAchievementEntity.setDescription(newAchievementDetails.getDescription());
         existingAchievementEntity.setImagePath(newAchievementDetails.getImagePath());
+        existingAchievementEntity.setAchievementType(newAchievementDetails.getAchievementType());
         existingAchievementEntity.setCriteria(newAchievementDetails.getCriteria());
 
         return achievementRepository.save(existingAchievementEntity);
