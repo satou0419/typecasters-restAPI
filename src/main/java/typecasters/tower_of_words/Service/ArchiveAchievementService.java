@@ -25,12 +25,12 @@ public class ArchiveAchievementService {
         try {
             List<ArchiveAchievementEntity> insert = archiveAchievementRepository.findByUserID(userID);
 
-            for (ArchiveAchievementEntity i : insert) {
-                if (i.getName().equals(achievement.getName())) {
-                    achievementExists = true;
-                    break;
-                }
-            }
+//            for (ArchiveAchievementEntity i : insert) {
+//                if (i.getName().equals(achievement.getName())) {
+//                    achievementExists = true;
+//                    break;
+//                }
+//            }
 
         } catch (NoSuchElementException ex) {
             throw new NoSuchElementException("Achievement " + achievement.getArchiveAchievementID() + " does not exist");
@@ -59,9 +59,9 @@ public class ArchiveAchievementService {
         try {
             edit = archiveAchievementRepository.findById(achievement.getArchiveAchievementID()).get();
 
-            edit.setName(achievement.getName());
-            edit.setDescription(achievement.getDescription());
-            edit.setImagePath(achievement.getImagePath());
+//            edit.setName(achievement.getName());
+//            edit.setDescription(achievement.getDescription());
+//            edit.setImagePath(achievement.getImagePath());
             edit.setChecked(achievement.isChecked());
 
         }catch(NoSuchElementException ex) {
