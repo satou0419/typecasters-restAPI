@@ -3,6 +3,7 @@ package typecasters.tower_of_words.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -16,12 +17,6 @@ public class ArchiveAchievementEntity {
     private int archiveAchievementID;
 
     private int userID;
-
-    private String name;
-
-    private String description;
-
-    private String imagePath;
 
     private boolean isChecked = false;
 

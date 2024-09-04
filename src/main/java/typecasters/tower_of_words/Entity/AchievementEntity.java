@@ -27,6 +27,8 @@ public class AchievementEntity {
 
     private int totalUnlocked;
 
+    private String achievementType;
+
     private int criteria;
 
     @JsonIgnore
