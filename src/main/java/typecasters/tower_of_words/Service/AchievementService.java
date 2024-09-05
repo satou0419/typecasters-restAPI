@@ -1,8 +1,10 @@
 package typecasters.tower_of_words.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import typecasters.tower_of_words.Entity.AchievementEntity;
+import typecasters.tower_of_words.Entity.UserDetailsEntity;
 import typecasters.tower_of_words.Repository.AchievementRepository;
 
 import java.util.List;
@@ -15,8 +17,20 @@ public class AchievementService {
     @Autowired
     private AchievementRepository achievementRepository;
 
-    public AchievementEntity insertAchievement(AchievementEntity achievement){
-        return achievementRepository.save(achievement);
+    @Autowired
+    @Lazy
+    private ArchiveAchievementService archiveAchievementService;
+
+    public AchievementEntity insertAchievement(AchievementEntity achievement) {
+        AchievementEntity savedAchievement = achievementRepository.save(achievement);
+
+        archiveAchievementService.prepopulateNewAchievementForExistingUsers(savedAchievement);
+
+        return savedAchievement;
+    }
+
+    public List<AchievementEntity> getAchievementsByType(String achievementType){
+        return achievementRepository.findByAchievementType(achievementType);
     }
 
     public List<AchievementEntity> getAllAchievements() {
@@ -27,6 +41,16 @@ public class AchievementService {
             int achievementID)
     {
         return achievementRepository.findById(achievementID);
+    }
+
+    public String incrementTotalUnlocked(int achievementID){
+        AchievementEntity achievement = getOneAchievementByAchievementID(achievementID)
+                .orElseThrow(() -> new NoSuchElementException("Achievement ID doesn't exist!"));
+
+        achievement.setTotalUnlocked(achievement.getTotalUnlocked()+1);
+        achievementRepository.save(achievement);
+
+        return "Total Unlocked incremented!";
     }
 
     public AchievementEntity updateAchievement(

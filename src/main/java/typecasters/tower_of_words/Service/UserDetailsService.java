@@ -6,6 +6,7 @@ import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,7 +29,15 @@ public class UserDetailsService {
     @Lazy
     UserCharacterService userCharacterService;
 
-    //Initialized User Details
+    @Autowired
+    @Lazy
+    ArchiveAchievementService archiveAchievementService;
+
+    @Autowired
+    @Lazy
+    AchievementService achievementService;
+
+    // Initialize User Details
     public void initUserDetails(int userID){
         UserProgressEntity towerProg = new UserProgressEntity(userID, 0, 0, 0, 1, 1 ,1);
         UserDetailsEntity userDetails = new UserDetailsEntity(userID,
@@ -56,6 +65,8 @@ public class UserDetailsService {
         UserCharacterEntity userCharacter2 = createUserCharacter(userID, false, 2);
         userCharacterService.insertUserCharacter(userCharacter1);
         userCharacterService.insertUserCharacter(userCharacter2);
+
+        initializeArchiveAchievements(userID);
     }
 
     private UserItemEntity createUserItem(int quantity, int userID, int itemID) {
@@ -67,6 +78,21 @@ public class UserDetailsService {
         CharacterEntity characterEntity = characterService.getCharacterByID(characterID).get();
         return new UserCharacterEntity(userID, isOwned, characterEntity);
     }
+
+    private void initializeArchiveAchievements(int userID) {
+        List<AchievementEntity> achievements = achievementService.getAllAchievements();
+
+        for (AchievementEntity achievement : achievements) {
+            ArchiveAchievementEntity archiveAchievement = new ArchiveAchievementEntity();
+            archiveAchievement.setUserID(userID);
+            archiveAchievement.setAchievementID(achievement);
+            archiveAchievement.setUnlocked(false);
+            archiveAchievement.setUnlockedDate(null);
+
+            archiveAchievementService.insertArchiveAchievement(archiveAchievement);
+        }
+    }
+
 
     //Get user details
     public UserDetailsEntity getUserDetails(int userID){
@@ -109,11 +135,13 @@ public class UserDetailsService {
         return "word count incremented";
     }
 
+
     public String incrementUserAchievementCount(int userID){
         UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
         userDetails.setAchievementCount(userDetails.getAchievementCount() + 1);
         userDetailsRepository.save(userDetails);
 
+        archiveAchievementService.checkUserEligibilityForAchievements(userID, "achievements");
         return "achievement count incremented";
     }
 

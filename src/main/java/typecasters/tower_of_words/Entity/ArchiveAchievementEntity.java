@@ -22,6 +22,8 @@ public class ArchiveAchievementEntity {
 
     private Date unlockedDate;
 
+    private boolean isUnlocked = false;
+
     @ManyToOne
     @JoinColumn(name = "achievementID")
     private AchievementEntity achievementID;

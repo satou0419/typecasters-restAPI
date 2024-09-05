@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import typecasters.tower_of_words.UserInfo;
 import typecasters.tower_of_words.UserInfoAndDetails;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -130,6 +131,10 @@ public class UserService {
             throw new NoSuchElementException("User not found");
         }
         return user.getUserID();
+    }
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public UserInfoAndDetails getUserInfo(int userId){
