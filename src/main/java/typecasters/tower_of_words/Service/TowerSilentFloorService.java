@@ -41,7 +41,7 @@ public class TowerSilentFloorService {
         TowerSilentFloorEntity silentFloor = getSilentFloorByID(silentFloorID)
                 .orElseThrow(() -> new NoSuchElementException("Tower Silent Floor ID #" + silentFloorID + "doesn't exist!"));
 
-        towerSilentFloorRepository.deleteById(silentFloor.getTowerSilentFloorID());
+        towerSilentFloorRepository.deleteById(silentFloor.getTowerFloorID());
     }
 
 

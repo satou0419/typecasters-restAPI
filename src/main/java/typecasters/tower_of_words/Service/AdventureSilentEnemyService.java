@@ -46,6 +46,6 @@ public class AdventureSilentEnemyService {
         AdventureSilentEnemyEntity updatedSilentEnemy = getSilentEnemyById(silentEnemyID)
                 .orElseThrow(() -> new NoSuchElementException("Adventure Silent Enemy ID# " + silentEnemyID + " doesn't exist!"));
 
-        adventureSilentEnemyRepository.deleteById(updatedSilentEnemy.getAdventureSilentEnemyID());
+        adventureSilentEnemyRepository.deleteById(updatedSilentEnemy.getAdventureEnemyID());
     }
 }

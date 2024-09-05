@@ -30,7 +30,7 @@ public class UserDetailsService {
 
     //Initialized User Details
     public void initUserDetails(int userID){
-        UserProgressEntity towerProg = new UserProgressEntity(userID, 0, 1);
+        UserProgressEntity towerProg = new UserProgressEntity(userID, 0, 0, 0, 1, 1 ,1);
         UserDetailsEntity userDetails = new UserDetailsEntity(userID,
                 0,
                 0,

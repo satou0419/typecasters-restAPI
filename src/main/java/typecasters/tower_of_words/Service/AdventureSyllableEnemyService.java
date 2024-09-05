@@ -46,6 +46,6 @@ public class AdventureSyllableEnemyService {
         AdventureSyllableEnemyEntity updatedSyllableEnemy = getSyllableEnemyById(syllableEnemyID)
                 .orElseThrow(() -> new NoSuchElementException("Adventure Syllable Enemy ID # " + syllableEnemyID + " doesn't exist!" ));
 
-        adventureSyllableEnemyRepository.deleteById(updatedSyllableEnemy.getAdventureSyllableEnemyID());
+        adventureSyllableEnemyRepository.deleteById(updatedSyllableEnemy.getAdventureEnemyID());
     }
 }

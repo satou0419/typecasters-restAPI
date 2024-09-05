@@ -42,6 +42,6 @@ public class TowerSyllableFloorService {
         TowerSyllableFloorEntity syllableFloor = getSyllableFloorByID(syllableFloorID)
                 .orElseThrow(() -> new NoSuchElementException("Tower Syllable Floor ID #" + syllableFloorID + " doesn't exist!"));
 
-        towerSyllableFloorRepository.deleteById(syllableFloor.getTowerSyllableFloorID());
+        towerSyllableFloorRepository.deleteById(syllableFloor.getTowerFloorID());
     }
 }

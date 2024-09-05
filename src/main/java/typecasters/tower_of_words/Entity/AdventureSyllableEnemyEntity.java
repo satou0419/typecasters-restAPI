@@ -17,13 +17,13 @@ public class AdventureSyllableEnemyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int adventureSyllableEnemyID;
+    private int adventureEnemyID;
 
     private int towerFloorID;
 
     private String imagePath;
 
     @ElementCollection
-    @CollectionTable(name = "tbl_adventure_syllable_words", joinColumns = @JoinColumn(name = "adventure_syllable_enemy_id"))
+    @CollectionTable(name = "tbl_adventure_syllable_words", joinColumns = @JoinColumn(name = "adventure_enemy_id"))
     private List<String> words = new ArrayList<>();
 }

@@ -18,17 +18,30 @@ public class UserProgressEntity {
 
     private int userDetailsID;
 
-    private int towerSectionProgress;
+    private int spellingSectionProgress;
 
-    private int floorID;
+    private int syllableSectionProgress;
+
+    private int silentSectionProgress;
+
+    private int spellingFloorID;
+
+    private int syllableFloorID;
+
+    private int silentFloorID;
 
     @OneToOne(mappedBy = "userProgress")
     @JsonIgnore
     private UserDetailsEntity userDetails;
 
-    public UserProgressEntity(int userDetailsID, int towerSectionProgress, int floorID) {
+
+    public UserProgressEntity(int userDetailsID, int spellingSectionProgress, int syllableSectionProgress, int silentSectionProgress, int spellingFloorID, int syllableFloorID, int silentFloorID) {
         this.userDetailsID = userDetailsID;
-        this.towerSectionProgress = towerSectionProgress;
-        this.floorID = floorID;
+        this.spellingSectionProgress = spellingSectionProgress;
+        this.syllableSectionProgress = syllableSectionProgress;
+        this.silentSectionProgress = silentSectionProgress;
+        this.spellingFloorID = spellingFloorID;
+        this.syllableFloorID = syllableFloorID;
+        this.silentFloorID = silentFloorID;
     }
 }

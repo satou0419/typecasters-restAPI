@@ -18,13 +18,13 @@ public class AdventureSilentEnemyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int adventureSilentEnemyID;
+    private int adventureEnemyID;
 
     private int towerFloorID;
 
     private String imagePath;
 
     @ElementCollection
-    @CollectionTable(name = "tbl_adventure_silent_words", joinColumns = @JoinColumn(name = "adventure_silent_enemy_id"))
+    @CollectionTable(name = "tbl_adventure_silent_words", joinColumns = @JoinColumn(name = "adventure_enemy_id"))
     private List<WordIndex> words = new ArrayList<>();
 }

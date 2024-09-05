@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class TowerSilentFloorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int towerSilentFloorID;
+    private int towerFloorID;
 
     private int towerSection;
 

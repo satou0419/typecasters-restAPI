@@ -20,8 +20,13 @@ public class UserProgressService {
         try{
             UserProgressEntity towerProgress = userProgressRepository.findById(userProgressID).get();
 
-            towerProgress.setTowerSectionProgress(towerProgUpdate.getTowerSectionProgress());
-            towerProgress.setFloorID(towerProgUpdate.getFloorID());
+            towerProgress.setSpellingSectionProgress(towerProgUpdate.getSpellingSectionProgress());
+            towerProgress.setSilentSectionProgress(towerProgUpdate.getSilentSectionProgress());
+            towerProgress.setSyllableSectionProgress(towerProgUpdate.getSyllableSectionProgress());
+
+            towerProgress.setSpellingFloorID(towerProgUpdate.getSpellingFloorID());
+            towerProgress.setSilentFloorID(towerProgUpdate.getSilentFloorID());
+            towerProgress.setSyllableFloorID(towerProgUpdate.getSyllableFloorID());
 
             userProgressRepository.save(towerProgress);
         }catch(NoSuchElementException e){
