@@ -140,4 +140,14 @@ public class ArchiveAchievementService {
 
         return unlockedAchievements;
     }
+
+    @Transactional
+    public ArchiveAchievementEntity forNotificationsArchiveAchievement(int userID, int achievementID){
+        ArchiveAchievementEntity updatedArchiveAchievement = getArchiveAchievementByUserIDAndAchievementID(userID, achievementID)
+                .orElseThrow(() -> new NoSuchElementException("Archive Achievement doesn't exist!"));
+
+        updatedArchiveAchievement.setChecked(true);
+
+        return archiveAchievementRepository.save(updatedArchiveAchievement);
+    }
 }

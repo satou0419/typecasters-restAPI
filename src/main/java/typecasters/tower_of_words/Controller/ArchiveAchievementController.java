@@ -110,4 +110,17 @@ public class ArchiveAchievementController {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @PatchMapping("/for_notifications")
+    public ResponseEntity<Object> forNotificationsArchiveAchievement(
+            @RequestParam int userID, @RequestParam int achievementID) {
+        try {
+            ArchiveAchievementEntity updatedAchievement = archiveAchievementService.forNotificationsArchiveAchievement(userID, achievementID);
+            return Response.response(HttpStatus.OK, "Archive achievement updated for notifications", updatedAchievement);
+        } catch (NoSuchElementException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }
