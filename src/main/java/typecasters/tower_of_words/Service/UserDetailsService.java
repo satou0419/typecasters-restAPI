@@ -40,14 +40,18 @@ public class UserDetailsService {
     // Initialize User Details
     public void initUserDetails(int userID){
         UserProgressEntity towerProg = new UserProgressEntity(userID, 0, 0, 0, 1, 1 ,1);
-        UserDetailsEntity userDetails = new UserDetailsEntity(userID,
+        UserDetailsEntity userDetails = new UserDetailsEntity(
+                userID,
                 0,
                 0,
                 0,
-                towerProg,
+                0,
+                0,
+                0,
                 0,
                 "&melee_sword-i19-a21",
-                "");
+                "",
+                towerProg);
 
         userDetailsRepository.save(userDetails);
 
@@ -150,8 +154,39 @@ public class UserDetailsService {
         userDetails.setFloorCount(userDetails.getFloorCount()+1);
         userDetailsRepository.save(userDetails);
 
+        archiveAchievementService.checkUserEligibilityForAchievements(userID, "floors");
         return "floor count incremented";
     }
+    public String incrementSpellingFloorCount(int userID){
+        UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
+        userDetails.setSpellingFloorCount(userDetails.getSpellingFloorCount()+1);
+        userDetailsRepository.save(userDetails);
+
+        incrementFloorCount(userID);
+
+        return "Spelling floor count incremented";
+    }
+
+    public String incrementSyllableFloorCount(int userID){
+        UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
+        userDetails.setSyllableFloorCount(userDetails.getSyllableFloorCount()+1);
+        userDetailsRepository.save(userDetails);
+
+        incrementFloorCount(userID);
+
+        return "Syllable floor count incremented";
+    }
+
+    public String incrementSilentFloorCount(int userID){
+        UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
+        userDetails.setSilentFloorCount(userDetails.getSilentFloorCount()+1);
+        userDetailsRepository.save(userDetails);
+
+        incrementFloorCount(userID);
+
+        return "Silent floor count incremented";
+    }
+
 
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailID) {
 

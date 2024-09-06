@@ -107,6 +107,15 @@ public class ArchiveAchievementService {
                 case "floors":
                     isEligible = userDetails.getFloorCount() >= criteria;
                     break;
+                case "spellingfloors":
+                    isEligible = userDetails.getSpellingFloorCount() >= criteria;
+                    break;
+                case "silentfloors":
+                    isEligible = userDetails.getSilentFloorCount() >= criteria;
+                    break;
+                case "syllablefloors":
+                    isEligible = userDetails.getSyllableFloorCount() >= criteria;
+                    break;
                 case "achievements":
                     isEligible = userDetails.getAchievementCount() >= criteria;
                     break;

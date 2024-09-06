@@ -66,6 +66,42 @@ public class UserDetailsController {
         }
     }
 
+    @PatchMapping("/increment_spelling_floor")
+    public ResponseEntity<Object> incrementUserSpellingFloorCount(@RequestParam int userDetailsID){
+        try{
+            String result = userDetailsService.incrementSpellingFloorCount(userDetailsID);
+            return Response.response(HttpStatus.OK, "Spelling Floor count incremented successfully!", result);
+        }catch (IllegalArgumentException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }catch (Exception e){
+            return  NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR , e.getMessage());
+        }
+    }
+
+    @PatchMapping("/increment_syllable_floor")
+    public ResponseEntity<Object> incrementUserSyllableFloorCount(@RequestParam int userDetailsID){
+        try{
+            String result = userDetailsService.incrementSyllableFloorCount(userDetailsID);
+            return Response.response(HttpStatus.OK, "Syllable Floor count incremented successfully!", result);
+        }catch (IllegalArgumentException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }catch (Exception e){
+            return  NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR , e.getMessage());
+        }
+    }
+
+    @PatchMapping("/increment_silent_floor")
+    public ResponseEntity<Object> incrementUserSilentFloorCount(@RequestParam int userDetailsID){
+        try{
+            String result = userDetailsService.incrementSilentFloorCount(userDetailsID);
+            return Response.response(HttpStatus.OK, "Silent Floor count incremented successfully!", result);
+        }catch (IllegalArgumentException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }catch (Exception e){
+            return  NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR , e.getMessage());
+        }
+    }
+
     @GetMapping("/get_user_detail")
     public ResponseEntity<Object> getUserDetails(@RequestParam int userID){
         try {

@@ -16,9 +16,14 @@ public class UserDetailsEntity {
     private int userDetailsID;
     private int userID;
     private int creditAmount;
+
     private int wordsCollected;
     private int achievementCount;
     private int floorCount;
+
+    private int spellingFloorCount;
+    private int syllableFloorCount;
+    private int silentFloorCount;
 
     private String equipped_character;
     private String badge_display;
@@ -28,24 +33,17 @@ public class UserDetailsEntity {
     @JoinColumn(name = "tower_progress_id")
     private UserProgressEntity userProgress;
 
-    public UserDetailsEntity(
-            int userID,
-            int creditAmount,
-            int wordsCollected,
-            int achievementCount,
-            UserProgressEntity userProgress,
-            int floorCount,
-            String equipped_character,
-            String badge_display
-            ) {
-
+    public UserDetailsEntity(int userID, int creditAmount, int wordsCollected, int achievementCount, int floorCount, int spellingFloorCount, int syllableFloorCount, int silentFloorCount, String equipped_character, String badge_display, UserProgressEntity userProgress) {
         this.userID = userID;
         this.creditAmount = creditAmount;
         this.wordsCollected = wordsCollected;
         this.achievementCount = achievementCount;
-        this.userProgress = userProgress;
         this.floorCount = floorCount;
+        this.spellingFloorCount = spellingFloorCount;
+        this.syllableFloorCount = syllableFloorCount;
+        this.silentFloorCount = silentFloorCount;
         this.equipped_character = equipped_character;
         this.badge_display = badge_display;
+        this.userProgress = userProgress;
     }
 }
