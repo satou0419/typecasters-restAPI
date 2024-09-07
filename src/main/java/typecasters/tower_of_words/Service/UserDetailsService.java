@@ -49,7 +49,7 @@ public class UserDetailsService {
                 0,
                 0,
                 0,
-                "&melee_sword-i19-a21",
+                "&melee_sword-a21-i19",
                 "",
                 towerProg);
 
