@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import typecasters.tower_of_words.Entity.ArchiveAchievementEntity;
 import typecasters.tower_of_words.Entity.AchievementEntity;
+import typecasters.tower_of_words.Exception.ArchiveAchievementAlreadyExistException;
 import typecasters.tower_of_words.Response.NoDataResponse;
 import typecasters.tower_of_words.Response.Response;
 import typecasters.tower_of_words.Service.ArchiveAchievementService;
@@ -121,6 +122,23 @@ public class ArchiveAchievementController {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PatchMapping("/equip_badge")
+    public ResponseEntity<Object> equipBadge(
+            @RequestParam int userID, @RequestParam int achievementID) {
+        try {
+            String result = archiveAchievementService.equipBadge(userID, achievementID);
+            return Response.response(HttpStatus.OK, "Badge equipped successfully!", result);
+        } catch (NoSuchElementException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (ArchiveAchievementAlreadyExistException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.CONFLICT, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }

@@ -2,10 +2,12 @@ package typecasters.tower_of_words.Service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.web.bind.annotation.PathVariable;
 import typecasters.tower_of_words.Entity.AchievementEntity;
 import typecasters.tower_of_words.Entity.ArchiveAchievementEntity;
 import typecasters.tower_of_words.Entity.UserDetailsEntity;
 import typecasters.tower_of_words.Entity.UserEntity;
+import typecasters.tower_of_words.Exception.ArchiveAchievementAlreadyExistException;
 import typecasters.tower_of_words.Repository.ArchiveAchievementRepository;
 import typecasters.tower_of_words.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,5 +160,34 @@ public class ArchiveAchievementService {
         updatedArchiveAchievement.setChecked(true);
 
         return archiveAchievementRepository.save(updatedArchiveAchievement);
+    }
+
+    @Transactional
+    public String equipBadge(int userID, int achievementID){
+        try{
+            UserDetailsEntity userDetails = userDetailsService.getUserDetails(userID);
+
+            ArchiveAchievementEntity isExistArchiveAchievementObject = getArchiveAchievementByUserIDAndAchievementID(userDetails.getUserID(), achievementID)
+                    .orElseThrow(() -> new NoSuchElementException("This archive achievement doesn't exist!"));
+
+            if(isExistArchiveAchievementObject.isUnlocked()){
+                String badgeImagePath = isExistArchiveAchievementObject.getAchievementID().getImagePath();
+                if(userDetails.getBadge_display().equals(badgeImagePath)){
+                    throw new ArchiveAchievementAlreadyExistException("You already equipped this achievement!");
+                }else{
+                    userDetailsService.updateBadgeDisplay(userDetails.getUserDetailsID(), badgeImagePath);
+                }
+            }else{
+                throw new IllegalArgumentException("You do not own this achievement!");
+            }
+
+            return "Achievement " + isExistArchiveAchievementObject.getAchievementID().getName() + " equipped successfully to " + userID + ".";
+
+        }catch (NoSuchElementException | ArchiveAchievementAlreadyExistException | IllegalArgumentException e){
+            throw e;
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("An error occurred while processing the request.", e);
+        }
     }
 }

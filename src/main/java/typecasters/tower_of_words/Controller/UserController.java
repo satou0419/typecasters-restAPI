@@ -41,7 +41,7 @@ public class UserController {
             return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error has occurred during registration");
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
