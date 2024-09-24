@@ -146,6 +146,7 @@ typecasters\tower_of_words\Entity\AdventureRewardEntity.class
 typecasters\tower_of_words\Repository\SimulationParticipantsRepository.class
 typecasters\tower_of_words\Service\StudentWordProgressService.class
 typecasters\tower_of_words\Controller\UserController.class
+typecasters\tower_of_words\Exception\ArchiveAchievementAlreadyExistException.class
 typecasters\tower_of_words\Exception\UsernameNotFoundException.class
 typecasters\tower_of_words\Entity\SimulationParticipantsEntity.class
 typecasters\tower_of_words\FieldConverter.class
