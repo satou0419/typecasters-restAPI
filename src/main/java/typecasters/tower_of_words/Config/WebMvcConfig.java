@@ -11,7 +11,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://tower-of-words.onrender.com", "https://tower-of-words.vercel.app", "https://towerofwords.online", "www.towerofwords.online", "https://www.towerofwords.online")
+                .allowedOrigins("http://localhost:3000", "https://tower-of-words.onrender.com", "https://tower-of-words.vercel.app", "https://towerofwords.online", "www.towerofwords.online", "https://www.towerofwords.online", "towerofwords.online")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                 .allowedHeaders("*")
                 .allowCredentials(true);
@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000", "https://tower-of-words.onrender.com", "https://tower-of-words.vercel.app", "https://towerofwords.online", "www.towerofwords.online", "https://www.towerofwords.online")
+                        .allowedOrigins("http://localhost:3000", "https://tower-of-words.onrender.com", "https://tower-of-words.vercel.app", "https://towerofwords.online", "www.towerofwords.online", "https://www.towerofwords.online", "towerofwords.online")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                         .allowedHeaders("*")
                         .allowCredentials(true);
