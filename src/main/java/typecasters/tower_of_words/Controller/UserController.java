@@ -143,7 +143,7 @@ public class UserController {
             if(userExists){
                 return Response.response(HttpStatus.OK, "User exists", userExists);
             }else{
-                return Response.response(HttpStatus.NOT_FOUND, "User doesn't exist", userExists);
+                return Response.response(HttpStatus.OK, "User doesn't exist", userExists);
             }
         } catch (Exception e) {
             return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to check user existence");
