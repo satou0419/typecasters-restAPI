@@ -20,7 +20,7 @@ public class SimulationEnemyEntity {
 
     private String imagePath;
 
-    @CollectionTable(name = "tbl_simulation_enemy_words", joinColumns = @JoinColumn(name = "simulationEnemyID"))
+    @CollectionTable(name = "tbl_simulation_enemy", joinColumns = @JoinColumn(name = "simulationEnemyID"))
     @Column(name = "simulationWordsID")
     private List<Integer> words = new ArrayList<>();
 

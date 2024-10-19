@@ -19,7 +19,7 @@ public interface SimulationEnemyRepository extends JpaRepository<SimulationEnemy
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM tbl_simulation_enemy_words WHERE simulationEnemyID = :simulationEnemyID", nativeQuery = true)
+    @Query(value = "DELETE FROM tbl_simulation_enemy WHERE simulation_enemyid = :simulationEnemyID", nativeQuery = true)
     void deleteWordsBySimulationEnemyID(@Param("simulationEnemyID") int simulationEnemyID);
 
 }
