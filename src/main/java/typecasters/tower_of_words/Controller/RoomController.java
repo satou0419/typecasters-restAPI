@@ -146,4 +146,18 @@ public class RoomController {
             return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
+
+    @DeleteMapping("/remove_user/{userID}/from_room_by/{roomID}")
+    public ResponseEntity<Object> removeUserFromRoom(@PathVariable int roomID, @PathVariable int userID) {
+        try {
+            roomService.removeUserFromRoom(roomID, userID);
+            return NoDataResponse.noDataResponse(HttpStatus.OK, "User " + userID + " removed from room " + roomID + " successfully!");
+        } catch (IllegalArgumentException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        } catch (RuntimeException ex) {
+            return NoDataResponse.noDataResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+        } catch (Exception e) {
+            return NoDataResponse.noDataResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 }

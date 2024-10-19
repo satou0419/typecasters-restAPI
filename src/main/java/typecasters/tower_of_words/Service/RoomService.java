@@ -37,9 +37,36 @@ public class RoomService {
     SimulationParticipantsService simulationParticipantsService;
 
     @Autowired
+    @Lazy
     SimulationWordsRepository simulationWordsRepository;
 
     @Autowired
+    @Lazy
+    SimulationWordAssessmentRepository simulationWordAssessmentRepository;
+
+    @Autowired
+    @Lazy
+    SimulationEnemyRepository simulationEnemyRepository;
+
+    @Autowired
+    @Lazy
+    SimulationParticipantsRepository simulationParticipantsRepository;
+
+    @Autowired
+    @Lazy
+    SimulationWeightedScoreRepository simulationWeightedScoreRepository;
+
+    @Autowired
+    @Lazy
+    SimulationWeightedSettingsRepository simulationWeightedSettingsRepository;
+
+    @Autowired
+    @Lazy
+    StudentWordProgressRepository studentWordProgressRepository;
+
+
+    @Autowired
+    @Lazy
     SimulationAssessmentRepository simulationAssessmentRepository;
 
     public RoomEntity createRoom(RoomEntity room) {
@@ -234,15 +261,85 @@ public class RoomService {
 
     }
 
+    @Transactional
     public String removeRoom(int roomID) {
         String msg = "";
 
-        if(roomRepository.findById(roomID).isPresent()) {
-            roomRepository.deleteById(roomID);
+        RoomEntity room = roomRepository.findById(roomID)
+                .orElseThrow(() -> new NoSuchElementException("Room " + roomID + " does not exist"));
 
-            msg = "Item " + roomID + " is successfully deleted!";
+        // Get all simulations associated with the room
+        List<SimulationEntity> simulations = room.getSimulations();
+
+        for (SimulationEntity simulation : simulations) {
+            simulationParticipantsRepository.deleteParticipantsBySimulationID(simulation.getSimulationID());
+
+            studentWordProgressRepository.deleteBySimulationID(simulation.getSimulationID());
+            simulationWeightedScoreRepository.deleteBySimulation(simulation.getSimulationID());
+            simulationWeightedSettingsRepository.deleteBySimulation(simulation.getSimulationID());
+            simulationAssessmentRepository.deleteBySimulationID(simulation.getSimulationID());
+
+            List<SimulationEnemyEntity> enemies = simulation.getEnemy();
+            for (SimulationEnemyEntity enemy : enemies) {
+                simulationEnemyRepository.deleteWordsBySimulationEnemyID(enemy.getSimulationEnemyID());
+
+                simulationEnemyRepository.deleteById(enemy.getSimulationEnemyID());
+            }
+
+            simulationWordAssessmentRepository.deleteBySimulation(simulation.getSimulationID());
+
+            simulationParticipantsRepository.deleteBySimulation(simulation);
+
+            simulationRepository.delete(simulation);
         }
 
+        roomRepository.delete(room);
+
+        msg = "Room " + roomID + " and all related records have been successfully deleted!";
         return msg;
     }
+
+
+
+
+    @Transactional
+    public void removeUserFromRoom(int roomId, int userId) {
+
+        RoomEntity room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        if (!room.getMembers().contains(userId)) {
+            throw new RuntimeException("User not found in the room");
+        }
+
+        // This one actually copies the members from the room into this list so the original list wont get affected when there is
+        // some thing happens during deletion
+        List<Integer> membersCopy = new ArrayList<>(room.getMembers());
+        membersCopy.remove(Integer.valueOf(userId));
+
+        room.setMembers(membersCopy);
+
+        roomRepository.save(room);
+
+        List<SimulationEntity> simulations = room.getSimulations();
+
+        for (SimulationEntity simulation : simulations) {
+            Optional<Integer> simulationParticipantsIDOpt = simulationParticipantsRepository
+                    .findSimulationParticipantsIDByUserIDAndSimulationID(userId, simulation);
+
+            if (simulationParticipantsIDOpt.isPresent()) {
+                int simulationParticipantsID = simulationParticipantsIDOpt.get();
+
+                simulationParticipantsRepository.deleteParticipantBySimulationParticipantsID(simulationParticipantsID);
+
+                simulationParticipantsRepository.deleteById(simulationParticipantsID);
+
+                studentWordProgressRepository.deleteByStudentIDAndSimulationID(userId, simulation.getSimulationID());
+            }
+        }
+    }
+
+
+
+
 }

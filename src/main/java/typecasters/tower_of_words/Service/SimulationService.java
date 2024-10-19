@@ -33,6 +33,26 @@ public class SimulationService {
 
     @Autowired
     @Lazy
+    SimulationWordAssessmentRepository simulationWordAssessmentRepository;
+
+    @Autowired
+    @Lazy
+    SimulationEnemyRepository simulationEnemyRepository;
+
+    @Autowired
+    @Lazy
+    SimulationWeightedScoreRepository simulationWeightedScoreRepository;
+
+    @Autowired
+    @Lazy
+    SimulationWeightedSettingsRepository simulationWeightedSettingsRepository;
+
+    @Autowired
+    @Lazy
+    StudentWordProgressRepository studentWordProgressRepository;
+
+    @Autowired
+    @Lazy
     private SimulationAttemptsService simulationAttemptsService;
 
     @Autowired
@@ -235,18 +255,6 @@ public class SimulationService {
 
     }
 
-    public String removeSimulation(int simulationID) {
-        String msg = "";
-
-        if(simulationRepository.findById(simulationID).isPresent()) {
-            simulationRepository.deleteById(simulationID);
-
-            msg = "Item " + simulationID + " is successfully deleted!";
-        }
-
-        return msg;
-    }
-
     @Transactional
     public SimulationEntity cloneSimulation(int simulationID, int targetRoomID) {
 
@@ -360,5 +368,38 @@ public class SimulationService {
 
         return clonedSimulation;
     }
+
+    @Transactional
+    public String removeSimulation(int simulationID) {
+        String msg = "";
+
+        SimulationEntity simulation = simulationRepository.findById(simulationID)
+                .orElseThrow(() -> new NoSuchElementException("Simulation " + simulationID + " does not exist"));
+
+        simulationParticipantsRepository.deleteParticipantsBySimulationID(simulation.getSimulationID());
+
+        List<SimulationEnemyEntity> enemies = simulation.getEnemy();
+        for (SimulationEnemyEntity enemy : enemies) {
+
+            simulationEnemyRepository.deleteWordsBySimulationEnemyID(enemy.getSimulationEnemyID());
+
+            simulationEnemyRepository.deleteById(enemy.getSimulationEnemyID());
+        }
+
+
+        simulationAssessmentRepository.deleteBySimulationID(simulation.getSimulationID());
+        simulationWeightedScoreRepository.deleteBySimulation(simulation.getSimulationID());
+        simulationWeightedSettingsRepository.deleteBySimulation(simulation.getSimulationID());
+        simulationWordAssessmentRepository.deleteBySimulation(simulation.getSimulationID());
+        studentWordProgressRepository.deleteBySimulationID(simulation.getSimulationID());
+
+        simulationParticipantsRepository.deleteBySimulation(simulation);
+
+        simulationRepository.delete(simulation);
+
+        msg = "Simulation " + simulationID + " and all related records have been successfully deleted!";
+        return msg;
+    }
+
 
 }
