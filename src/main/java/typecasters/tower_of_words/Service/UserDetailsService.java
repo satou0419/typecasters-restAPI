@@ -136,6 +136,7 @@ public class UserDetailsService {
         userDetails.setWordsCollected(userDetails.getWordsCollected() + 1);
         userDetailsRepository.save(userDetails);
 
+        archiveAchievementService.checkUserEligibilityForAchievements(userID, "words");
         return "word count incremented";
     }
 
