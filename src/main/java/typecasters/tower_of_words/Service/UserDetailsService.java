@@ -146,7 +146,7 @@ public class UserDetailsService {
         userDetails.setAchievementCount(userDetails.getAchievementCount() + 1);
         userDetailsRepository.save(userDetails);
 
-//        archiveAchievementService.checkUserEligibilityForAchievements(userID, "achievements");
+        archiveAchievementService.checkUserEligibilityForAchievements(userID, "achievements");
         return "achievement count incremented";
     }
 
