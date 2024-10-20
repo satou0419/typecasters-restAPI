@@ -136,7 +136,7 @@ public class UserDetailsService {
         userDetails.setWordsCollected(userDetails.getWordsCollected() + 1);
         userDetailsRepository.save(userDetails);
 
-        archiveAchievementService.checkUserEligibilityForAchievements(userID, "words");
+//        archiveAchievementService.checkUserEligibilityForAchievements(userID, "words");
         return "word count incremented";
     }
 
@@ -146,7 +146,7 @@ public class UserDetailsService {
         userDetails.setAchievementCount(userDetails.getAchievementCount() + 1);
         userDetailsRepository.save(userDetails);
 
-        archiveAchievementService.checkUserEligibilityForAchievements(userID, "achievements");
+//        archiveAchievementService.checkUserEligibilityForAchievements(userID, "achievements");
         return "achievement count incremented";
     }
 
@@ -155,7 +155,7 @@ public class UserDetailsService {
         userDetails.setFloorCount(userDetails.getFloorCount()+1);
         userDetailsRepository.save(userDetails);
 
-        archiveAchievementService.checkUserEligibilityForAchievements(userID, "floors");
+//        archiveAchievementService.checkUserEligibilityForAchievements(userID, "floors");
         return "floor count incremented";
     }
     public String incrementSpellingFloorCount(int userID){
