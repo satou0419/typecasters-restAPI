@@ -37,6 +37,10 @@ public class UserDetailsService {
     @Lazy
     AchievementService achievementService;
 
+    @Autowired
+    @Lazy
+    UserGameTutorialStatusService userGameTutorialStatusService;
+
     // Initialize User Details
     public void initUserDetails(int userID){
         UserProgressEntity towerProg = new UserProgressEntity(userID, 0, 0, 0, 1, 1 ,1);
@@ -55,6 +59,8 @@ public class UserDetailsService {
 
         userDetailsRepository.save(userDetails);
 
+        createUserGameTutorialStatusObject(userDetails.getUserDetailsID());
+
         UserItemEntity userItem1 = createUserItem(0, userID, 1);
         UserItemEntity userItem2 = createUserItem(0, userID, 2);
         UserItemEntity userItem3 = createUserItem(0, userID, 3);
@@ -67,10 +73,17 @@ public class UserDetailsService {
 
         UserCharacterEntity userCharacter1 = createUserCharacter(userID, true, 1);
         UserCharacterEntity userCharacter2 = createUserCharacter(userID, false, 2);
+        UserCharacterEntity userCharacter3 = createUserCharacter(userID, false, 3);
         userCharacterService.insertUserCharacter(userCharacter1);
         userCharacterService.insertUserCharacter(userCharacter2);
+        userCharacterService.insertUserCharacter(userCharacter3);
 
         initializeArchiveAchievements(userID);
+    }
+
+    private void createUserGameTutorialStatusObject(int userDetailsID){
+        UserGameTutorialStatusEntity newUserGameTutorialStatusObject = new UserGameTutorialStatusEntity(userDetailsID);
+        userGameTutorialStatusService.insertUserGameTutorialStatus(newUserGameTutorialStatusObject);
     }
 
     private UserItemEntity createUserItem(int quantity, int userID, int itemID) {
