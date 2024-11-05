@@ -67,6 +67,7 @@ D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typec
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Entity\GameTypeEntity.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\StudentWordProgressRepository.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\WordIndex.java
+D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Entity\UserGameTutorialStatusEntity.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Entity\RoomEntity.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\UserProgressRepository.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\UserInfoAndDetails.java
@@ -76,6 +77,7 @@ D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typec
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Controller\SimulationController.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\SimulationAttemptsRepository.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\SimulationAssessmentRepository.java
+D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Service\UserGameTutorialStatusService.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Entity\AdventureSyllableEnemyEntity.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\RoomRepository.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Response\NoDataResponse.java
@@ -85,10 +87,12 @@ D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typec
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Service\SimulationWordAssessmentService.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Entity\AdventureRewardEntity.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\TowerSyllableFloorRepository.java
+D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Controller\UserGameTutorialStatusController.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Controller\SimulationAttemptsController.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Exception\UserCharacterNotFoundException.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\ArchiveAchievementRepository.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\SimulationWeightedSettingsRepository.java
+D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\UserGameTutorialStatusRepository.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Entity\SimulationEntity.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Repository\AchievementRepository.java
 D:\$FILES\SCHOOL_FILES\#Third Year\Second_Semester\Typecasters\BACKEND_NEW\typecasters-restAPI\src\main\java\typecasters\tower_of_words\Service\UserItemService.java

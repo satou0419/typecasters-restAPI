@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import typecasters.tower_of_words.Entity.SimulationWordsEntity;
 import typecasters.tower_of_words.Repository.SimulationWordsRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class SimulationWordsService {
         if(checkWordIfExist.isPresent()){
             throw new IllegalArgumentException("Word already exist!");
         }else{
+            word.setAddedDate(new Date());
             return simulationWordsRepository.save(word);
         }
 

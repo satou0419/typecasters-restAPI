@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,4 +22,6 @@ public class SimulationWordsEntity {
     private String word;
 
     private String silentIndex;
+
+    private Date addedDate;
 }

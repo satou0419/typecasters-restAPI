@@ -1,3 +1,4 @@
+typecasters\tower_of_words\Entity\UserGameTutorialStatusEntity.class
 typecasters\tower_of_words\Service\TowerFloorService.class
 typecasters\tower_of_words\Controller\AdventureSyllableEnemyController.class
 typecasters\tower_of_words\Controller\SimulationController.class
@@ -6,6 +7,7 @@ typecasters\tower_of_words\Service\UserDetailsService.class
 typecasters\tower_of_words\Controller\TowerFloorController.class
 typecasters\tower_of_words\Controller\ArchiveAchievementController.class
 typecasters\tower_of_words\Repository\RoomRepository.class
+typecasters\tower_of_words\Repository\UserGameTutorialStatusRepository.class
 typecasters\tower_of_words\Controller\SimulationEnemyController.class
 typecasters\tower_of_words\Entity\SimulationWordAssessmentEntity.class
 typecasters\tower_of_words\Service\UserCharacterService.class
@@ -87,6 +89,7 @@ typecasters\tower_of_words\Config\tower_of_words\ApiTowerOfWordsApplication.clas
 typecasters\tower_of_words\Entity\AdventureEnemyEntity.class
 typecasters\tower_of_words\Controller\RoomController.class
 typecasters\tower_of_words\Repository\AdventureSilentEnemyRepository.class
+typecasters\tower_of_words\Controller\UserGameTutorialStatusController.class
 typecasters\tower_of_words\Service\SimulationService.class
 typecasters\tower_of_words\Controller\SimulationAttemptsController.class
 typecasters\tower_of_words\Service\UserItemService.class
@@ -110,6 +113,7 @@ typecasters\tower_of_words\Controller\GameTypeController.class
 typecasters\tower_of_words\Repository\CharacterRepository.class
 typecasters\tower_of_words\Controller\ItemController.class
 typecasters\tower_of_words\Exception\UserCharacterNotFoundException.class
+typecasters\tower_of_words\Service\UserGameTutorialStatusService.class
 typecasters\tower_of_words\Service\AdventureRewardService.class
 typecasters\tower_of_words\Repository\SimulationEnemyRepository.class
 typecasters\tower_of_words\Service\SimulationParticipantsService.class
