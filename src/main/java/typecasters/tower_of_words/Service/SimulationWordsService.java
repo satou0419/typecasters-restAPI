@@ -48,7 +48,7 @@ public class SimulationWordsService {
     public SimulationWordsEntity setIndex(SimulationWordsEntity word) {
         SimulationWordsEntity edit = new SimulationWordsEntity();
         try {
-            edit = simulationWordsRepository.findById(word.getSimulationWordsID()).get();
+            edit = simulationWordsRepository.findOneByCreatorIDAndWord(word.getCreatorID(), word.getWord()).get();
 
             edit.setSilentIndex(word.getSilentIndex());
 

@@ -76,7 +76,7 @@ public class SimulationWordsController {
         }
     }
 
-    @PutMapping("/edit")
+    @PatchMapping("/edit")
     public ResponseEntity<Object> updateWord(@RequestBody SimulationWordsEntity word) {
         try {
             SimulationWordsEntity updatedWord = simulationWordsService.setIndex(word);
