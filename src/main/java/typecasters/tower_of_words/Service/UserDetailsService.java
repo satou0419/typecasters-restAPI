@@ -1,5 +1,6 @@
 package typecasters.tower_of_words.Service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import typecasters.tower_of_words.Entity.*;
 import typecasters.tower_of_words.Repository.UserDetailsRepository;
@@ -142,6 +143,7 @@ public class UserDetailsService {
     }
 
     //Increment
+    @Transactional
     public String incrementUserDetailWords(int userID){
         UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
         userDetails.setWordsCollected(userDetails.getWordsCollected() + 1);
@@ -151,7 +153,7 @@ public class UserDetailsService {
         return "word count incremented";
     }
 
-
+    @Transactional
     public String incrementUserAchievementCount(int userID){
         UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
         userDetails.setAchievementCount(userDetails.getAchievementCount() + 1);
@@ -161,6 +163,7 @@ public class UserDetailsService {
         return "achievement count incremented";
     }
 
+    @Transactional
     public String incrementFloorCount(int userID){
         UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
         userDetails.setFloorCount(userDetails.getFloorCount()+1);
@@ -169,6 +172,8 @@ public class UserDetailsService {
 //        archiveAchievementService.checkUserEligibilityForAchievements(userID, "floors");
         return "floor count incremented";
     }
+
+    @Transactional
     public String incrementSpellingFloorCount(int userID){
         UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
         userDetails.setSpellingFloorCount(userDetails.getSpellingFloorCount()+1);
@@ -179,6 +184,7 @@ public class UserDetailsService {
         return "Spelling floor count incremented";
     }
 
+    @Transactional
     public String incrementSyllableFloorCount(int userID){
         UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
         userDetails.setSyllableFloorCount(userDetails.getSyllableFloorCount()+1);
@@ -189,6 +195,7 @@ public class UserDetailsService {
         return "Syllable floor count incremented";
     }
 
+    @Transactional
     public String incrementSilentFloorCount(int userID){
         UserDetailsEntity userDetails = userDetailsRepository.findOneByUserID(userID);
         userDetails.setSilentFloorCount(userDetails.getSilentFloorCount()+1);
@@ -199,7 +206,7 @@ public class UserDetailsService {
         return "Silent floor count incremented";
     }
 
-
+    @Transactional
     public Optional<Integer> getCreditAmountByUserDetailId(int userDetailID) {
 
         return userDetailsRepository.findCreditAmountByUserDetailsID(userDetailID);
