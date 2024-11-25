@@ -64,12 +64,10 @@ public class UserDetailsService {
         UserItemEntity userItem1 = createUserItem(0, userID, 1);
         UserItemEntity userItem2 = createUserItem(0, userID, 2);
         UserItemEntity userItem3 = createUserItem(0, userID, 3);
-        UserItemEntity userItem4 = createUserItem(0, userID, 4);
 
         userItemService.insertUserItem(userItem1);
         userItemService.insertUserItem(userItem2);
         userItemService.insertUserItem(userItem3);
-        userItemService.insertUserItem(userItem4);
 
         UserCharacterEntity userCharacter1 = createUserCharacter(userID, true, 1);
         UserCharacterEntity userCharacter2 = createUserCharacter(userID, false, 2);
