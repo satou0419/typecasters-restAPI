@@ -16,7 +16,7 @@ public class UserProgressController {
     @Autowired
     UserProgressService userProgressService;
 
-    @PutMapping("/update_user_progress")
+    @PatchMapping("/update_user_progress")
     public ResponseEntity<Object> updateUserProgress(@RequestBody UserProgressEntity updatedProgress, @RequestParam int userProgressID) {
         try {
             String result = userProgressService.updateTowerProgress(updatedProgress, userProgressID);
