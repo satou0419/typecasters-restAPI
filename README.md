@@ -12,6 +12,7 @@ This is the back-end or API of Tower of Words.
 - [Jhon Lorenz Pabroa](https://github.com/JhonoBrine)
 - [Gil Joshua Yabao](https://github.com/Steemp)
 - [Rey Dante Garcia](https://github.com/satou0419)
+- [Trisha Mae Rivera](https://github.com/riveratrishamae)
 
 ## Framework
 - Java Springboot
